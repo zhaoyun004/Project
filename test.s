@@ -5,7 +5,9 @@
     
 (while (< i 23) (begin (print i) (set i (+ i 1))(if (eq? i 12) break)))
 
-(for (set i 23) (< i 45) (set i (+ i 2)) (begin (print i) (if (eq? i 41) break)))
+(define sum 0)
+(for (set i 0) (< i 100) (set i (+ i 1)) (+ sum i))
+(print sum)
 
 (print (call/cc (lambda k (* 5 (k 8) 45))))
 
