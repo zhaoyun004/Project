@@ -1,0 +1,7 @@
+scheme.s test.s new.s测试文件
+
+运行python ZhScheme.py test.s解释执行test.s文件。
+
+或者python ZhScheme.py进入单行交互模式。
+
+系统需求：Python3
