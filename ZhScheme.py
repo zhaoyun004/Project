@@ -57,7 +57,7 @@ def callcc(proc):
         return proc(throw)
     except RuntimeWarning as w:
         if w is ball: 
-            print(".... ", ball.retval)
+            #print(".... ", ball.retval)
             return ball.retval
         else: 
             raise w
@@ -394,7 +394,7 @@ def eval(x, e):
                 args = []
                 for i in x[1:]:
                     args = args + [eval(i, e)]
-                print("....", args)
+                print("args ....", args)
                 return tmp(*args)
                 
             if type(tmp) is types.new_class: 
