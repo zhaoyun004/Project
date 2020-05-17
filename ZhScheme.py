@@ -39,7 +39,7 @@ def find(var, e):
         while e != None:
             if var in e.my.keys():
                 return e
-        else:
+            else:
                 e = e.father
         return None
         
@@ -392,7 +392,6 @@ def eval(x, e):
                 args = []
                 for i in x[1:]:
                     args = args + [eval(i, e)]
-                print("args ....", args)
                 return tmp(*args)
                 
             if type(tmp) is types.new_class: 
@@ -456,14 +455,8 @@ def eval_as_line(f):
           
 def eval_as_file(f):
     tmp = get_list(tokenize(f.read()))
-    print(tmp)
-        
-    # 分析列表的意义，并计算。
-    val = eval(tmp, env_g)
-        
-    # 打印计算结果
-    if val is not None: 
-        print(val)
+    #print(tmp)    
+    eval(tmp, env_g)
 
 if len(sys.argv) == 2:
     f = open(sys.argv[1], "r")
