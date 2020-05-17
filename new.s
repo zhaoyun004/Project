@@ -3,6 +3,8 @@
 
 (quote ...)
 (define abc 123)
+(define (efg  x) (x))
+
 
 (define s 0)
 (for (define i 0) (< i 301) (set i (+ i 1)) (set s (+ s i)))
