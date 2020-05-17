@@ -9,7 +9,7 @@
 (print s)
 
 (define t 0)
-  (define (sum x r)
+  (define (sum x r) 
       (if (eq? x 0)
           r
           (sum (- x 1) (+ x r))

@@ -62,7 +62,6 @@ def callcc(proc):
         else: 
             raise w
 
-
 # 环境变量（全局变量），用户可以修改。
 env_g.my.update({
         '+':    op.add, 
@@ -211,12 +210,9 @@ class Procedure(object):
             e0 = find(args[i], e)
             if e0 != None:
                 e0[args[i]][1] = 1
-                
-        # 函数体内定义的变量，存在c.my中，只在函数内可见。
-        c = env(self.e);
-        
+                        
         try:
-            return eval(self.body, c)
+            return eval(self.body, self.e)
         except RuntimeWarning as w:
             if w is b: 
                 return b.retval
@@ -265,7 +261,9 @@ def eval(x, e):
             # 定义函数
             if isa(x[1], List):
                 if x[1][0] not in e.my.keys():
-                    e.my[x[1][0]] = [Procedure(x[1][1:], x[2], e), 0]    
+                    # 函数体内定义的变量，存在c.my中，只在函数内可见。
+                    c = env(e)
+                    e.my[x[1][0]] = [Procedure(x[1][1:], x[2], c), 0]    
                 return
                 
             # 定义变量
@@ -406,6 +404,8 @@ def eval(x, e):
         e0 = find(x, e)
         if e0 != None:
             if isa(e0.my[x], List):
+                # 此处表明是用户定义变量，而不是内置变量。
+                e0.my[x][1] = 1
                 return e0.my[x][0]
             return e0.my[x]
         else:
@@ -473,5 +473,7 @@ if len(sys.argv) == 2:
         
     f.close()
     
-    print("Warn :")
+    for i in env_g.my.keys():
+        if isa(env_g.my[i] ,List) and env_g.my[i][1] == 0:
+            print("Warn : [", i, "] is not used." )
     exit()
