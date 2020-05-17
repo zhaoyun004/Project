@@ -26,18 +26,20 @@ isa = isinstance
 # 查找变量时，必须沿着叶子节点my一直找到根（None）。
 class env:
     def __init__(self, fa):
+        # my中的一项是一对key-value：“i”:[12, 0]，其中value的第一项是变量值，第二项0表示未使用，1表示已经使用. 
         self.my = {}
         self.father = fa
 
+# 查查var变量，返回var所在的e
 def find(var, e):
     if var in list(e.my.keys()):
-        return e.my[var]
+        return e
     else:
         e = e.father
         while e != None:
             if var in e.my.keys():
-                return e.my[var]
-            else:
+                return e
+        else:
                 e = e.father
         return None
         
@@ -63,8 +65,15 @@ def callcc(proc):
 
 # 环境变量（全局变量），用户可以修改。
 env_g.my.update({
-        '+':op.add, '-':op.sub, '*':op.mul, '/':op.truediv, 
-        '>':op.gt, '<':op.lt, '>=':op.ge, '<=':op.le, '=':op.eq, 
+        '+':    op.add, 
+        '-':    op.sub, 
+        '*':    op.mul, 
+        '/':    op.truediv, 
+        '>':    op.gt, 
+        '<':    op.lt, 
+        '>=':   op.ge, 
+        '<=':   op.le, 
+        '=':    op.eq, 
 		'not':     op.not_,
 		'eq?':     op.is_, 
         'equal?':  op.eq, 
@@ -187,14 +196,22 @@ def lispstr(exp):
 
 # 函数可能有返回值，也可能返回None，也就是没有返回值。
 class Procedure(object):
-    "A user-defined Scheme procedure."
+
     def __init__(self, parms, body, e):
         self.parms, self.body, self.e = parms, body, e
+        
     def __call__(self, *args): 
+    
         # parms是形参，args是实参
         for i in range(len(self.parms)):
             self.e.my[self.parms[i]] = args[i]
         
+        # 如果实参是变量，则变量对应的值（列表）第二项置为1，表示已被使用。
+        if isa(args[i], String):
+            e0 = find(args[i], e)
+            if e0 != None:
+                e0[args[i]][1] = 1
+                
         # 函数体内定义的变量，存在c.my中，只在函数内可见。
         c = env(self.e);
         
@@ -248,28 +265,28 @@ def eval(x, e):
             # 定义函数
             if isa(x[1], List):
                 if x[1][0] not in e.my.keys():
-                    e.my[x[1][0]] = Procedure(x[1][1:], x[2], e)    
+                    e.my[x[1][0]] = [Procedure(x[1][1:], x[2], e), 0]    
                 return
                 
             # 定义变量
             if x[1] not in e.my.keys():
-                e.my[x[1]] = eval(x[2], e)
+                e.my[x[1]] = [eval(x[2], e), 0]
             else:
-                print("Error Message: define [" + x[1] + "] again.")
+                print("Error : define [" + x[1] + "] again.")
             return
             
         elif x[0] == 'set':                
             # 为变量赋值
             if x[1] in e.my.keys():
-                e.my[x[1]] = eval(x[2], e)
+                e.my[x[1]] = [eval(x[2], e), 1]
             else:
-                print("Error Message: [" + x[1] + "] not define.")
+                print("Error : [" + x[1] + "] not define.")
             return
             
         # (set-list x 2 12)   设置列表的某一项       
         elif x[0] == 'set-list':
             if len(x) != 4:
-                print("Error Message: [set-list] need 4 args.")
+                print("Error : [set-list] need 4 args.")
                 return
             
             a = eval(x[1], e)
@@ -279,7 +296,7 @@ def eval(x, e):
             if isa(a, List):
                 a[b] = c
             else:
-                print("Error Message: argument 1 must be a list.")
+                print("Error : argument 1 must be a list.")
             return
                 
         # (begin (...) (...) (...)) 依次执行，返回最后一项的运算结果。
@@ -296,7 +313,7 @@ def eval(x, e):
             # (define a (lambda x (print x)))
             # (lambda parms body)
             if len(x) != 3:
-                print("Error Message: [lambda] needs 2 args.")
+                print("Error : [lambda] needs 2 args.")
                 return 
             return Procedure(x[1], x[2], e)
             
@@ -315,7 +332,7 @@ def eval(x, e):
         elif x[0] == 'while':
         
             if (len(x) != 3):
-                print("Error Message: [while] needs 2 args.")
+                print("Error : [while] needs 2 args.")
                 
             while eval(x[1], e):
                 # 检测到break，很可能是跳出循环。
@@ -326,7 +343,7 @@ def eval(x, e):
         elif x[0] == 'for':
         
             if (len(x) != 5):
-                print("Error Message: [for] needs 4 args.")
+                print("Error : [for] needs 4 args.")
                 
             eval(x[1], e)
             while True:
@@ -349,7 +366,7 @@ def eval(x, e):
             if x[1] not in e.my.keys():
                 e.my[x[1]] = tmp
             else:
-                print("Error Message: define [" + x[1] + "] again.")
+                print("Error : define [" + x[1] + "] again.")
             return
             
         elif x[0] == 'break':
@@ -362,13 +379,22 @@ def eval(x, e):
             raise b
             
         else:                       
-            tmp = find(x[0], e)
+            e0 = find(x[0], e)
             
+            #使用改变量之前，将变量对应的列表第二项置为1
+            if isa(e0.my[x[0]], List):
+                e0.my[x[0]][1] = 1
+                tmp = e0.my[x[0]][0]
+            else:
+                # 内置函数
+                tmp = e0.my[x[0]]
+
             # 函数调用
             if callable(tmp):
                 args = []
                 for i in x[1:]:
                     args = args + [eval(i, e)]
+                print("....", args)
                 return tmp(*args)
                 
             if type(tmp) is types.new_class: 
@@ -377,9 +403,11 @@ def eval(x, e):
             
     if isa(x, String):
         #如果x在环境变量里，那么很可能是一个变量，而不是字符串。
-        value = find(x, e)
-        if value != None:
-            return value
+        e0 = find(x, e)
+        if e0 != None:
+            if isa(e0.my[x], List):
+                return e0.my[x][0]
+            return e0.my[x]
         else:
             return x
             
@@ -404,7 +432,6 @@ def get_list(tokens):
         while tokens[0] != ')':
             L.append(get_list(tokens))
         tokens.pop(0) # pop off ')'
-        print(L)
         return L
     elif ')' == token:
         raise SyntaxError('Error Message: Unexpected [)]')
@@ -445,4 +472,6 @@ if len(sys.argv) == 2:
     eval_as_file(f)
         
     f.close()
+    
+    print("Warn :")
     exit()

@@ -5,3 +5,31 @@ scheme.s test.s new.s测试文件
 或者python ZhScheme.py进入单行交互模式。
 
 系统需求：Python3
+
+
+数据类型：
+int float bool string list tuple dict
+
+顺序
+begin
+
+条件
+if
+
+循环
+while, for, break, continue
+
+时间
+time
+
+函数定义
+
+lambda函数
+
+递归函数
+
+
+
+程序块(block)
+
+我们把一对（）中间的程序，称为"块"(block)。一个block里可以有0个或者多个block。
