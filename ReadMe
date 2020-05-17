@@ -7,29 +7,69 @@ scheme.s test.s new.s测试文件
 系统需求：Python3
 
 
-数据类型：
-int float bool string list tuple dict
 
-顺序
-begin
+程序说明：
 
-条件
-if
+我们这个Scheme可能更像是Python，因为笔者学习Python的时间更多，编写的程序更多，更熟悉，而Scheme中唯一的数据结构List正好对应与Python的List。
+
+当人们学习Scheme程序时，可能印象最深的是对称的()，不探究实质，我们欣赏这种对称美，也许我们会想当然的认为这种对称的语法，方便作文本和语义分析。笔者大学时期，编译原理课程的大作业是作一个解释程序，分析类似Pascal语法并生成中间代码，很可惜笔者天赋不够，又不好好学习，没有完成大作业，蒙混过关了。
+
+
+笔者创造的东西，大量使用Python内置函数，而数据结构也和Python完全一样 --- 只是形式上学习了Lisp/Scheme。是的，ZhScheme不符合任何一个Lisp，Scheme标准。创作者，也无意实现一个标准的Scheme或者Lisp，只是按照自己也许有点独特的编程习惯，加入那些自认为容易理解、常用、好用的程序设计元素。
+
+
+一、基本数据类型(和Python保持一致)：
+int float bool string 
+
+二、复合数据类型(和Python保持一致)：
+list tuple dict
+
+三、程序块(block)：我们把一对（）中间的程序，称为"块"(block)。一个block里可以有0个或者多个block。每个块里定义的变量和函数只在当前块内部可见，外部块不可见。
+
+时间 (time (..))  
+time --- 关键字，time后只能有一项参数。
+
+顺序 (begin (...) (...) (...))
+begin -- 关键字，将依次计算各项，返回最后一项的结果。
+
+条件 (if (1) (2) (3))
+if -- 关键字，将判断1的结果，如果为True，则计算2并返回，否则计算3并返回，
 
 循环
 while, for, break, continue
-
-时间
-time
 
 函数定义
 
 lambda函数
 
-递归函数
+内置函数：
+
+内置函数一部分直接使用了Python内置函数，或者是某个python模块定义的函数，还有一部分是简单的lambda函数，我们编写Scheme程序时可以直接使用这些内置函数。
+
+结构体(Class)
+
+call/cc
+
+递归函数和尾递归
 
 
 
-程序块(block)
+其他特性：
 
-我们把一对（）中间的程序，称为"块"(block)。一个block里可以有0个或者多个block。
+一、无用变量的检测警告功能：
+
+new.s文件中定义了一个没有被使用的变量和函数，解释器能够检测到，并给出警告：
+(define abc 123)
+(define (efg  x) (x))
+
+python ZhScheme.py new.s
+
+E:\Project\ZhScheme>python ZhScheme.py new.s
+45150
+0
+0:00:00.012001
+Warn : [ abc ] is not used.
+Warn : [ efg ] is not used.
+
+
+
