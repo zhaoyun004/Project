@@ -14,6 +14,7 @@
 
 (set abc 123)
 
+
 (define (fun) (begin (set i "testykasd") 34 (env)))
 (fun)
 (print i)

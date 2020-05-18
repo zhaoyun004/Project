@@ -382,7 +382,14 @@ def eval(x, e):
             b.retval = eval(x[1], e)
             raise b
             
-        else:                       
+        else:        
+            tmp = eval(x[0], e)
+            if callable(tmp):
+                args = []
+                for i in x[1:]:
+                    args = args + [eval(i, e)]
+                return tmp(*args)
+
             e0 = find(x[0], e)
             
             if e0 == None:

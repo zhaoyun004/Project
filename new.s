@@ -1,14 +1,12 @@
-(quote ...)
-
 (class point (list (list n "hello!!!!!")(list m (lambda x (* 2 x)))))
 (set x (point))
 (print (. x n))
 (procedure? (. x m))
-(quote here are bugs)
-(. x m)
+(print ((. x m) 5))
+
 
 (set f (open test.ss r))
-((. f read))
+(print ((. f read)))
 
 
 (print (call/cc (lambda k (* 5 (k 8) 45))))
