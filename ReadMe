@@ -12,16 +12,11 @@ ZhScheme大量使用Python内置函数，数据结构和Python完全一样 --- �
 
 ZhScheme不符合任何一个Lisp，Scheme标准。作者无意实现一个符合某个标准的Scheme或者Lisp，而是使用各种容易理解、好用、常用的程序设计元素。
 
-ZhScheme更像Python，因为笔者学习使用Python的时间更多，而Scheme中数据结构List正好对应Python的List，用Python List来实现Scheme List非常容易。
+ZhScheme更像Python，因为笔者学习使用Python的时间更多，而Scheme中List正好对应Python的List，用Python List来实现Scheme List非常容易。
 
 
 
-Scheme中的cons，作用是构造一个pair，包括左右两个值，在ChezScheme和Racket中，(cons 1 2)的输出是(1 . 2)，显然，他们用.来区分左右两部分。car取得左值，cdr取得右值。
-
-笔者深究cons，用稍显复杂的逻辑来测试list和cons，发现其中有难以自圆其说的地方。也许，这是笔者的一些强迫症，不过，我们完全可以把python list当作cons，你只要把list的第一项当作左值，后面所有的项当作右值。在Python里，car和cdr其实就是一个list的x[0]和x[1:]。
-
-既然cons可能会导致复杂、概念上的混乱，与其强行费劲解释这稍显复杂的”设计“，不如简单的抛弃不用。笔者甚至抛弃了Scheme中的符号类型(Symbol)，而简单代替以字符串类型。
-
+Scheme中的cons，作用是构造一个pair，包括左右两个值，在ChezScheme和Racket中，(cons 1 2)的输出是(1 . 2)，用.来区分左右两部分。car取得左值，cdr取得右值。可以将python list看作一个cons，list的第一项当作左值，后面所有的项组成的列表当作右值。在Python里，car和cdr其实就是一个list的x[0]和x[1:]。
 
 
 quote，程序注释。
@@ -30,6 +25,7 @@ car和cdr，返回一个List的第一项和剩余项。
 
 set!赋值改为set
 
+取消了cons和符合类型(Symbol)。
 
 
 递归浅谈
@@ -61,9 +57,6 @@ int float bool string
 
 二、复合数据类型(和Python保持一致)：
 list tuple dict
-
-
-三、程序块(block)：我们把一对（）中间的程序，称为"块"(block)。一个block里可以有0个或者多个block。每个块里定义的变量和函数只在当前块内部可见，外部块不可见。
 
 
 时间 (time (..))  

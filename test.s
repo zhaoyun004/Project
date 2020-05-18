@@ -1,4 +1,13 @@
-(begin (define i 1)
+(define i 1)
+
+(class point (list (list n "hello!!!!!")(list m (lambda x (* 2 x)))))
+(define x (point))
+(print (. x n))
+(procedure? (. x m))
+(quote here are bugs)
+(. x m)
+
+(define fun (begin (define i 12) 34))
 
 (if (< i 19) (print (+ i 1))
     )
@@ -27,4 +36,3 @@
    (sum 150 0)
 )
 (sum 100 0)
-)

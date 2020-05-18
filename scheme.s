@@ -1,5 +1,3 @@
-(begin
-
 (define i 12)
 
 (print (dict (list (list "3" 4) (list "aa" "bbb"))))
@@ -14,7 +12,5 @@
 (for-each (lambda (x) (set sum (+ sum x))) (list 3 4 5 6 7))
 (print sum)
 
- (define abc 123)
-
-)
+(define abc 123)
 

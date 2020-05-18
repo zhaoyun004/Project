@@ -272,6 +272,7 @@ def eval(x, e):
                 e.my[x[1]] = [eval(x[2], e), 0]
             else:
                 print("Error : define [" + x[1] + "] again.")
+                exit()
             return
             
         elif x[0] == 'set':                
@@ -461,8 +462,9 @@ def eval_as_line(f):
             print(val)
           
 def eval_as_file(f):
-    tmp = get_list(tokenize(f.read()))
-    #print(tmp)    
+    program = f.read()
+    program = "(begin" + program + ")"
+    tmp = get_list(tokenize(program))
     eval(tmp, env_g)
 
 if len(sys.argv) == 2:
