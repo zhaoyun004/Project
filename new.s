@@ -5,8 +5,12 @@
 (define abc 123)
 (define (efg  x) (x))
 
-   (define sum 0)
-   (for-each (lambda (x) (set sum (+ sum x))) (list 3 4 5 6 7))
-   (print sum)
+(class point (list (list n "hello!!!!!")(list m (lambda x (* 2 x)))))
+(define x (point))
+(print (. x n))
+(procedure? (. x m))
+(quote here are bugs)
+(. x m)
+
 )
 )
