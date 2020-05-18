@@ -2,6 +2,8 @@
 (tuple 2 3)
 (print (dict (list (list "3" 4) (list "aa" "bbb"))))
 
+(goto "test")
+
 (if (< i 19) (print (+ i 1)))
 
 (while (< i 23) (begin (print i) (set i (+ i 1))(if (eq? i 20) break)))
@@ -12,9 +14,11 @@
 (for-each (lambda (x) (set sum (+ sum x))) (list 3 4 5 6 7))
 (print sum)
 
+(label "test")
+
 (set abc 123)
 
 
-(define (fun) (begin (set i "testykasd") 34 (env)))
+(define (fun) (begin (set i "testykasd") (return 34) (env)))
 (fun)
 (print i)

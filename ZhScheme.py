@@ -45,23 +45,6 @@ def find(var, e):
         
 env_g = env(None);
 
-# callcc函数里定义一个throw函数, throw作为proc的参数
-
-def callcc(proc):
-    "Call proc with current continuation; escape only"
-    ball = RuntimeWarning("Sorry, can't continue this continuation any longer.")
-    def throw(retval): 
-        ball.retval = retval; 
-        raise ball
-    try:
-        return proc(throw)
-    except RuntimeWarning as w:
-        if w is ball: 
-            #print(".... ", ball.retval)
-            return ball.retval
-        else: 
-            raise w
-
 # 环境变量（全局变量），用户可以修改。
 env_g.my.update({
         '+':    op.add, 
@@ -126,9 +109,7 @@ env_g.my.update({
 })
 
 env_g.my.update(vars(math)) # sin, cos, sqrt, pi, ...
-       
-b = RuntimeWarning("Return ...")
-       
+              
 def parse(program):
     "Read a Scheme expression from a string."
     return read_from_tokens(tokenize(program))
@@ -213,12 +194,7 @@ class Procedure(object):
                 if e0 != None:
                     e0.my[args[i]][1] = 1
                         
-        try:
-            return eval(self.body, c)
-            
-        except RuntimeWarning as w:
-            if w is b: 
-                return b.retval
+        return eval(self.body, c)
 
 # x： 待解析的list
 # e:  env对象
@@ -361,7 +337,6 @@ def eval(x, e):
             for i in eval(x[2], e): 
                 eval(x[1], e)(i)
 
-        # 定义类以及数据成员(class point (list (list n 2)(list m (lambda x (* 2 x)))))
         elif x[0] == 'class':
         
             print(x[2])
@@ -376,11 +351,8 @@ def eval(x, e):
         elif x[0] == 'break':
             return 'break'
             
-        # ??? 函数返回，用try,except实现。
-        # 用call/cc
         elif x[0] == 'return':
-            b.retval = eval(x[1], e)
-            raise b
+            return 
             
         else:        
             tmp = eval(x[0], e)
