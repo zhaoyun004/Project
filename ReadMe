@@ -89,7 +89,6 @@ break, continue
 
 函数与lambda
 
-
 读写文件
 
 读写文件直接使用Python的file对象，以下程序打开test.ss文件，并读取，打印：
@@ -123,8 +122,6 @@ E:\Project\ZhScheme>python ZhScheme.py new.s
 0:00:00.012001
 Warn : [ abc ] is not used.
 Warn : [ efg ] is not used.
-
-call/cc
 
 
 递归函数和尾递归
