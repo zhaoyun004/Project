@@ -349,10 +349,7 @@ def eval(x, e):
             return
             
         elif x[0] == 'break':
-            return 'break'
-            
-        elif x[0] == 'return':
-            return 
+            return 'break'      
             
         else:        
             tmp = eval(x[0], e)

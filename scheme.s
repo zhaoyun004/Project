@@ -19,6 +19,6 @@
 (set abc 123)
 
 
-(define (fun) (begin (set i "testykasd") (return 34) (env)))
-(fun)
+(define (fun (x y) (m n)) (begin (set i "testykasd") (return (12 34)) (env)))
+(set (a b) (fun x y))
 (print i)
