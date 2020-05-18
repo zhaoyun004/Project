@@ -200,10 +200,12 @@ class Procedure(object):
         self.parms, self.body, self.e, self.type = parms, body, e, type
         
     def __call__(self, *args): 
+        # 函数体内定义的变量，存在c.my中，只在函数内可见。
+        c = env(self.e)
     
         # parms是形参，args是实参
         for i in range(len(self.parms)):
-            self.e.my[self.parms[i]] = args[i]
+            c.my[self.parms[i]] = args[i]
 
             #如果实参是变量，则变量对应的值（列表）第二项置为1，表示已被使用
             if isa(args[i], String) and self.type == "define":
@@ -212,12 +214,12 @@ class Procedure(object):
                     e0.my[args[i]][1] = 1
                         
         try:
-            return eval(self.body, self.e)
+            return eval(self.body, c)
             
         except RuntimeWarning as w:
             if w is b: 
                 return b.retval
- 
+
 # x： 待解析的list
 # e:  env对象
 
@@ -262,18 +264,20 @@ def eval(x, e):
             
             if isa(x[1], List):
                 if x[1][0] not in e.my.keys():
-                    # 函数体内定义的变量，存在c.my中，只在函数内可见。
-                    c = env(e)
-                    e.my[x[1][0]] = [Procedure(x[1][1:], x[2], c, "define"), 0] 
+                    e.my[x[1][0]] = [Procedure(x[1][1:], x[2], e, "define"), 0] 
                 else:
                     print("Error: define [ ", x[1][0], " ] again.")
+                    exit()
             else:
                 print("Error: Should define a function.")
+                exit()
             
-        elif x[0] == 'set':                
+        elif x[0] == 'set':   
+            # 往外层查找变量，是否定义过？
+            tmp = find(x[1], e)
             # 为变量赋值
-            if x[1] in e.my.keys():
-                e.my[x[1]] = [eval(x[2], e), 1]
+            if tmp != None:
+                tmp.my[x[1]] = [eval(x[2], e), 1]
             else:
                 # 首次定义
                 e.my[x[1]] = [eval(x[2], e), 0]
@@ -385,7 +389,7 @@ def eval(x, e):
                 print("Error : What is [", x[0], "]?" )
                 return 
                 
-            #使用改变量之前，将变量对应的列表第二项置为1
+            #使用变量之前，将变量对应的列表第二项置为1
             if isa(e0.my[x[0]], List):
                 e0.my[x[0]][1] = 1
                 tmp = e0.my[x[0]][0]

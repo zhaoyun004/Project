@@ -8,11 +8,13 @@ scheme.s test.s new.s为测试文件
 
 https://segmentfault.com/q/1010000022586274
 
+
+待完善功能：call/cc 递归函数调用层次太少... 生成Lua虚拟机字节码
+ 
+
 ZhScheme大量使用Python内置函数，数据结构和Python完全一样 --- 只是形式上学习了Lisp/Scheme -- 成对的()。
 
-ZhScheme不符合任何一个Lisp，Scheme标准。作者无意实现一个符合某个标准的Scheme或者Lisp，而是希望引入各种容易理解、好用、常用的程序设计元素。
-
-ZhScheme更像Python，因为笔者学习使用Python的时间更多，而Scheme中List正好对应Python的List，用Python List来实现Scheme List非常容易。
+ZhScheme不符合任何一个Lisp，Scheme标准。作者无意实现一个符合某个标准的Scheme或者Lisp。ZhScheme更像Python，因为笔者学习使用Python的时间更多，而Scheme中List正好对应Python的List，用Python List来实现Scheme List非常容易。
 
 
 和Lisp/Scheme的区别：
@@ -133,4 +135,4 @@ call/cc
 
 以笔者粗浅的理解，编译技术的难点在于这个及其复杂的递归函数，层层调用，一环套一环，容易让读者”迷路“，从而丧失耐心和信心。
 
-求和、数列等递归程序实际上可以用循环代替 --  循环语句更容易理解，而且不会出现递归调用层数太多导致栈不够用的情况 --为什么要自找麻烦写递归呢？但是，编译技术中的递归函数，似乎无法用循环代替 -- 笔者不敢确定。如果将来有人发明这种方法，也许会让编译技术更加容易。
+求和、数列等递归程序实际上可以用循环代替 --  循环语句更容易理解，而且不会出现递归调用层数太多导致栈不够用的情况 --为什么要自找麻烦写递归呢？但是，编译技术中的递归函数，似乎无法用循环代替 -- 笔者不敢确定.
