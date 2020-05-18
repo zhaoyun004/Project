@@ -257,30 +257,26 @@ def eval(x, e):
         elif x[0] == 'int':
             return
             
-        # 动态变量
+        # 定义函数
         elif x[0] == 'define':       
-            # 定义函数
+            
             if isa(x[1], List):
                 if x[1][0] not in e.my.keys():
                     # 函数体内定义的变量，存在c.my中，只在函数内可见。
                     c = env(e)
-                    e.my[x[1][0]] = [Procedure(x[1][1:], x[2], c, "define"), 0]    
-                return
-                
-            # 定义变量
-            if x[1] not in e.my.keys():
-                e.my[x[1]] = [eval(x[2], e), 0]
+                    e.my[x[1][0]] = [Procedure(x[1][1:], x[2], c, "define"), 0] 
+                else:
+                    print("Error: define [ ", x[1][0], " ] again.")
             else:
-                print("Error : define [" + x[1] + "] again.")
-                exit()
-            return
+                print("Error: Should define a function.")
             
         elif x[0] == 'set':                
             # 为变量赋值
             if x[1] in e.my.keys():
                 e.my[x[1]] = [eval(x[2], e), 1]
             else:
-                print("Error : [" + x[1] + "] not define.")
+                # 首次定义
+                e.my[x[1]] = [eval(x[2], e), 0]
             return
             
         # (set-list x 2 12)   设置列表的某一项       

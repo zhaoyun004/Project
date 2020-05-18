@@ -107,8 +107,8 @@ call/cc
 一、无用变量的检测警告功能：
 
 new.s文件中定义了一个没有被使用的变量和函数，解释器能够检测到，并给出警告：
-(define abc 123)
-(define (efg  x) (x))
+(set abc 123)
+(set (efg  x) (x))
 
 python ZhScheme.py new.s
 
