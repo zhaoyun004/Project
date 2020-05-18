@@ -381,6 +381,10 @@ def eval(x, e):
         else:                       
             e0 = find(x[0], e)
             
+            if e0 == None:
+                print("Error : What is [", x[0], "]?" )
+                return 
+                
             #使用改变量之前，将变量对应的列表第二项置为1
             if isa(e0.my[x[0]], List):
                 e0.my[x[0]][1] = 1
@@ -400,7 +404,6 @@ def eval(x, e):
                 # (point) 创造对象
                 return tmp()
 
-            print("Error : What is [ ", x, " ]?" )
             
     if isa(x, String):
         #如果x在环境变量里，那么很可能是一个变量，而不是字符串。
