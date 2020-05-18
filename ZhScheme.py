@@ -196,23 +196,24 @@ def lispstr(exp):
 # 函数可能有返回值，也可能返回None，也就是没有返回值。
 class Procedure(object):
 
-    def __init__(self, parms, body, e):
-        self.parms, self.body, self.e = parms, body, e
+    def __init__(self, parms, body, e, type):
+        self.parms, self.body, self.e, self.type = parms, body, e, type
         
     def __call__(self, *args): 
     
         # parms是形参，args是实参
         for i in range(len(self.parms)):
             self.e.my[self.parms[i]] = args[i]
-        
-        # 如果实参是变量，则变量对应的值（列表）第二项置为1，表示已被使用。
-        if isa(args[i], String):
-            e0 = find(args[i], e)
-            if e0 != None:
-                e0[args[i]][1] = 1
+
+            #如果实参是变量，则变量对应的值（列表）第二项置为1，表示已被使用
+            if isa(args[i], String) and self.type == "define":
+                e0 = find(args[i], self.e)
+                if e0 != None:
+                    e0.my[args[i]][1] = 1
                         
         try:
             return eval(self.body, self.e)
+            
         except RuntimeWarning as w:
             if w is b: 
                 return b.retval
@@ -263,7 +264,7 @@ def eval(x, e):
                 if x[1][0] not in e.my.keys():
                     # 函数体内定义的变量，存在c.my中，只在函数内可见。
                     c = env(e)
-                    e.my[x[1][0]] = [Procedure(x[1][1:], x[2], c), 0]    
+                    e.my[x[1][0]] = [Procedure(x[1][1:], x[2], c, "define"), 0]    
                 return
                 
             # 定义变量
@@ -313,7 +314,7 @@ def eval(x, e):
             if len(x) != 3:
                 print("Error : [lambda] needs 2 args.")
                 return 
-            return Procedure(x[1], x[2], e)
+            return Procedure(x[1], x[2], e, "lambda")
             
         elif x[0] == 'if':        
             cond = eval(x[1], e)
@@ -354,7 +355,11 @@ def eval(x, e):
                 eval(x[3], e)     # (+ i 1) 步长
                 
             return
-        
+            
+        elif x[0] == 'for-each':
+            for i in eval(x[2], e): 
+                eval(x[1], e)(i)
+
         # 定义类以及数据成员(class point (list (list n 2)(list m (lambda x (* 2 x)))))
         elif x[0] == 'class':
         
@@ -397,6 +402,8 @@ def eval(x, e):
             if type(tmp) is types.new_class: 
                 # (point) 创造对象
                 return tmp()
+
+            print("Error : What is [ ", x, " ]?" )
             
     if isa(x, String):
         #如果x在环境变量里，那么很可能是一个变量，而不是字符串。
