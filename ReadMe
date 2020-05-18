@@ -10,19 +10,21 @@ scheme.s test.s new.s为测试文件
 
 ZhScheme大量使用Python内置函数，数据结构和Python完全一样 --- 只是形式上学习了Lisp/Scheme -- 成对的()。
 
-ZhScheme不符合任何一个Lisp，Scheme标准。作者无意实现一个符合某个标准的Scheme或者Lisp，只是按照自己也许有点独特的编程习惯，加入那些自认为容易理解、常用、好用的程序设计元素。
+ZhScheme不符合任何一个Lisp，Scheme标准。作者无意实现一个符合某个标准的Scheme或者Lisp，而是使用各种容易理解、好用、常用的程序设计元素。
 
 ZhScheme更像Python，因为笔者学习使用Python的时间更多，而Scheme中数据结构List正好对应Python的List，用Python List来实现Scheme List非常容易。
 
 
-对于Scheme中的cons，好像是构造一个pair，包括左右两个值，但是笔者在ChezScheme和Racket测试其语义和输出，发现并不完全相同，有细微的差别。也许这是不同的编译器作者对cons的理解不一样，这种理解，也许是来个某个标准，或许是来自同行的教导。
 
-既然cons会产生复杂的概念、可能导致混乱，与其强行费劲解释这稍显复杂的”设计“，不如简单的抛弃不用。笔者甚至抛弃了Scheme中的符号类型(Symbol)，而简单代替以字符串类型。
+Scheme中的cons，作用是构造一个pair，包括左右两个值，在ChezScheme和Racket中，(cons 1 2)的输出是(1 . 2)，显然，他们用.来区分左右两部分。car取得左值，cdr取得右值。
 
-Scheme中quote，似乎作为程序注释。
+笔者深究cons，用稍显复杂的逻辑来测试list和cons，发现其中有难以自圆其说的地方。也许，这是笔者的一些强迫症，不过，我们完全可以把python list当作cons，你只要把list的第一项当作左值，后面所有的项当作右值。在Python里，car和cdr其实就是一个list的x[0]和x[1:]。
+
+既然cons可能会导致复杂、概念上的混乱，与其强行费劲解释这稍显复杂的”设计“，不如简单的抛弃不用。笔者甚至抛弃了Scheme中的符号类型(Symbol)，而简单代替以字符串类型。
 
 
-实现的Scheme元素和改动
+
+quote，程序注释。
 
 car和cdr，返回一个List的第一项和剩余项。
 
