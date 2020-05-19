@@ -17,3 +17,25 @@
 )
     
 (sum 500 0)
+
+(class point (list 
+    (list n "hello!")
+    (list m (lambda x (* 2 x)))
+    )
+)
+
+(set x (point))
+(print (. x n))
+(print ((. x m) 5))
+
+(import scheme.s)
+
+(quote
+(export sum i )
+
+(import "http://test.org/test.s" "test")
+
+(env test)
+
+(-> test sum)
+)

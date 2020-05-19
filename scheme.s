@@ -17,6 +17,9 @@
 (set abc 123)
 
 (set s 12)
-(define (fun x y) (begin (set s (+ x y)) (print s) (env)))
+(define (fun x y) (begin 
+        (set s (+ x y)) (print s) (env)
+    )
+)
 (fun 33 44)
 (print s)

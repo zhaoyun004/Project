@@ -284,7 +284,15 @@ def eval(x, e):
             else:
                 print("Error : argument 1 must be a list.")
             return
-                
+
+        elif x[0] == 'import':
+            f = open(x[1], "r")            
+            program = f.read()
+            f.close()
+            program = "(begin" + program + ")"
+            tmp = get_list(tokenize(program))
+            eval(tmp, env_g)
+
         # (begin (...) (...) (...)) 依次执行。
         elif x[0] == 'begin':
             l = len(x)
