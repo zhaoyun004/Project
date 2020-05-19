@@ -80,9 +80,7 @@ env_g.my.update({
 		'exit':	   exit,
         
         'open':    open,
-                
-        'call/cc': callcc,
-        
+                        
         'procedure?': callable,
         'null?':   lambda x: x == [], 
         # python的bool可能有错 bool("False")返回了True
@@ -181,6 +179,7 @@ class Procedure(object):
         self.parms, self.body, self.e, self.type = parms, body, e, type
         
     def __call__(self, *args): 
+    
         # 函数体内定义的变量，存在c.my中，只在函数内可见。
         c = env(self.e)
     
@@ -217,10 +216,10 @@ def eval(x, e):
         # 打印当前的环境。
         if x[0] == 'env':
         
-            print("variables ...\n")
+            print("variables ...")
             for i in e.my.keys():
                 print(i, " : ", e.my[i])
-            
+            print(".........")
             return;
             
         elif x[0] == 'time':
@@ -275,14 +274,11 @@ def eval(x, e):
                 print("Error : argument 1 must be a list.")
             return
                 
-        # (begin (...) (...) (...)) 依次执行，返回最后一项的运算结果。
+        # (begin (...) (...) (...)) 依次执行。
         elif x[0] == 'begin':
             l = len(x)
             for i in range(l - 1):
-                if i != l - 2:
-                    eval(x[i+1], e)
-            # 返回最后一项
-            return eval(x[i+1], e)
+                eval(x[i+1], e)
 
         elif x[0] == 'lambda':
         
@@ -296,13 +292,10 @@ def eval(x, e):
         elif x[0] == 'if':        
             cond = eval(x[1], e)
             if cond == True:
-                return eval(x[2], e)
+                eval(x[2], e)
             else:
                 if len(x) == 4:
-                    return eval(x[3], e)
-            return
-
-        elif x[0] == 'switch':
+                    eval(x[3], e)
             return
      
         elif x[0] == 'while':
