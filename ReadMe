@@ -20,73 +20,28 @@ ZhScheme不符合任何一个Lisp，Scheme标准。作者无意实现一个符�
 
 和Lisp/Scheme的一些区别（不完全）：
 
-一、取消了cons，实现了car和cdr
-
-Scheme中的cons，作用是构造一个pair，包括左右两个值，在ChezScheme和Racket中，(cons 1 2)的输出是(1 . 2)，用.来区分左右两部分，car取得左值，cdr取得右值，可以对一个list取car和cdr。
-
-二、quote，用于注释。
+一、quote，用于注释。
 
 取消了Symbol类型，使用python字符串。
 
-三、define和set!
+二、define和set!
 
 ZhScheme中，define只能定义函数，而变量直接用set定义并赋值。
 
-四、bool类型
+三、bool类型
 
 Scheme里bool值为#T和#F,ZheScheme直接使用Python的bool型 -- True和False
 
-五、增加了break
+四、while for循环中可以使用break跳出循环
+
+五、取消了cons，实现了car和cdr
+
+Scheme中的cons，作用是构造一个pair，包括左右两个值，在ChezScheme和Racket中，(cons 1 2)的输出是(1 . 2)，用.来区分左右两部分，car取得左值，cdr取得右值，可以对一个list取car和cdr。
 
 六、外层变量与局部变量
 
+https://github.com/zhangyun007/ZhScheme/blob/master/ZhScheme.py
 
-ZhScheme新功能需求：
-
-
-set一次定义多个变量:
-
-
-要求，能一次定义多个变量：
-(set (a b) (12 34))
-等价于
-(set a 12)
-(set b 34)
-
-修改eval函数中251行；
-
-        elif x[0] == 'set':   
-        
-下的语句，就应该足够了。
-
-
-
-[外层变量与局部变量]
- 
-(set s 12)
-(define (fun x y (^ z)) (begin (set z (+ x y)) (print z) (env)))
-(fun 33 44 s)
-(print s)
-
-以上程序，将打印求和结果77。
-
-和大多Lisp/Scheme中不同的是函数fun的第三个参数多了一个符号^，^表示该变量是一个外层变量。函数调用时，将从上层函数中查找变量，如果没找到，则一直向上层查找，直到找到或者到达最外层。
-
-x，y是局部变量。局部变量定义在当前函数栈，在我们的Python实现里，栈对应于e.my这个字典结；而外层变量的存储空间实际上在外层函数中。
-
-如果使用局部变量作为参数：
-
-(set s  12)
-(define (fun x y z)) (begin (set z (+ x y)) (print z) (env)))
-(fun 33 44 s)
-(print s)
-
-打印s的结果还是很12，S的值没有变化。z的结果虽然是77，但是函数运行完成后，局部变量的生命期结束了，你无法访问。
-
-
-外层变量适合用于实现函数返回值。在ZhScheme中，函数没有返回值，如果你需要返回一些数据，你就必须使用外层变量，其好处是，一个函数可以有多个返回值 -- 使用多个外层变量。
-
-实现该功能，可能要改class Procedure(object)里的__call__函数。
 
 单行交互模式
 
