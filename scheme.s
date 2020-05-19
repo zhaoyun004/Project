@@ -8,6 +8,7 @@
 
 (for (set i 23) (< i 45) (set i (+ i 2)) (begin (print i) (if (eq? i 43) break)))
 
+
 (set sum 0)
 (for-each (lambda (x) (set sum (+ sum x))) (list 3 4 5 6 7 22))
 (print sum)
@@ -15,8 +16,7 @@
 
 (set abc 123)
 
-(set to 12)
-(define (fun x y (^ z)) (begin (set z (+ x y)) (print z) (env)))
-(fun 33 44 to)
-
-(print to)
+(set s 12)
+(define (fun x y) (begin (set s (+ x y)) (print s) (env)))
+(fun 33 44)
+(print s)

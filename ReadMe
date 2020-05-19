@@ -26,7 +26,7 @@ ZhScheme不符合任何一个Lisp，Scheme标准。作者无意实现一个符�
 
 二、define和set!
 
-ZhScheme中，define只能定义函数，而变量直接用set定义并赋值。
+ZhScheme中，define只能定义函数，而变量直接用set定义并赋值，set可以一次定义/赋值多个变量。
 
 三、bool类型
 
@@ -38,7 +38,6 @@ Scheme里bool值为#T和#F,ZheScheme直接使用Python的bool型 -- True和False
 
 Scheme中的cons，作用是构造一个pair，包括左右两个值，在ChezScheme和Racket中，(cons 1 2)的输出是(1 . 2)，用.来区分左右两部分，car取得左值，cdr取得右值，可以对一个list取car和cdr。
 
-六、外层变量与局部变量
 
 https://github.com/zhangyun007/ZhScheme/blob/master/ZhScheme.py
 
@@ -70,7 +69,7 @@ if -- 关键字，判断1的结果，如果为True，则计算2，否则计算3�
 循环
 while, for, for-each
 
-break, continue 
+break 
 
 
 时间 (time (..))  

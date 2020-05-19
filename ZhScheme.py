@@ -30,8 +30,8 @@ class env:
         self.my = {}
         self.father = fa
 
-# 查查var变量，返回var所在的e
-def find(var, e):
+# 查找var变量，返回var所在的e
+def find_all(var, e):
     if var in list(e.my.keys()):
         return e
     else:
@@ -41,6 +41,13 @@ def find(var, e):
                 return e
             else:
                 e = e.father
+        return None
+        
+# 只在当前环境中查找var变量
+def find(var, e):
+    if var in list(e.my.keys()):
+        return e
+    else:
         return None
         
 env_g = env(None);
@@ -189,7 +196,7 @@ class Procedure(object):
 
             #如果实参是变量，则变量对应的值（列表）第二项置为1，表示已被使用
             if isa(args[i], String) and self.type == "define":
-                e0 = find(args[i], self.e)
+                e0 = find_all(args[i], self.e)
                 if e0 != None:
                     e0.my[args[i]][1] = 1
                         
@@ -247,15 +254,19 @@ def eval(x, e):
                 print("Error: Should define a function.")
                 exit()
             
-        elif x[0] == 'set':   
-            # 往外层查找变量，是否定义过？
-            tmp = find(x[1], e)
-            # 为变量赋值
-            if tmp != None:
-                tmp.my[x[1]] = [eval(x[2], e), 1]
+        elif x[0] == 'set': 
+            # (set (a b c) (2 3 44)) 一次定义/赋值多个变量
+            if isa(x[1], List):
+                pass
             else:
-                # 首次定义
-                e.my[x[1]] = [eval(x[2], e), 0]
+                # 往外层查找变量，是否定义过？
+                tmp = find_all(x[1], e)
+                # 为变量赋值
+                if tmp != None:
+                    tmp.my[x[1]] = [eval(x[2], e), 1]
+                else:
+                    # 首次定义
+                    e.my[x[1]] = [eval(x[2], e), 0]
             return
             
         # (set-list x 2 12)   设置列表的某一项       
@@ -352,7 +363,7 @@ def eval(x, e):
                     args = args + [eval(i, e)]
                 return tmp(*args)
 
-            e0 = find(x[0], e)
+            e0 = find_all(x[0], e)
             
             if e0 == None:
                 print("Error : What is [", x[0], "]?" )
@@ -380,7 +391,7 @@ def eval(x, e):
             
     if isa(x, String):
         #如果x在环境变量里，那么很可能是一个变量，而不是字符串。
-        e0 = find(x, e)
+        e0 = find_all(x, e)
         if e0 != None:
             if isa(e0.my[x], List):
                 # 此处表明是用户定义变量，而不是内置变量。
