@@ -1,24 +1,27 @@
-系统需求：Python3
+一、系统需求：Python3
+
+
+二、下载代码、运行测试
+
+git clone https://github.com/zhangyun007/ZhScheme.git
 
 运行python ZhScheme.py进入单行交互模式。
 
 运行python ZhScheme.py test.s解释执行test.s文件。
 
-scheme.s test.s new.s为测试文件
+scheme.s test.s new.s为测试文件，其余扩展名为ss的文件可以运行在Racket和ChezScheme下，而不能运行在ZhScheme中。
 
-https://segmentfault.com/q/1010000022586274
 
+三、文档说明
+
+ZhScheme不符合任何一个Lisp，Scheme标准，作者无意实现一个符合某个标准的Scheme或者Lisp。ZhScheme更像Python，大量使用Python内置函数，数据结构和Python完全一样。
 
 待完善功能：  
-.操作符访问对象成员；递归函数调用层次太少；生成Lua虚拟机字节码
- 
-
-ZhScheme大量使用Python内置函数，数据结构和Python完全一样 --- 只是形式上学习了Lisp/Scheme -- 成对的()。
-
-ZhScheme不符合任何一个Lisp，Scheme标准。作者无意实现一个符合某个标准的Scheme或者Lisp。ZhScheme更像Python，因为笔者学习使用Python的时间更多，Scheme中List正好对应Python的List，用Python List来实现Scheme List非常容易。
+.操作符访问对象成员；import数可以直接执行http；递归函数调用层次太少；生成Lua虚拟机字节码
 
 
 和Lisp/Scheme的一些区别（不完全）：
+
 
 一、quote，用于注释。
 
@@ -32,14 +35,12 @@ ZhScheme中，define只能定义函数，而变量直接用set定义并赋值，
 
 Scheme里bool值为#T和#F,ZheScheme直接使用Python的bool型 -- True和False
 
-四、while for循环中可以使用break跳出循环
+四、实现了C风格的while，for循环，循环体中可以使用break跳出循环。
 
 五、取消了cons，实现了car和cdr
 
 Scheme中的cons，作用是构造一个pair，包括左右两个值，在ChezScheme和Racket中，(cons 1 2)的输出是(1 . 2)，用.来区分左右两部分，car取得左值，cdr取得右值，可以对一个list取car和cdr。
 
-
-https://github.com/zhangyun007/ZhScheme/blob/master/ZhScheme.py
 
 
 单行交互模式
@@ -68,9 +69,9 @@ if -- 关键字，判断1的结果，如果为True，则计算2并返回，否�
 
 
 循环
-while, for, for-each
+while, for, break
 
-break 
+for-each
 
 
 时间 (time (..))  
@@ -88,7 +89,7 @@ time --- 关键字，time后只能有一项参数，运行参数项，并打印�
 函数与lambda
 
 
-Class
+class
 
 程序设计者可以使用Python的type函数创建一个类，但是多数情况下，你应该使用class直接定义一个类，使用.操作符访问对象的成员。尽量避免使用type函数。
 
