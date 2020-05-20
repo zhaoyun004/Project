@@ -21,14 +21,14 @@
         (sum (- x 1) (+ x r))
      )
 )
-(sum 500 0)
+(sum 10000 0)
 
 (set m 12)
 (set fun (lambda x (* x x)))
 (print (fun m))
 
 
-(quote "牛顿迭代迭代法求平方根")
+(quote "牛顿法求平方根")
 
 (define (sqrt-iter guess x)
     (if (good-enough? guess x)

@@ -25,10 +25,16 @@
 (define (range n) (if (eq? n 1) (list 1) (append (range (- n 1)) (cons n '()))))
 (define (range n) (if (eq? n 1) (list 1) (append (range (- n 1)) (list n))))
 
+
+;以下两种方式，构造list太费时间，性能不能接受。
 ( time
    (define sum 0)
-   (for-each (lambda (x) (set! sum (+ sum x))) (range 10000))
+   (for-each (lambda (x) (set! sum (+ sum x))) (range 100000))
    sum
+)
+
+(time
+(apply + (range 100000)
 )
 
 
