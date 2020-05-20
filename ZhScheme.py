@@ -205,6 +205,21 @@ class Procedure(object):
 # x： 待解析的list
 # e:  env对象
 
+# 传入tokens不能为空列表
+def get_list(tokens):
+    token = tokens.pop(0)
+    if '(' == token:
+        L = []
+        while tokens[0] != ')':
+            L.append(get_list(tokens))
+        tokens.pop(0) # pop off ')'
+        return L
+    elif ')' == token:
+        raise SyntaxError('Error Message: Unexpected [)]')
+    else:
+	    # 这里将字符串转成具体的数据类型，
+        return atom(token)
+        
 # 可能返回一个bool,int,float,string,list或者None
 
 def eval(x, e):
@@ -223,10 +238,10 @@ def eval(x, e):
         # 打印当前的环境。
         if x[0] == 'env':
         
-            print("variables ...")
+            print("env ...")
             for i in e.my.keys():
                 print(i, " : ", e.my[i])
-            print(".........")
+            print("....")
             return;
             
         elif x[0] == 'time':
@@ -291,7 +306,7 @@ def eval(x, e):
             f.close()
             program = "(begin" + program + ")"
             tmp = get_list(tokenize(program))
-            eval(tmp, env_g)
+            eval(tmp, e)
 
         # (begin (...) (...) (...)) 依次执行。
         elif x[0] == 'begin':
@@ -364,7 +379,10 @@ def eval(x, e):
             return 'break'      
             
         else:        
+        
             tmp = eval(x[0], e)
+            
+            #对象函数调用
             if callable(tmp):
                 args = []
                 for i in x[1:]:
@@ -377,7 +395,7 @@ def eval(x, e):
                 print("Error : What is [", x[0], "]?" )
                 return 
                 
-            #使用变量之前，将变量对应的列表第二项置为1
+            #使用参数之前，将参数变量对应的列表第二项置为1
             if isa(e0.my[x[0]], List):
                 e0.my[x[0]][1] = 1
                 tmp = e0.my[x[0]][0]
@@ -401,14 +419,20 @@ def eval(x, e):
         #如果x在环境变量里，那么很可能是一个变量，而不是字符串。
         e0 = find_all(x, e)
         if e0 != None:
+            # 判断该变量适合用户定义变量，而不是内置变量。
             if isa(e0.my[x], List):
-                # 此处表明是用户定义变量，而不是内置变量。
                 e0.my[x][1] = 1
                 return e0.my[x][0]
             return e0.my[x]
         else:
-            return x
-            
+            y = x.split('.')
+            while len(y) > 1:
+                z = getattr(eval(y[0], e), y[1])
+                del y[0]
+                y[0] = z
+            return y[0]
+    
+    # int float ...
     return x   
 
 if len(sys.argv) == 1:
@@ -421,21 +445,6 @@ def is_blank(line):
         if ch != ' ' and ch != '\t' and ch != '\n' and ch != '\r':
             return False
     return True
-
-# 传入tokens不能为空列表
-def get_list(tokens):
-    token = tokens.pop(0)
-    if '(' == token:
-        L = []
-        while tokens[0] != ')':
-            L.append(get_list(tokens))
-        tokens.pop(0) # pop off ')'
-        return L
-    elif ')' == token:
-        raise SyntaxError('Error Message: Unexpected [)]')
-    else:
-	    # 这里将字符串转成具体的数据类型，
-        return atom(token)
         
 # 以行为单位读取文件并解释执行。
 def eval_as_line(f):

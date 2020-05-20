@@ -5,8 +5,7 @@
 (while (< i 23) (begin 
     (print i) 
     (set i (+ i 1))
-    (if (eq? i 19) 
-        break)
+    (if (eq? i 19) break)
     )
 )
 
@@ -35,14 +34,13 @@
 (print (. x n))
 (print ((. x m) 5))
 
+(print x.n)
+(print (x.m 123))
+
 (import scheme.s)
 
 (quote
-(export sum i )
 
 (import "http://test.org/test.s" "test")
 
-(env test)
-
-(-> test sum)
 )
