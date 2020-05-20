@@ -325,12 +325,11 @@ def eval(x, e):
         elif x[0] == 'if':        
             cond = eval(x[1], e)
             if cond == True:
-                eval(x[2], e)
+                return eval(x[2], e)
             else:
                 if len(x) == 4:
-                    eval(x[3], e)
-            return
-     
+                    return eval(x[3], e)
+                    
         elif x[0] == 'while':
         
             if (len(x) != 3):
