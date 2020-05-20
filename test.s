@@ -31,8 +31,6 @@
 )
 
 (set x (point))
-(print (. x n))
-(print ((. x m) 5))
 
 (print x.n)
 (print (x.m 123))

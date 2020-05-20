@@ -108,7 +108,6 @@ env_g.my.update({
         'type':    type,
         'getattr': getattr,
         'setattr': setattr,
-        '.':       lambda x, y: getattr(x, y), 
         
         'int': {}
 })
