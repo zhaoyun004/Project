@@ -21,24 +21,13 @@
         (sum (- x 1) (+ x r))
      )
 )
-    
 (sum 500 0)
 
-(class point (list 
-    (list n "hello!")
-    (list m (lambda x (* 2 x)))
-    )
-)
-
-(set x (point))
-
-(print x.n)
-(print (x.m 123))
-
-(import scheme.s)
+(set m 12)
+(set fun (lambda x (* x x)))
+(print (fun m))
 
 (quote
-
+(import scheme.s)
 (import "http://test.org/test.s" "test")
-
 )

@@ -367,7 +367,7 @@ def eval(x, e):
         
             print(x[2])
             tmp = type(x[1],(object,),dict(eval(x[2], e)))
-            dir(tmp)
+            #dir(tmp)
             if x[1] not in e.my.keys():
                 e.my[x[1]] = tmp
             else:
@@ -412,26 +412,32 @@ def eval(x, e):
             if type(tmp) is types.new_class: 
                 # (point) 创造对象
                 return tmp()
-
             
     if isa(x, String):
         #如果x在环境变量里，那么很可能是一个变量，而不是字符串。
         e0 = find_all(x, e)
         if e0 != None:
-            # 判断该变量适合用户定义变量，而不是内置变量。
+            # 判断该变量是用户定义变量，而不是内置变量。
             if isa(e0.my[x], List):
                 e0.my[x][1] = 1
                 return e0.my[x][0]
             return e0.my[x]
-        else:
-            y = x.split('.')
+        
+        y = x.split('.')
+        # x里有.操作符，表示访问对象成员。
+        if len(y) > 1:
+            z = getattr(eval(y[0], e), y[1])
+            del y[0]
+            y[0] = z
             while len(y) > 1:
-                z = getattr(eval(y[0], e), y[1])
+                z = getattr(y[0], y[1])
                 del y[0]
                 y[0] = z
             return y[0]
+            
+        return x
     
-    # int float ...
+    # int float bool
     return x   
 
 if len(sys.argv) == 1:
