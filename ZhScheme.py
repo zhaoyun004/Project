@@ -9,7 +9,7 @@ import datetime
 import types
 import sys
 
-sys.setrecursionlimit(4000)
+sys.setrecursionlimit(1500)
 
 Bool = bool
 String = str          			# A Lisp String is implemented as a Python str
