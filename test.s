@@ -53,10 +53,10 @@
 (print (improve 1 5))
 (print (good-enough? 1.41 3))
 
-(print (sqrt-iter 1 4))
+(print (sqrt-iter 1.4 4))
 
+(import scheme.s)
 
 (quote
-(import scheme.s)
 (import "http://test.org/test.s" "test")
 )

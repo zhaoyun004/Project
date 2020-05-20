@@ -311,7 +311,11 @@ def eval(x, e):
         elif x[0] == 'begin':
             l = len(x)
             for i in range(l - 1):
-                eval(x[i+1], e)
+                if i + 1 == l - 1:
+                    # 返回最后一项
+                    return eval(x[i+1], e)
+                else:
+                    eval(x[i+1], e)
 
         elif x[0] == 'lambda':
         
