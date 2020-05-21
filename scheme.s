@@ -1,4 +1,6 @@
-(set i 12)
+(set j (list 34 "test" 3 4))
+(print ([] j 1))
+(print j[0)
 
 (tuple 2 3)
 
@@ -12,7 +14,7 @@
 (set e (dict (list (list "name" d))))
 (print e)
 
-
+(set i 1)
 (if (< i 19) (print (+ i 1)))
 
 (while (< i 23) (begin 

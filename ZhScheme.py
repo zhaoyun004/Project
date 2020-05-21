@@ -78,7 +78,7 @@ env_g.my.update({
         'cdr':     lambda x: x[1:], 
         'list':    lambda *x: list(x), 
         # 考虑用[]实现列表下标
-        'list-ref':lambda x, y: x[y], 
+        '[]':       lambda x, y: x[y], 
 		
         'append':  op.add,  	# 连接两个列表
 		'len':     len, 		# 列表长度
@@ -417,7 +417,7 @@ def eval(x, e):
                 return tmp()
             
     if isa(x, String):
-        #如果x在环境变量里，是一个变量，而不是字符串。
+        #如果x在环境变量里，取其值。
         e0 = find_all(x, e)
         if e0 != None:
             # 判断该变量是用户定义变量，而不是内置变量。
@@ -426,7 +426,7 @@ def eval(x, e):
                 return e0.my[x][0]
             return e0.my[x]
         
-        # 处理"，表示是一个字符串。
+        # 第一个和最后一直字符都是"，表示是一个字符串。
         if x[0] == '\"' and x[-1] == '\"':
             return x[1:-1]
             
@@ -442,13 +442,23 @@ def eval(x, e):
                 y[0] = z
             return y[0]
             
-        #处理[], 访问列表的某一项。
+        y = x.split('[')
+        #处理[, 访问列表的某一项。
+        if len(y) > 1:
+            z = eval(y[0], e)[int(y[1])]
+            del y[0]
+            y[0] = z
+            while len(y) > 1:
+                z = eval(y[0], e)[int(y[1])]
+                del y[0]
+                y[0] = z
+            return y[0]
             
         return x
     
     # int float bool
     return x   
-
+    
 if len(sys.argv) == 1:
     # 逐行解释执行用户输入
     repl()
