@@ -21,12 +21,7 @@
         (sum (- x 1) (+ x r))
      )
 )
-(sum 10000 0)
-
-(set m 12)
-(set fun (lambda x (* x x)))
-(print (fun m))
-
+(sum 101 0)
 
 (quote "牛顿法求平方根")
 
