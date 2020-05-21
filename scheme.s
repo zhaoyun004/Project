@@ -1,6 +1,17 @@
 (set i 12)
+
 (tuple 2 3)
-(print (dict (list (list "3" 4) (list "aa" "bbb"))))
+
+(set d (dict (list 
+    (list "3" 4) 
+    (list "aa" "bbb")) ) 
+)
+
+(print (d.keys))
+
+(set e (dict (list (list "name" d))))
+(print e)
+
 
 (if (< i 19) (print (+ i 1)))
 

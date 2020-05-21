@@ -8,4 +8,3 @@ function sum(num, s)
 end
 
 print(sum(10099, 0))
-        

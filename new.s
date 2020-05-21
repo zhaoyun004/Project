@@ -1,4 +1,4 @@
-(set f (open test.ss r))
+(set f (open "test.ss "r))
 (print (f.read))
 
 (class point (list (list n "hello!") (list m (lambda x (* 2 x)))))

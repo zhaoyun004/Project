@@ -108,7 +108,7 @@ env_g.my.update({
         'type':    type,
         'getattr': getattr,
         'setattr': setattr,
-        
+        '.' :      lambda x,y: getattr(x, y),
         'int': {}
 })
 
@@ -426,6 +426,10 @@ def eval(x, e):
                 return e0.my[x][0]
             return e0.my[x]
         
+        # 处理"和‘，表示是一个字符串。
+        if x[0] == '\'' or x[0] == '\"':
+            return x[1:]
+            
         y = x.split('.')
         # x里有.操作符，表示访问对象成员。
         if len(y) > 1:
@@ -437,6 +441,8 @@ def eval(x, e):
                 del y[0]
                 y[0] = z
             return y[0]
+            
+        #处理[], 访问列表的某一项。
             
         return x
     

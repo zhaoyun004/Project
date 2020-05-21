@@ -54,7 +54,6 @@
 (print (good-enough? 1.41 3))
 
 (print (sqrt-iter 1.4 4))
-
 (import scheme.s)
 
 (quote
