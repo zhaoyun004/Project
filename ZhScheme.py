@@ -77,8 +77,8 @@ env_g.my.update({
         'car':     lambda x: x[0],
         'cdr':     lambda x: x[1:], 
         'list':    lambda *x: list(x), 
-        # 考虑用[]实现列表下标
-        '[]':       lambda x, y: x[y], 
+        # 考虑用->实现列表下标
+        '->':       lambda x, y: x[y], 
 		
         'append':  op.add,  	# 连接两个列表
 		'len':     len, 		# 列表长度
@@ -147,24 +147,19 @@ def atom(token):
         try: 
             return float(token)
         except ValueError:
-            if token == "True":
-                return True
-            if token == "False":
-                return False
-            else:
-                return String(token)
-
+            return String(token)
+                
 # call this to entery Interaction.
 
 def repl(prompt='ZhScheme> '):
-    "A prompt-read-eval-print loop."
+    "A prompt-read-eval_list-print loop."
     while True:
         # 读取输入，并解析，得到字符串列表
         tmp = parse(input(prompt))
         print(tmp)
         
         # 分析列表的意义，并计算。
-        val = eval(tmp, env_g)
+        val = eval_list(tmp, env_g)
         
         # 打印计算结果
         if val is not None: 
@@ -199,7 +194,7 @@ class Procedure(object):
                 if e0 != None:
                     e0.my[args[i]][1] = 1
                         
-        return eval(self.body, c)
+        return eval_list(self.body, c)
 
 # x： 待解析的list
 # e:  env对象
@@ -221,7 +216,7 @@ def get_list(tokens):
         
 # 可能返回一个bool,int,float,string,list或者None
 
-def eval(x, e):
+def eval_list(x, e):
     
     if isa(x, List):
         if x == []:
@@ -246,7 +241,7 @@ def eval(x, e):
         elif x[0] == 'time':
         
             start = datetime.datetime.now()
-            eval(x[1], e)
+            eval_list(x[1], e)
             end = datetime.datetime.now()    
             print(end - start)
          
@@ -277,10 +272,10 @@ def eval(x, e):
                 tmp = find_all(x[1], e)
                 # 为变量赋值
                 if tmp != None:
-                    tmp.my[x[1]] = [eval(x[2], e), 1]
+                    tmp.my[x[1]] = [eval_list(x[2], e), 1]
                 else:
                     # 首次定义
-                    e.my[x[1]] = [eval(x[2], e), 0]
+                    e.my[x[1]] = [eval_list(x[2], e), 0]
             return
             
         # (set-list x 2 12)   设置列表的某一项       
@@ -289,9 +284,9 @@ def eval(x, e):
                 print("Error : [set-list] need 4 args.")
                 return
             
-            a = eval(x[1], e)
-            b = eval(x[2], e)
-            c = eval(x[3], e)
+            a = eval_list(x[1], e)
+            b = eval_list(x[2], e)
+            c = eval_list(x[3], e)
             
             if isa(a, List):
                 a[b] = c
@@ -305,7 +300,7 @@ def eval(x, e):
             f.close()
             program = "(begin" + program + ")"
             tmp = get_list(tokenize(program))
-            eval(tmp, e)
+            eval_list(tmp, e)
 
         # (begin (...) (...) (...)) 依次执行。
         elif x[0] == 'begin':
@@ -313,9 +308,9 @@ def eval(x, e):
             for i in range(l - 1):
                 if i + 1 == l - 1:
                     # 返回最后一项
-                    return eval(x[i+1], e)
+                    return eval_list(x[i+1], e)
                 else:
-                    eval(x[i+1], e)
+                    eval_list(x[i+1], e)
 
         elif x[0] == 'lambda':
         
@@ -327,21 +322,21 @@ def eval(x, e):
             return Procedure(x[1], x[2], e, "lambda")
             
         elif x[0] == 'if':        
-            cond = eval(x[1], e)
+            cond = eval_list(x[1], e)
             if cond == True:
-                return eval(x[2], e)
+                return eval_list(x[2], e)
             else:
                 if len(x) == 4:
-                    return eval(x[3], e)
+                    return eval_list(x[3], e)
                     
         elif x[0] == 'while':
         
             if (len(x) != 3):
                 print("Error : [while] needs 2 args.")
                 
-            while eval(x[1], e):
+            while eval_list(x[1], e):
                 # 检测到break，很可能是跳出循环。
-                if eval(x[2], e) == 'break':
+                if eval_list(x[2], e) == 'break':
                     break
             return
             
@@ -350,26 +345,26 @@ def eval(x, e):
             if (len(x) != 5):
                 print("Error : [for] needs 4 args.")
                 
-            eval(x[1], e)
+            eval_list(x[1], e)
             while True:
-                if eval(x[2], e) == True:
-                    tmp = eval(x[4], e)
+                if eval_list(x[2], e) == True:
+                    tmp = eval_list(x[4], e)
                     if tmp == 'break':
                         break
                 else:
                     break
-                eval(x[3], e)     # (+ i 1) 步长
+                eval_list(x[3], e)     # (+ i 1) 步长
                 
             return
             
         elif x[0] == 'for-each':
-            for i in eval(x[2], e): 
-                eval(x[1], e)(i)
+            for i in eval_list(x[2], e): 
+                eval_list(x[1], e)(i)
 
         elif x[0] == 'class':
         
             print(x[2])
-            tmp = type(x[1],(object,),dict(eval(x[2], e)))
+            tmp = type(x[1],(object,),dict(eval_list(x[2], e)))
             #dir(tmp)
             if x[1] not in e.my.keys():
                 e.my[x[1]] = tmp
@@ -382,13 +377,13 @@ def eval(x, e):
             
         else:        
         
-            tmp = eval(x[0], e)
+            tmp = eval_list(x[0], e)
             
             #对象函数调用
             if callable(tmp):
                 args = []
                 for i in x[1:]:
-                    args = args + [eval(i, e)]
+                    args = args + [eval_list(i, e)]
                 return tmp(*args)
 
             e0 = find_all(x[0], e)
@@ -409,7 +404,7 @@ def eval(x, e):
             if callable(tmp):
                 args = []
                 for i in x[1:]:
-                    args = args + [eval(i, e)]
+                    args = args + [eval_list(i, e)]
                 return tmp(*args)
                 
             if type(tmp) is types.new_class: 
@@ -417,6 +412,12 @@ def eval(x, e):
                 return tmp()
             
     if isa(x, String):
+        if x == "True":
+            return True
+            
+        if x == "False":
+            return False
+            
         #如果x在环境变量里，取其值。
         e0 = find_all(x, e)
         if e0 != None:
@@ -433,7 +434,7 @@ def eval(x, e):
         y = x.split('.')
         # x里有.操作符，表示访问对象成员。
         if len(y) > 1:
-            z = getattr(eval(y[0], e), y[1])
+            z = getattr(eval_list(y[0], e), y[1])
             del y[0]
             y[0] = z
             while len(y) > 1:
@@ -442,21 +443,20 @@ def eval(x, e):
                 y[0] = z
             return y[0]
             
-        y = x.split('[')
-        #处理[, 访问列表的某一项。
+        y = x.split('->')
+        #处理->, 访问列表的某一项。
         if len(y) > 1:
-            z = eval(y[0], e)[int(y[1])]
+            z = eval_list(y[0], e)[int(y[1])]
             del y[0]
             y[0] = z
             while len(y) > 1:
-                z = eval(y[0], e)[int(y[1])]
+                z = eval_list(y[0], e)[int(y[1])]
                 del y[0]
                 y[0] = z
             return y[0]
-            
+          
         return x
-    
-    # int float bool
+    # int float
     return x   
     
 if len(sys.argv) == 1:
@@ -479,23 +479,23 @@ def eval_as_line(f):
         print("...>")
         print(line)
         # 分析列表的意义，并计算。
-        val = eval(parse(line), env_g)
+        val = eval_list(parse(line), env_g)
         
         # 打印计算结果
         if val is not None: 
             print(val)
           
-def eval_as_file(f):
+def eval_file(f):
     program = f.read()
     program = "(begin" + program + ")"
     tmp = get_list(tokenize(program))
-    eval(tmp, env_g)
+    eval_list(tmp, env_g)
 
 if len(sys.argv) == 2:
     f = open(sys.argv[1], "r")
     
     #eval_as_line(f)
-    eval_as_file(f)
+    eval_file(f)
         
     f.close()
     
