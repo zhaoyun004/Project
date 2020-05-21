@@ -430,31 +430,27 @@ def eval_list(x, e):
         # 第一个和最后一直字符都是"，表示是一个字符串。
         if x[0] == '\"' and x[-1] == '\"':
             return x[1:-1]
+        
+        # obj.hhe->1.o->
+        '''
+        t = eval_list(get_first(x), e)
+        op, str = '', ''
+        
+        def get_op_str():
             
-        y = x.split('.')
-        # x里有.操作符，表示访问对象成员。
-        if len(y) > 1:
-            z = getattr(eval_list(y[0], e), y[1])
-            del y[0]
-            y[0] = z
-            while len(y) > 1:
-                z = getattr(y[0], y[1])
-                del y[0]
-                y[0] = z
-            return y[0]
-            
-        y = x.split('->')
-        #处理->, 访问列表的某一项。
-        if len(y) > 1:
-            z = eval_list(y[0], e)[int(y[1])]
-            del y[0]
-            y[0] = z
-            while len(y) > 1:
-                z = eval_list(y[0], e)[int(y[1])]
-                del y[0]
-                y[0] = z
-            return y[0]
-          
+        if get_op_str() == True:
+            if op == '.'
+                t = getattr(t, str)
+            if op == '->'
+                t = t[int(str)]
+            while get_op_str() == True:
+                if op == '.'
+                    t = getattr(t, str)
+                if op == '->'
+                    t = t[int(str)]         
+            return t
+        '''
+        # string as a Symbol(Var)
         return x
     # int float
     return x   

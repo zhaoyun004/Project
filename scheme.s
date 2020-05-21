@@ -37,6 +37,8 @@
 (set s 12)
 (define (fun x y) (begin 
         (set s (+ x y)) (print s) (env)
+        (define (inside-fun x ) (* x x))
+        (print (inside-fun 7))
     )
 )
 (fun 33 44)
