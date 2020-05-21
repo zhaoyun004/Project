@@ -417,7 +417,7 @@ def eval(x, e):
                 return tmp()
             
     if isa(x, String):
-        #如果x在环境变量里，那么很可能是一个变量，而不是字符串。
+        #如果x在环境变量里，是一个变量，而不是字符串。
         e0 = find_all(x, e)
         if e0 != None:
             # 判断该变量是用户定义变量，而不是内置变量。
@@ -426,9 +426,9 @@ def eval(x, e):
                 return e0.my[x][0]
             return e0.my[x]
         
-        # 处理"和‘，表示是一个字符串。
-        if x[0] == '\'' or x[0] == '\"':
-            return x[1:]
+        # 处理"，表示是一个字符串。
+        if x[0] == '\"' and x[-1] == '\"':
+            return x[1:-1]
             
         y = x.split('.')
         # x里有.操作符，表示访问对象成员。
