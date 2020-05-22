@@ -5,3 +5,11 @@
 (set x (point))
 (print x.n)
 (print (x.m 123))
+
+(set j (list 34 "test" 3 x))
+(print j|0)
+(print j|1)
+(print ([] j 1))
+
+(print j|3.n)
+(print (j|3.m 9))

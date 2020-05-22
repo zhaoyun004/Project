@@ -77,8 +77,8 @@ env_g.my.update({
         'car':     lambda x: x[0],
         'cdr':     lambda x: x[1:], 
         'list':    lambda *x: list(x), 
-        # 考虑用->实现列表下标
-        '->':       lambda x, y: x[y], 
+        # 考虑用[]实现列表下标
+        '[]':       lambda x, y: x[y], 
 		
         'append':  op.add,  	# 连接两个列表
 		'len':     len, 		# 列表长度
@@ -431,27 +431,34 @@ def eval_list(x, e):
         if x[0] == '\"' and x[-1] == '\"':
             return x[1:-1]
         
-        # obj.hhe->1.o->
-        '''
-        t = eval_list(get_first(x), e)
-        op, str = '', ''
-        
-        def get_op_str():
+        # obj.he|1.o|2:-1  
+        y = []
+        z = x
+        while True:
+            for i in range(len(z)):
+                if z[i] == '.' or z[i] == '|':
+                    y = y + [z[0:i]] + [z[i]]
+                    z = z[(i+1):]
+                    break   
+            else:
+                break
+        y = y + [z]                   
+                     
+        # y的长度为1，上面已经查找过环境变量，这里只能是字符串常量。
+        if len(y) == 1:
+            return x
             
-        if get_op_str() == True:
-            if op == '.'
-                t = getattr(t, str)
-            if op == '->'
-                t = t[int(str)]
-            while get_op_str() == True:
-                if op == '.'
-                    t = getattr(t, str)
-                if op == '->'
-                    t = t[int(str)]         
-            return t
-        '''
-        # string as a Symbol(Var)
-        return x
+        for i in range(len(y)):
+            if i == 0:
+                t = eval_list(y[0], e)
+            #  对象成员
+            if y[i] == '.':
+                t = getattr(t, y[i+1])
+            #  列表成员
+            if y[i] == '|':
+                t = t[int(y[i+1])]            
+        return t
+        
     # int float
     return x   
     
