@@ -79,7 +79,7 @@ env_g.my.update({
         'cdr':     lambda x: x[1:], 
         'list':    lambda *x: list(x), 
         # 考虑用|实现列表下标
-        '|':       lambda x, y: x[y], 
+        '|':       lambda x, y: x[int(y)], 
 		
         'append':  op.add,  	# 连接两个列表
 		'len':     len, 		# 列表长度
@@ -306,8 +306,8 @@ def eval_list(x, e):
                 else:
                     if has_op(x[1]):
                         y = expression_to_list(x[1], e)
-                        print(y)     
-                        # e.my[y[i]][1] = 1
+                        print("_____", y)     
+                        # eval_list(y, e) = eval_list(x[2], e)
                     else:
                         # 首次定义变量
                         e.my[x[1]] = [eval_list(x[2], e), 0]

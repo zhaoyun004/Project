@@ -13,7 +13,7 @@
 (set j (list 34 "test" 3 x))
 (print j|0)
 (print j|1)
-(print ([] j 1))
+(print (| j 1))
 (set j|0 12)
 
 (print j|3.n)
