@@ -7,9 +7,9 @@ git clone https://github.com/zhangyun007/ZhScheme.git
 
 运行python ZhScheme.py进入单行交互模式。
 
-运行python ZhScheme.py test.s解释执行test.s文件。
+运行python ZhScheme.py test.s解释执行test.s文件，测试文件包括：scheme.s test.s new.s first.s 
 
-scheme.s test.s new.s为测试文件，其余扩展名为ss的文件可以运行在Racket和ChezScheme下，而不能运行在ZhScheme中。
+扩展名为ss的文件可以运行在Racket和ChezScheme下，而不能运行在ZhScheme中。
 
 
 三、文档说明
@@ -50,7 +50,115 @@ Scheme中的cons，作用是构造一个pair，包括左右两个值，在ChezSc
 
 (print "hello , world!")
 
-print是Python内置函数，可以直接使用。
+print是Python内置函数，可以直接使用。运行(env)查看内置函数，这些函数和变量可以直接使用：
+
+E:\Project\ZhScheme>python ZhScheme.py
+ZhScheme> (env)
+['env']
+env ...
++  :  <built-in function add>
+-  :  <built-in function sub>
+*  :  <built-in function mul>
+/  :  <built-in function truediv>
+>  :  <built-in function gt>
+<  :  <built-in function lt>
+>=  :  <built-in function ge>
+<=  :  <built-in function le>
+=  :  <built-in function eq>
+not  :  <function <lambda> at 0x0000000002C2ABF8>
+eq?  :  <built-in function is_>
+equal?  :  <built-in function eq>
+max  :  <built-in function max>
+min  :  <built-in function min>
+abs  :  <built-in function abs>
+round  :  <built-in function round>
+tuple  :  <function <lambda> at 0x0000000002C2A510>
+dict  :  <function <lambda> at 0x0000000002C2A598>
+car  :  <function <lambda> at 0x0000000002C2A620>
+cdr  :  <function <lambda> at 0x0000000002C2A6A8>
+list  :  <function <lambda> at 0x0000000002C2A730>
+|  :  <function <lambda> at 0x0000000002C2A7B8>
+append  :  <built-in function add>
+len  :  <built-in function len>
+map  :  <class 'map'>
+print  :  <built-in function print>
+exit  :  Use exit() or Ctrl-Z plus Return to exit
+open  :  <built-in function open>
+procedure?  :  <built-in function callable>
+null?  :  <function <lambda> at 0x0000000002C2A840>
+bool?  :  <function <lambda> at 0x0000000002C2A8C8>
+number?  :  <function <lambda> at 0x0000000002C2A950>
+string?  :  <function <lambda> at 0x0000000002C2A9D8>
+tuple?  :  <function <lambda> at 0x0000000002C2AA60>
+list?  :  <function <lambda> at 0x0000000002C2AAE8>
+dict?  :  <function <lambda> at 0x0000000002C2AB70>
+and  :  <function <lambda> at 0x0000000002C2AC80>
+or  :  <function <lambda> at 0x0000000002C2AD08>
+isa  :  <built-in function isinstance>
+dir  :  <built-in function dir>
+type  :  <class 'type'>
+getattr  :  <built-in function getattr>
+setattr  :  <built-in function setattr>
+.  :  <function <lambda> at 0x0000000002C2AD90>
+int  :  {}
+__name__  :  math
+__doc__  :  This module is always available.  It provides access to the
+mathematical functions defined by the C standard.
+__package__  :
+__loader__  :  <class '_frozen_importlib.BuiltinImporter'>
+__spec__  :  ModuleSpec(name='math', loader=<class '_frozen_importlib.BuiltinImp
+orter'>, origin='built-in')
+acos  :  <built-in function acos>
+acosh  :  <built-in function acosh>
+asin  :  <built-in function asin>
+asinh  :  <built-in function asinh>
+atan  :  <built-in function atan>
+atan2  :  <built-in function atan2>
+atanh  :  <built-in function atanh>
+ceil  :  <built-in function ceil>
+copysign  :  <built-in function copysign>
+cos  :  <built-in function cos>
+cosh  :  <built-in function cosh>
+degrees  :  <built-in function degrees>
+erf  :  <built-in function erf>
+erfc  :  <built-in function erfc>
+exp  :  <built-in function exp>
+expm1  :  <built-in function expm1>
+fabs  :  <built-in function fabs>
+factorial  :  <built-in function factorial>
+floor  :  <built-in function floor>
+fmod  :  <built-in function fmod>
+frexp  :  <built-in function frexp>
+fsum  :  <built-in function fsum>
+gamma  :  <built-in function gamma>
+gcd  :  <built-in function gcd>
+hypot  :  <built-in function hypot>
+isclose  :  <built-in function isclose>
+isfinite  :  <built-in function isfinite>
+isinf  :  <built-in function isinf>
+isnan  :  <built-in function isnan>
+ldexp  :  <built-in function ldexp>
+lgamma  :  <built-in function lgamma>
+log  :  <built-in function log>
+log1p  :  <built-in function log1p>
+log10  :  <built-in function log10>
+log2  :  <built-in function log2>
+modf  :  <built-in function modf>
+pow  :  <built-in function pow>
+radians  :  <built-in function radians>
+sin  :  <built-in function sin>
+sinh  :  <built-in function sinh>
+sqrt  :  <built-in function sqrt>
+tan  :  <built-in function tan>
+tanh  :  <built-in function tanh>
+trunc  :  <built-in function trunc>
+pi  :  3.141592653589793
+e  :  2.718281828459045
+tau  :  6.283185307179586
+inf  :  inf
+nan  :  nan
+....
+ZhScheme>(exit)
 
 
 我们复习一下Python的数据类型，并学习使用set为一个变量赋值。
