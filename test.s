@@ -25,6 +25,8 @@
 
 (import scheme.s)
 
+(import newton.s)
+
 (quote
 (import "http://test.org/test.s" "test")
 )

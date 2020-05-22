@@ -7,5 +7,5 @@
 (set fib (lambda (n) (if (< n 2) 1 (+ (fib (- n 1)) (fib (- n 2))))))
 (define (range n) (if (eq? n 1) (list 1) (append (range (- n 1)) (list n))))
 (print (range 10))
-(print (map fib (range 10)))
-(print (map fib (range 20)))
+(print (list (map fib (range 10))))
+(print (list (map fib (range 20))))
