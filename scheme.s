@@ -1,7 +1,7 @@
 (set j (list 34 "test" 3 4))
 (print j|0)
 (print j|1)
-(print ([] j 1))
+(print (| j 1))
 
 (tuple 2 3)
 

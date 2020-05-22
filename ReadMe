@@ -98,7 +98,7 @@ class
 读写文件
 
 读写文件直接使用Python的file对象，以下程序打开test.ss文件，并读取，打印：
-(set f (open test.ss r))
+(set f (open "test.ss" "r"))
 (print (f.read))
 
 
