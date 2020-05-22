@@ -8,6 +8,7 @@ import operator as op
 import datetime
 import types
 import sys
+import unittest
 
 sys.setrecursionlimit(1000000)
 
@@ -77,8 +78,8 @@ env_g.my.update({
         'car':     lambda x: x[0],
         'cdr':     lambda x: x[1:], 
         'list':    lambda *x: list(x), 
-        # 考虑用[]实现列表下标
-        '[]':       lambda x, y: x[y], 
+        # 考虑用|实现列表下标
+        '|':       lambda x, y: x[y], 
 		
         'append':  op.add,  	# 连接两个列表
 		'len':     len, 		# 列表长度
@@ -213,7 +214,36 @@ def get_list(tokens):
     else:
 	    # 这里将字符串转成具体的数据类型，
         return atom(token)
+
+def has_op(x):
+    for i in x:
+        if i == '.' or i == '|':
+            return True
+    return False
+    
+# obj.he|1.o|2:-1  -->  [| [. obj he] 1]
+def expression_to_list(x, e):
+    y = []
+    z = x
+    for i in range(len(z)):
+        if z[i] == '.' or z[i] == '|':
+            if len(y) == 0:
+                # []
+                y.append(z[0:i])
+                y.insert(0, z[i])
+                print("--- ", y)
+            else:
+                #  y = [. obj]
+                y.append(z[0:i])
+                print("+++++", y)
+                # y = [. obj he]
+                y = [z[i], y]
+            z = z[(i+1):]
+            print(z)
+    y.append(z)
         
+    return y        
+    
 # 可能返回一个bool,int,float,string,list或者None
 
 def eval_list(x, e):
@@ -274,26 +304,15 @@ def eval_list(x, e):
                 if tmp != None:
                     tmp.my[x[1]] = [eval_list(x[2], e), 1]
                 else:
-                    # 首次定义
-                    e.my[x[1]] = [eval_list(x[2], e), 0]
+                    if has_op(x[1]):
+                        y = expression_to_list(x[1], e)
+                        print(y)     
+                        # e.my[y[i]][1] = 1
+                    else:
+                        # 首次定义变量
+                        e.my[x[1]] = [eval_list(x[2], e), 0]
             return
             
-        # (set-list x 2 12)   设置列表的某一项       
-        elif x[0] == 'set-list':
-            if len(x) != 4:
-                print("Error : [set-list] need 4 args.")
-                return
-            
-            a = eval_list(x[1], e)
-            b = eval_list(x[2], e)
-            c = eval_list(x[3], e)
-            
-            if isa(a, List):
-                a[b] = c
-            else:
-                print("Error : argument 1 must be a list.")
-            return
-
         elif x[0] == 'import':
             f = open(x[1], "r")            
             program = f.read()
@@ -431,48 +450,38 @@ def eval_list(x, e):
         if x[0] == '\"' and x[-1] == '\"':
             return x[1:-1]
         
-        # obj.he|1.o|2:-1  
-        y = []
-        z = x
-        while True:
-            for i in range(len(z)):
-                if z[i] == '.' or z[i] == '|':
-                    y = y + [z[0:i]] + [z[i]]
-                    z = z[(i+1):]
-                    break   
-            else:
-                break
-        y = y + [z]                   
-                     
-        # y的长度为1，上面已经查找过环境变量，这里只能是字符串常量。
-        if len(y) == 1:
+        # x - > x
+        # obj.he|1.o|2:-1  -->  [| [. obj he] 1]
+        if has_op(x):
+            y = expression_to_list(x, e)   
+            return eval_list(y, e)
+        else:
+            # 返回字符串
             return x
-            
-        for i in range(len(y)):
-            if i == 0:
-                t = eval_list(y[0], e)
-            #  对象成员
-            if y[i] == '.':
-                t = getattr(t, y[i+1])
-            #  列表成员
-            if y[i] == '|':
-                t = t[int(y[i+1])]            
-        return t
         
     # int float
     return x   
-    
-if len(sys.argv) == 1:
-    # 逐行解释执行用户输入
-    repl()
-    exit()
 
 def is_blank(line):
     for ch in line:
         if ch != ' ' and ch != '\t' and ch != '\n' and ch != '\r':
             return False
     return True
+    
+class MyTest(unittest.TestCase):
+    def test(self):
+        self.assertEqual(is_blank(" \t   \n"), True)
+        self.assertEqual(expression_to_list("obj.m", env_g), ["." "obj"  "m"])
+        #self.assertEqual(expression_to_list("obj.m|2", env_g), ["|" ["." "obj" "m"] 2])
         
+t = MyTest()
+t.test()
+
+if len(sys.argv) == 1:
+    # 逐行解释执行用户输入
+    repl()
+    exit()
+
 # 以行为单位读取文件并解释执行。
 def eval_as_line(f):
     for line in f:
