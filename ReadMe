@@ -18,7 +18,7 @@ ZhScheme不符合任何一个Lisp，Scheme标准，作者无意实现一个符�
 
 
 待完善功能：  
-import数直接执行http；递归函数调用层次太少；生成Lua虚拟机字节码
+import直接执行http；递归函数调用层次太少；生成Lua虚拟机字节码
 
 
 和Lisp/Scheme的一些区别（不完全）：

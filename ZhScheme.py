@@ -225,23 +225,23 @@ def has_op(x):
 def expression_to_list(x, e):
     y = []
     z = x
-    for i in range(len(z)):
-        if z[i] == '.' or z[i] == '|':
-            if len(y) == 0:
-                # []
-                y.append(z[0:i])
-                y.insert(0, z[i])
-                print("--- ", y)
-            else:
-                #  y = [. obj]
-                y.append(z[0:i])
-                print("+++++", y)
-                # y = [. obj he]
-                y = [z[i], y]
-            z = z[(i+1):]
-            print(z)
-    y.append(z)
-        
+    while True:
+        for i in range(len(z)):
+            if z[i] == '.' or z[i] == '|':
+                if len(y) == 0:
+                    # []
+                    y.append(z[0:i])
+                    y.insert(0, z[i])
+                else:
+                    #  y = [. obj]
+                    y.append(z[0:i])
+                    # y = [. obj he]
+                    y = [z[i], y]
+                z = z[(i+1):]
+                break
+        else:
+            y.append(z)
+            break        
     return y        
     
 # 可能返回一个bool,int,float,string,list或者None
@@ -471,9 +471,10 @@ def is_blank(line):
 class MyTest(unittest.TestCase):
     def test(self):
         self.assertEqual(is_blank(" \t   \n"), True)
-        self.assertEqual(expression_to_list("obj.m", env_g), ["." "obj"  "m"])
-        #self.assertEqual(expression_to_list("obj.m|2", env_g), ["|" ["." "obj" "m"] 2])
-        
+        self.assertEqual(expression_to_list("obj.m", env_g), ['.','obj', 'm'])
+        self.assertEqual(expression_to_list("obj.m|2", env_g), ['|', ['.', 'obj','m'], '2'])
+        self.assertEqual(expression_to_list("obj.m|2.a|4", env_g), ['|', ['.', ['|', ['.', 'obj','m'], '2'], 'a'], '4'])
+
 t = MyTest()
 t.test()
 
