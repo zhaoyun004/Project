@@ -23,32 +23,6 @@
 )
 (sum 101 0)
 
-(quote "牛顿法求平方根")
-
-(define (sqrt-iter guess x)
-    (if (good-enough? guess x)
-         guess
-        (sqrt-iter (improve guess x) x) 
-    )
-)
-
-(define (improve guess x)
-    (average guess (/ x guess))
-)
-
-(define (average x y)
-    (/ (+ x y) 2)
-)
-
-(define (good-enough? guess x) 
-    (< (abs (- (* guess guess) x)) 0.0001)
-)
-
-(print (average 7 6))
-(print (improve 1 5))
-(print (good-enough? 1.41 3))
-
-(print (sqrt-iter 1.4 4))
 (import scheme.s)
 
 (quote
