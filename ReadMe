@@ -167,10 +167,8 @@ nan  :  nan
 ....
 ZhScheme>(exit)
 
-
-使用set定义和赋值变量：
+多数（标准）Scheme里，变量需要先define(定义)，然后set!(赋值)，其实，定义和赋值用一个关键字更为简洁。在ZhScheme里，使用set直接定义并赋值，而且一次能定义并赋值多个变量：
 (set (a 12) (b 13) (c "hello"))
-
 
 ZhScheme的数据类型：
 

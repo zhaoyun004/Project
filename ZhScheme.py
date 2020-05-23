@@ -154,14 +154,14 @@ def atom(token):
 # call this to entery Interaction.
 
 def repl(prompt='ZhScheme> '):
-    "A prompt-read-eval_list-print loop."
+    "A prompt-read-eval_all-print loop."
     while True:
         # 读取输入，并解析，得到字符串列表
         tmp = parse(input(prompt))
         print(tmp)
         
         # 分析列表的意义，并计算。
-        val = eval_list(tmp, env_g)
+        val = eval_all(tmp, env_g)
         
         # 打印计算结果
         if val is not None: 
@@ -196,7 +196,7 @@ class Procedure(object):
                 if e0 != None:
                     e0.my[args[i]][1] = 1
                         
-        return eval_list(self.body, c)
+        return eval_all(self.body, c)
 
 # x： 待解析的list
 # e:  env对象
@@ -218,36 +218,36 @@ def get_list(tokens):
 
 def has_op(x):
     for i in x:
-        if i == '.' or i == '|':
+        if i == '.' or i == '|' or i == '+' or i == '-' or i == '*' or i == '/':
             return True
     return False
     
-# obj.he|1.o|2:-1  -->  [| [. obj he] 1]
+# obj.he|1.o|2+2*3/4 -->  [| [. obj he] 1]
 def expression_to_list(x, e):
     y = []
     z = x
     while True:
         for i in range(len(z)):
-            if z[i] == '.' or z[i] == '|':
+            if z[i] == '.' or z[i] == '|' or z[i] == '+' or z[i] == '-' or z[i] == '*' or z[i] == '/':
                 if len(y) == 0:
                     # []
-                    y.append(z[0:i])
-                    y.insert(0, z[i])
+                    y.append(atom(z[0:i]))
+                    y.insert(0, atom(z[i]))
                 else:
                     #  y = [. obj]
-                    y.append(z[0:i])
+                    y.append(atom(z[0:i]))
                     # y = [. obj he]
-                    y = [z[i], y]
+                    y = [atom(z[i]), y]
                 z = z[(i+1):]
                 break
         else:
-            y.append(z)
-            break        
+            y.append(atom(z))
+            break 
     return y        
     
 # 可能返回一个bool,int,float,string,list或者None
 
-def eval_list(x, e):
+def eval_all(x, e):
     
     if isa(x, List):
         if x == []:
@@ -272,7 +272,7 @@ def eval_list(x, e):
         elif x[0] == 'time':
         
             start = datetime.datetime.now()
-            eval_list(x[1], e)
+            eval_all(x[1], e)
             end = datetime.datetime.now()    
             print(end - start)
             return
@@ -310,15 +310,15 @@ def eval_list(x, e):
                     tmp = find_all(i[0], e)
                     # 为变量赋值
                     if tmp != None:
-                        tmp.my[i[0]] = [eval_list(i[1], e), 1]
+                        tmp.my[i[0]] = [eval_all(i[1], e), 1]
                     else:
                         if has_op(i[0]):
                             y = expression_to_list(i[0], e)
                             print("_____", y)     
-                            # eval_list(y, e) = eval_list(x[2], e)
+                            # eval_all(y, e) = eval_all(x[2], e)
                         else:
                             # 首次定义变量
-                            e.my[i[0]] = [eval_list(i[1], e), 0]
+                            e.my[i[0]] = [eval_all(i[1], e), 0]
             return
             
         elif x[0] == 'import':
@@ -327,13 +327,13 @@ def eval_list(x, e):
             f.close()
             program = "(begin" + program + ")"
             tmp = get_list(tokenize(program))
-            eval_list(tmp, e)
+            eval_all(tmp, e)
             return
             
         # 单元测试，确定某个函数的返回值和预期一致。
         elif x[0] == 'expect':
-            a  = eval_list(x[1], e)
-            b  = eval_list(x[2], e)
+            a  = eval_all(x[1], e)
+            b  = eval_all(x[2], e)
             if a != b:
                 print(x[1],"=", a, "---- Expected : ", b)
             return
@@ -344,9 +344,9 @@ def eval_list(x, e):
             for i in range(l - 1):
                 if i + 1 == l - 1:
                     # 返回最后一项
-                    return eval_list(x[i+1], e)
+                    return eval_all(x[i+1], e)
                 else:
-                    eval_list(x[i+1], e)
+                    eval_all(x[i+1], e)
 
         elif x[0] == 'lambda':
         
@@ -358,21 +358,21 @@ def eval_list(x, e):
             return Procedure(x[1], x[2], e, "lambda")
             
         elif x[0] == 'if':        
-            cond = eval_list(x[1], e)
+            cond = eval_all(x[1], e)
             if cond == True:
-                return eval_list(x[2], e)
+                return eval_all(x[2], e)
             else:
                 if len(x) == 4:
-                    return eval_list(x[3], e)
+                    return eval_all(x[3], e)
                     
         elif x[0] == 'while':
         
             if (len(x) != 3):
                 print("Error : [while] needs 2 args.")
                 
-            while eval_list(x[1], e):
+            while eval_all(x[1], e):
                 # 检测到break，很可能是跳出循环。
-                if eval_list(x[2], e) == 'break':
+                if eval_all(x[2], e) == 'break':
                     break
             return
             
@@ -381,27 +381,27 @@ def eval_list(x, e):
             if (len(x) != 5):
                 print("Error : [for] needs 4 args.")
                 
-            eval_list(x[1], e)
+            eval_all(x[1], e)
             while True:
-                if eval_list(x[2], e) == True:
-                    tmp = eval_list(x[4], e)
+                if eval_all(x[2], e) == True:
+                    tmp = eval_all(x[4], e)
                     if tmp == 'break':
                         break
                 else:
                     break
-                eval_list(x[3], e)     # (+ i 1) 步长
+                eval_all(x[3], e)     # (+ i 1) 步长
                 
             return
             
         elif x[0] == 'for-each':
-            for i in eval_list(x[2], e): 
-                eval_list(x[1], e)(i)
+            for i in eval_all(x[2], e): 
+                eval_all(x[1], e)(i)
             return
 
         elif x[0] == 'class':
         
             print(x[2])
-            tmp = type(x[1],(object,),dict(eval_list(x[2], e)))
+            tmp = type(x[1],(object,),dict(eval_all(x[2], e)))
             #dir(tmp)
             if x[1] not in e.my.keys():
                 e.my[x[1]] = tmp
@@ -412,15 +412,13 @@ def eval_list(x, e):
         elif x[0] == 'break':
             return 'break'      
             
-        else:        
-        
-            tmp = eval_list(x[0], e)
-            
-            #对象函数调用
+        else:                    
+            #对象成员函数调用
+            tmp = eval_all(x[0], e)
             if callable(tmp):
                 args = []
                 for i in x[1:]:
-                    args = args + [eval_list(i, e)]
+                    args = args + [eval_all(i, e)]
                 return tmp(*args)
 
             e0 = find_all(x[0], e)
@@ -429,24 +427,29 @@ def eval_list(x, e):
                 print("Error : What is [", x[0], "]?" )
                 return 
                 
-            #使用参数之前，将参数变量对应的列表第二项置为1
-            if isa(e0.my[x[0]], List):
+            if isa(e0.my[x[0]], List):                              
+                #自定义函数或者变量。使用参数之前，将参数变量对应的列表第二项置为1
                 e0.my[x[0]][1] = 1
                 tmp = e0.my[x[0]][0]
             else:
-                # 内置函数
+                # 内置函数或变量
                 tmp = e0.my[x[0]]
 
             # 函数调用
             if callable(tmp):
                 args = []
                 for i in x[1:]:
-                    args = args + [eval_list(i, e)]
+                    args = args + [eval_all(i, e)]
+                print(args)
                 return tmp(*args)
                 
             if type(tmp) is types.new_class: 
                 # (point) 创造对象
                 return tmp()
+                
+            # ['+', ['.', 'obj','m'], '2'] 表达式解析
+            #print(".....", x)
+            #return eval_all(x, e)
             
     if isa(x, String):
         if x == "True":
@@ -472,7 +475,7 @@ def eval_list(x, e):
         # obj.he|1.o|2:-1  -->  [| [. obj he] 1]
         if has_op(x):
             y = expression_to_list(x, e)   
-            return eval_list(y, e)
+            return eval_all(y, e)
         else:
             # 返回字符串
             return x
@@ -490,8 +493,8 @@ class MyTest(unittest.TestCase):
     def test(self):
         self.assertEqual(is_blank(" \t   \n"), True)
         self.assertEqual(expression_to_list("obj.m", env_g), ['.','obj', 'm'])
-        self.assertEqual(expression_to_list("obj.m|2", env_g), ['|', ['.', 'obj','m'], '2'])
-        self.assertEqual(expression_to_list("obj.m|2.a|4", env_g), ['|', ['.', ['|', ['.', 'obj','m'], '2'], 'a'], '4'])
+        self.assertEqual(expression_to_list("obj.m+2", env_g), ['+', ['.', 'obj','m'], 2])
+        self.assertEqual(expression_to_list("obj.m|2.a|4", env_g), ['|', ['.', ['|', ['.', 'obj','m'], 2], 'a'], 4])
 
 t = MyTest()
 t.test()
@@ -510,7 +513,7 @@ def eval_as_line(f):
         print("...>")
         print(line)
         # 分析列表的意义，并计算。
-        val = eval_list(parse(line), env_g)
+        val = eval_all(parse(line), env_g)
         
         # 打印计算结果
         if val is not None: 
@@ -520,7 +523,7 @@ def eval_file(f):
     program = f.read()
     program = "(begin" + program + ")"
     tmp = get_list(tokenize(program))
-    eval_list(tmp, env_g)
+    eval_all(tmp, env_g)
 
 if len(sys.argv) == 2:
     f = open(sys.argv[1], "r")

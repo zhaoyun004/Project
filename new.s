@@ -2,7 +2,7 @@
 (print (f.read))
 
 (class point (list 
-    (list n "hello!") 
+    (list n 12) 
     (list m (lambda x (* 2 x))))
 )
 
@@ -16,5 +16,5 @@
 (print (| j 1))
 (set (j|0 12))
 
-(print j|3.n)
+(print j|3.n+3)
 (print (j|3.m 9))
