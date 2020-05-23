@@ -303,23 +303,22 @@ def eval_list(x, e):
                     if i == '.':
                         return
                         
-            # (set (a b c) (2 3 44)) 一次定义/赋值多个变量
-            if isa(x[1], List):
-                pass
-            else:
-                # 往外层查找变量，是否定义过？
-                tmp = find_all(x[1], e)
-                # 为变量赋值
-                if tmp != None:
-                    tmp.my[x[1]] = [eval_list(x[2], e), 1]
-                else:
-                    if has_op(x[1]):
-                        y = expression_to_list(x[1], e)
-                        print("_____", y)     
-                        # eval_list(y, e) = eval_list(x[2], e)
+            # (set (a 12) (b 32) (c 44)) 一次定义/赋值多个变量
+            for i in x: 
+                if i != 'set':
+                    # 往外层查找变量，是否定义过？
+                    tmp = find_all(i[0], e)
+                    # 为变量赋值
+                    if tmp != None:
+                        tmp.my[i[0]] = [eval_list(i[1], e), 1]
                     else:
-                        # 首次定义变量
-                        e.my[x[1]] = [eval_list(x[2], e), 0]
+                        if has_op(i[0]):
+                            y = expression_to_list(i[0], e)
+                            print("_____", y)     
+                            # eval_list(y, e) = eval_list(x[2], e)
+                        else:
+                            # 首次定义变量
+                            e.my[i[0]] = [eval_list(i[1], e), 0]
             return
             
         elif x[0] == 'import':
