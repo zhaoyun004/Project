@@ -46,17 +46,15 @@ Scheme中的cons，作用是构造一个pair，包括左右两个值，在ChezSc
 
 七、(import test.s)导入并执行test.s文件，可以在任意位置调用。
 
-八、取消了call//c。笔者认为call/cc相对循环和break语句，更难掌握，因为取消了call/cc相关代码，增加了break跳出循环关键字。
+八、取消了call/cc。笔者认为call/cc相对循环和break语句，更难掌握，因此删掉了call/cc相关代码，增加了break关键字 -- 跳出循环。
 
 
 单行交互模式
 
 运行python ZhScheme.py，进入单行交互模式。按照惯例，打印hello world:
-
 (print "hello , world!")
 
 print是Python内置函数，可以直接使用。运行(env)查看内置变量和函数，这些函数和变量可以直接使用：
-
 E:\Project\ZhScheme>python ZhScheme.py
 ZhScheme> (env)
 ['env']
@@ -166,7 +164,7 @@ nan  :  nan
 ZhScheme>(exit)
 
 
-我们复习一下Python的数据类型，并学习使用set为一个变量赋值。
+我们复习一下Python的数据类型，并学习使用set定义和赋值一个变量。
 
 一、基本数据类型(和Python保持一致)：
 int float bool string 
@@ -180,20 +178,20 @@ list tuple dict
 (| i 2)      -- 获得i的第二项 34
 i|2         -- 简写，意义同上。
 
-列表元素访问操作符为|，不同于大多程序设计语言，通常使用[]访问数组或者列表，我们简化使用、也简化解释器编程，使用单一操作符|访问列表。
+列表元素访问操作符为|，不同于大多程序设计语言，通常使用[]访问数组或者列表，我们做了简化，使用单一操作符|访问列表。用户少敲一个字符，同时解释器的实现也少写一些代码。 
 
 
-顺序 (begin (...) (...) (...))
+顺序块 (begin (...) (...) (...))
 begin -- 关键字，将依次计算各项，返回最后一项；可以嵌套使用。
 
-条件 (if (1) (2) (3)) 
+条件块 (if (1) (2) (3)) 
 if -- 关键字，判断1的结果，如果为True，则计算2并返回，否则计算3并返回。
 可以嵌套使用。
 
 大多程序设计语言里有return语句，返回函数值，ZhScheme没有return语句，但是可以通过begin和if的返回值来达到和return语句同样的效果。
 
 
-循环
+循环块
 while, for, break
 for-each
 
@@ -214,7 +212,7 @@ class
 (print (f.read))
 
 
-其他特性：
+其他常用特性：
 
 一、运行时间 (time (..))  
 
