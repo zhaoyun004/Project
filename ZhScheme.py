@@ -447,9 +447,7 @@ def eval_all(x, e):
                 # (point) 创造对象
                 return tmp()
                 
-            # ['+', ['.', 'obj','m'], '2'] 表达式解析
-            #print(".....", x)
-            #return eval_all(x, e)
+            # ['+', ['.', 'obj','m'], 2] 表达式解析
             
     if isa(x, String):
         if x == "True":
@@ -468,9 +466,10 @@ def eval_all(x, e):
             return e0.my[x]
         
         # 第一个和最后一直字符都是"，表示是一个字符串。
+        print(x)
         if x[0] == '\"' and x[-1] == '\"':
             return x[1:-1]
-        
+        # (+ j|3.n 3)*2-1
         # x - > x
         # obj.he|1.o|2:-1  -->  [| [. obj he] 1]
         if has_op(x):

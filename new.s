@@ -16,5 +16,5 @@
 (print (| j 1))
 (set (j|0 12))
 
-(print j|3.n+3)
+(print j|3.n+3*2-1)
 (print (j|3.m 9))
