@@ -8,6 +8,7 @@ import operator as op
 import datetime
 import types
 import sys
+import os
 import unittest
 
 sys.setrecursionlimit(1000000)
@@ -115,6 +116,8 @@ env_g.my.update({
 })
 
 env_g.my.update(vars(math)) # sin, cos, sqrt, pi, ...
+#env_g.my.update(vars(os)) 
+#env_g.my.update(vars(sys)) 
               
 def parse(program):
     "Read a Scheme expression from a string."

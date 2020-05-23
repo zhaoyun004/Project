@@ -7,7 +7,7 @@ git clone https://github.com/zhangyun007/ZhScheme.git
 
 运行python ZhScheme.py进入单行交互模式。
 
-运行python ZhScheme.py test.s解释执行test.s文件，测试文件包括：scheme.s test.s new.s first.s 
+运行python ZhScheme.py test.s解释执行test.s文件，测试文件包括：scheme.s test.s new.s first.s newton.s
 
 扩展名为ss的文件可以运行在Racket和ChezScheme下，而不能运行在ZhScheme中。
 
@@ -18,7 +18,7 @@ ZhScheme不符合任何一个Lisp，Scheme标准，作者无意实现一个符�
 
 
 待完善功能：  
-import直接执行http；递归函数调用层次太少；生成Lua虚拟机字节码
+import直接执行http；函数多个参数；递归函数调用层次太少；生成Lua虚拟机字节码
 
 
 和Lisp/Scheme的一些区别（不完全）：
@@ -48,6 +48,11 @@ Scheme中的cons，作用是构造一个pair，包括左右两个值，在ChezSc
 
 八、取消了call/cc。笔者认为call/cc相对循环和break语句，更难掌握，因此删掉了call/cc相关代码，增加了break关键字 -- 跳出循环。
 
+九、中缀表达式：
+
+十、同一个函数支持多个参数
+
+
 
 单行交互模式
 
@@ -56,7 +61,7 @@ Scheme中的cons，作用是构造一个pair，包括左右两个值，在ChezSc
 print是Python内置函数，可以直接使用。
 
  计算3+4:
- (+ 3 4)
+ (+ 3 4)或者3+4
 
 运行(env)查看内置变量和函数，这些函数和变量可以直接使用：
 E:\Project\ZhScheme>python ZhScheme.py
@@ -184,8 +189,11 @@ list tuple dict
 
 ZhScheme支持符号中缀表达式：j|3.n+3*2-1，符号的运算从左到右。注意，该表达式+在*左边，所以先算+，后算*，这和数学中定义的运算符优先级是不一致的。
 
-注意，表达式中不能有空格，否则会当成几个由空格隔开的表达式，这和其他多数程序设计语言是不一样的。
+注意:
 
+一、表达式中不能有空格，否则会当成几个由空格隔开的表达式，这和其他多数程序设计语言是不一样的。
+
+二、多数Scheme使用-作为变量分隔符，比如你可以定义一个变量is-a-list。因为ZhScheme支持中缀，is-a-list的含义则是3个变量相减。你应当使用_来分割字符串作为变量名。
 
 
 列表定义与元素访问
