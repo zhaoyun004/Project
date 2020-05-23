@@ -5,7 +5,7 @@
     (list n "hello!") 
     (list m (lambda x (* 2 x))))
 )
- 
+
 (set x (point))
 (print x.n)
 (print (x.m 123))

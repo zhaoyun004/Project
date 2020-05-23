@@ -13,17 +13,18 @@ import unittest
 sys.setrecursionlimit(1000000)
 
 Bool = bool
-String = str          			# A Lisp String is implemented as a Python str
-Number = (int, float) 	        # A Lisp Number is implemented as a Python int or float
-# List中可以包含List、Number、String、Bool
-List   = list         			# A Lisp List is implemented as a Python list
+String = str          			
+Number = (int, float)
+ 	        
+# List中可以包含List、Number、String、Bool、Tuple、Dict
+List   = list        
 Tuple  = tuple
 Dict   = dict
     
 
 isa = isinstance
 
-# env中有两个变量，其中my存放 [块/函数] 计算时新定义的变量；father指向上层环境变量。
+# env中有两个变量，其中my存放计算 [块/函数] 时新定义的变量；father指向上层环境变量。
 # 查找变量时，必须沿着叶子节点my一直找到根（None）。
 class env:
     def __init__(self, fa):
@@ -53,7 +54,7 @@ def find(var, e):
         
 env_g = env(None);
 
-# 环境变量（全局变量），用户可以修改。
+# 环境变量（全局变量），用户自定义的全局变量和函数也保存在这里。
 env_g.my.update({
         '+':    op.add, 
         '-':    op.sub, 
@@ -274,6 +275,7 @@ def eval_list(x, e):
             eval_list(x[1], e)
             end = datetime.datetime.now()    
             print(end - start)
+            return
          
         # type/racket
         # 整型变量 (int a) (int a 3)
@@ -294,6 +296,13 @@ def eval_list(x, e):
                 exit()
             
         elif x[0] == 'set': 
+        
+            # "obj.he|1.o"  -->  obj.he|1.o
+            def expression_var(x, e):
+                for i in x:
+                    if i == '.':
+                        return
+                        
             # (set (a b c) (2 3 44)) 一次定义/赋值多个变量
             if isa(x[1], List):
                 pass
@@ -320,7 +329,16 @@ def eval_list(x, e):
             program = "(begin" + program + ")"
             tmp = get_list(tokenize(program))
             eval_list(tmp, e)
-
+            return
+            
+        # 单元测试，确定某个函数的返回值和预期一致。
+        elif x[0] == 'expect':
+            a  = eval_list(x[1], e)
+            b  = eval_list(x[2], e)
+            if a != b:
+                print(x[1],"=", a, "---- Expected : ", b)
+            return
+            
         # (begin (...) (...) (...)) 依次执行。
         elif x[0] == 'begin':
             l = len(x)
@@ -379,6 +397,7 @@ def eval_list(x, e):
         elif x[0] == 'for-each':
             for i in eval_list(x[2], e): 
                 eval_list(x[1], e)(i)
+            return
 
         elif x[0] == 'class':
         

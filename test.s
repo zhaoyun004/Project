@@ -17,14 +17,14 @@
    
 (define (sum x r)
     (if (eq? x 0)
-        (print r)
+        r
         (sum (- x 1) (+ x r))
      )
 )
-(sum 101 0)
+
+(expect (sum 100 0) 5050)
 
 (import scheme.s)
-
 (import newton.s)
 
 (quote

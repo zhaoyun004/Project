@@ -14,7 +14,7 @@ git clone https://github.com/zhangyun007/ZhScheme.git
 
 三、文档说明
 
-ZhScheme不符合任何一个Lisp，Scheme标准，作者无意实现一个符合某个标准的Scheme或者Lisp。ZhScheme更像Python，大量使用Python内置函数，数据结构和Python完全一样。
+ZhScheme不符合任何一个Lisp，Scheme标准，作者无意实现一个符合某个标准的Scheme或者Lisp。ZhScheme更像Python，大量使用Python内置函数，数据类型和结构和Python完全一样。
 
 
 待完善功能：  
@@ -24,7 +24,7 @@ import直接执行http；递归函数调用层次太少；生成Lua虚拟机字�
 和Lisp/Scheme的一些区别（不完全）：
 
 
-一、quote，用于注释。
+一、quote用于注释。
 
 取消了Symbol类型，使用python字符串。
 
@@ -42,6 +42,11 @@ Scheme里bool值为#T和#F,ZheScheme直接使用Python的bool型 -- True和False
 
 Scheme中的cons，作用是构造一个pair，包括左右两个值，在ChezScheme和Racket中，(cons 1 2)的输出是(1 . 2)，用.来区分左右两部分，car取得左值，cdr取得右值，可以对一个list取car和cdr。
 
+六、(env)查看当前的环境变量，你可以在任意位置调用
+
+七、(import test.s)导入并执行test.s文件，可以在任意位置调用。
+
+八、取消了call//c。笔者认为call/cc相对循环和break语句，更难掌握，因为取消了call/cc相关代码，增加了break跳出循环关键字。
 
 
 单行交互模式
@@ -50,7 +55,7 @@ Scheme中的cons，作用是构造一个pair，包括左右两个值，在ChezSc
 
 (print "hello , world!")
 
-print是Python内置函数，可以直接使用。运行(env)查看内置函数，这些函数和变量可以直接使用：
+print是Python内置函数，可以直接使用。运行(env)查看内置变量和函数，这些函数和变量可以直接使用：
 
 E:\Project\ZhScheme>python ZhScheme.py
 ZhScheme> (env)
@@ -169,6 +174,15 @@ int float bool string
 二、复合数据类型(和Python保持一致)：
 list tuple dict
 
+
+列表元素访问
+(set i (list 12 "hello" 34 True))
+(| i 2)      -- 获得i的第二项 34
+i|2         -- 简写，意义同上。
+
+列表元素访问操作符为|，不同于大多程序设计语言，通常使用[]访问数组或者列表，我们简化使用、也简化解释器编程，使用单一操作符|访问列表。
+
+
 顺序 (begin (...) (...) (...))
 begin -- 关键字，将依次计算各项，返回最后一项；可以嵌套使用。
 
@@ -176,27 +190,17 @@ begin -- 关键字，将依次计算各项，返回最后一项；可以嵌套�
 if -- 关键字，判断1的结果，如果为True，则计算2并返回，否则计算3并返回。
 可以嵌套使用。
 
+大多程序设计语言里有return语句，返回函数值，ZhScheme没有return语句，但是可以通过begin和if的返回值来达到和return语句同样的效果。
+
 
 循环
 while, for, break
-
 for-each
 
 
-时间 (time (..))  
+函数定义define与lambda
 
-time --- 关键字，time后只能有一项参数，运行参数项，并打印运行时间。
-例如：(time (+ 4 5)) --- 计算”4+5“，并打印运行时间。
-
-你可以用begin将一些列语句包装起来，作为time的参数:
-(time (begin (...) (...) (...) (...)))
-
-嵌套使用：
-(time (begin (...) (time (...)) (...) (...)))
-
-
-函数与lambda
-
+函数内部可以定义函数，参见newton.s，函数A内定义的函数只能在函数A内使用，A外部的其他函数不能使用。
 
 class
 
@@ -212,7 +216,30 @@ class
 
 其他特性：
 
-一、无用变量的检测警告功能：
+一、运行时间 (time (..))  
+
+time --- 关键字，time后只能有一项参数，运行参数项，并打印运行时间。
+例如：(time (+ 4 5)) --- 计算”4+5“，并打印运行时间。
+
+你可以用begin将一系列语句包装起来，作为time的参数:
+(time (begin (...) (...) (...) (...)))
+
+嵌套使用：
+(time (begin (...) (time (...)) (...) (...)))
+
+
+二、单元测试
+
+单元测试，也就是测试你编写的函数。一个非常简单，几乎不用出错的函数，可能不需要单元测试，函数越复杂 --- 输入输出对应关系越复杂 --- 越需要单元测试。
+
+编写单元测试代码，避免多次重复手工测试，是良好的编程习惯。
+
+(expect (sum 100 0) 5050)
+
+expect关键字运算第二个参数（预期是一个函数调用），如果其结果和第三个参数不符，则打印出错误信息。
+
+
+三、无用变量的检测警告功能：
 
 new.s文件中定义了一个没有被使用的变量和函数，解释器能够检测到，并给出警告：
 (set abc 123)
@@ -228,7 +255,7 @@ Warn : [ abc ] is not used.
 Warn : [ efg ] is not used.
 
 
-递归函数和尾递归
+四、递归函数和尾递归
 
   (define (sum x r)
       (if (eq? x 0)
@@ -238,4 +265,6 @@ Warn : [ efg ] is not used.
     )
    (sum 150 0)
 
-当使用以上求和递归时，超过200层就会出现错误提示:栈不够用。
+因为Python不支持尾递归优化。当使用以上求和递归时，超过200层就会出现错误提示:栈不够用。
+
+即使这样，我们还是应该学习什么是尾递归，Python3不支持，不表示永远不支持。
