@@ -168,7 +168,11 @@ nan  :  nan
 ZhScheme>(exit)
 
 
-我们复习一下Python的数据类型，并学习使用set定义和赋值一个变量。
+使用set定义和赋值变量：
+(set (a 12) (b 13) (c "hello"))
+
+
+ZhScheme的数据类型：
 
 一、基本数据类型(和Python保持一致)：
 int float bool string 
@@ -176,8 +180,9 @@ int float bool string
 二、复合数据类型(和Python保持一致)：
 list tuple dict
 
+
 列表定义与元素访问
-(set i (list 12 "hello" 34 True))
+(set (i (list 12 "hello" 34 True)))
 (| i 2)      -- 获得i的第二项 34
 i|2         -- 简写，意义同上。
 
@@ -213,7 +218,7 @@ class
 读写文件
 
 读写文件直接使用Python的file对象，以下程序打开test.ss文件，并读取，打印：
-(set f (open "test.ss" "r"))
+(set (f (open "test.ss" "r")))
 (print (f.read))
 
 
@@ -245,7 +250,7 @@ expect关键字运算第二个参数（预期是一个函数调用），如果�
 三、无用变量的检测警告功能：
 
 new.s文件中定义了一个没有被使用的变量和函数，解释器能够检测到，并给出警告：
-(set abc 123)
+(set (abc 123))
 (define (efg x) (x))
 
 python ZhScheme.py new.s
