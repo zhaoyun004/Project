@@ -12,46 +12,12 @@ git clone https://github.com/zhangyun007/ZhScheme.git
 扩展名为ss的文件可以运行在Racket和ChezScheme下，而不能运行在ZhScheme中。
 
 
-三、文档说明
 
 ZhScheme不符合任何一个Lisp，Scheme标准，作者无意实现一个符合某个标准的Scheme或者Lisp。ZhScheme更像Python，大量使用Python内置函数，数据类型和结构和Python完全一样。
 
 
 待完善功能：  
 import直接执行http；函数多个参数；递归函数调用层次太少；生成Lua虚拟机字节码
-
-
-和Lisp/Scheme的一些区别（不完全）：
-
-
-一、quote用于注释。
-
-取消了Symbol类型，使用python字符串。
-
-二、define和set!
-
-ZhScheme中，define只能定义函数，而变量直接用set定义并赋值，set可以一次定义/赋值多个变量。
-
-三、bool类型
-
-Scheme里bool值为#T和#F,ZheScheme直接使用Python的bool型 -- True和False
-
-四、实现了C风格的while，for循环，循环体中可以使用break跳出循环。
-
-五、取消了cons，实现了car和cdr
-
-Scheme中的cons，作用是构造一个pair，包括左右两个值，在ChezScheme和Racket中，(cons 1 2)的输出是(1 . 2)，用.来区分左右两部分，car取得左值，cdr取得右值，可以对一个list取car和cdr。
-
-六、(env)查看当前的环境变量，你可以在任意位置调用
-
-七、(import test.s)导入并执行test.s文件，可以在任意位置调用。
-
-八、取消了call/cc。笔者认为call/cc相对循环和break语句，更难掌握，因此删掉了call/cc相关代码，增加了break关键字 -- 跳出循环。
-
-九、中缀表达式：
-
-十、同一个函数支持多个参数
-
 
 
 单行交互模式
@@ -187,13 +153,16 @@ list tuple dict
 
 中缀表达式：
 
-ZhScheme支持符号中缀表达式：j|3.n+3*2-1，符号的运算从左到右。注意，该表达式+在*左边，所以先算+，后算*，这和数学中定义的运算符优先级是不一致的。
+ZhScheme支持符号中缀表达式：j|3.n+3*2-1，符号的运算从左到右。该表达式+在*左边，所以先算+，后算*，这和数学中定义的运算符优先级是不一致的。
 
 注意:
 
 一、表达式中不能有空格，否则会当成几个由空格隔开的表达式，这和其他多数程序设计语言是不一样的。
 
-二、多数Scheme使用-作为变量分隔符，比如你可以定义一个变量is-a-list。因为ZhScheme支持中缀，is-a-list的含义则是3个变量相减。你应当使用_来分割字符串作为变量名。
+二、多数Scheme使用-作为变量分隔符，比如你可以定义一个变量is-a-list。因为ZhScheme支持中缀，is-a-list的意义是是3个变量相减。你应当使用_来分割字符串作为变量名:is_a_list。
+
+
+中缀和前缀的混合使用：j|3.n+(* 3 2)-1
 
 
 列表定义与元素访问
@@ -291,3 +260,38 @@ Warn : [ efg ] is not used.
 因为Python不支持尾递归优化。当使用以上求和递归时，超过200层就会出现错误提示:栈不够用。
 
 即使这样，我们还是应该学习什么是尾递归，Python3不支持，不表示永远不支持。
+
+
+
+
+和Lisp/Scheme的一些区别（不完全）：
+
+
+一、quote用于注释。
+
+取消了Symbol类型，使用python字符串。
+
+二、define和set!
+
+ZhScheme中，define只能定义函数，而变量直接用set定义并赋值，set可以一次定义/赋值多个变量。
+
+三、bool类型
+
+Scheme里bool值为#T和#F,ZheScheme直接使用Python的bool型 -- True和False
+
+四、实现了C风格的while，for循环，循环体中可以使用break跳出循环。
+
+五、取消了cons，实现了car和cdr
+
+Scheme中的cons，作用是构造一个pair，包括左右两个值，在ChezScheme和Racket中，(cons 1 2)的输出是(1 . 2)，用.来区分左右两部分，car取得左值，cdr取得右值，可以对一个list取car和cdr。
+
+六、(env)查看当前的环境变量，你可以在任意位置调用
+
+七、(import test.s)导入并执行test.s文件，可以在任意位置调用。
+
+八、取消了call/cc。笔者认为call/cc相对循环和break语句，更难掌握，因此删掉了call/cc相关代码，增加了break关键字 -- 跳出循环。
+
+九、中缀表达式：
+
+十、同一个函数支持多个参数
+

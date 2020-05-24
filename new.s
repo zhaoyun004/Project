@@ -1,8 +1,8 @@
 (set (f (open "test.ss" "r")))
 (print (f.read))
 
-(class point (list 
-    (list n 12) 
+(class point (list
+    (list n 12)
     (list m (lambda x (* 2 x))))
 )
 
@@ -18,3 +18,4 @@
 
 (print j|3.n+3*2-1)
 (print (j|3.m 9))
+(print j|3.n))

@@ -101,6 +101,9 @@ env_g.my.update({
 		'list?':   lambda x: isa(x, List), 
         'dict?':   lambda x: isa(x, Dict),
         
+        'int':     int,
+        'float':   float,
+        
         'not':     lambda x: not(x),
         'and':     lambda x, y: x and y,
         'or':      lambda x: x or y,
@@ -112,7 +115,6 @@ env_g.my.update({
         'getattr': getattr,
         'setattr': setattr,
         '.' :      lambda x,y: getattr(x, y),
-        'int': {}
 })
 
 env_g.my.update(vars(math)) # sin, cos, sqrt, pi, ...
@@ -279,11 +281,6 @@ def eval_all(x, e):
             end = datetime.datetime.now()    
             print(end - start)
             return
-         
-        # type/racket
-        # 整型变量 (int a) (int a 3)
-        elif x[0] == 'int':
-            return
             
         # 定义函数
         elif x[0] == 'define':       
@@ -331,6 +328,11 @@ def eval_all(x, e):
             program = "(begin" + program + ")"
             tmp = get_list(tokenize(program))
             eval_all(tmp, e)
+            return
+            
+        # 异常处理的问题在于，那些语句、函数会触发异常？
+        # (try ())
+        elif x[0] == 'try':
             return
             
         # 单元测试，确定某个函数的返回值和预期一致。
@@ -469,7 +471,6 @@ def eval_all(x, e):
             return e0.my[x]
         
         # 第一个和最后一直字符都是"，表示是一个字符串。
-        print(x)
         if x[0] == '\"' and x[-1] == '\"':
             return x[1:-1]
         # (+ j|3.n 3)*2-1

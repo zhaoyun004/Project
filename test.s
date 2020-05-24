@@ -23,10 +23,14 @@
      )
 )
 
+(print (int "12"))
 (expect (sum 100 0) 5050)
 
 (import scheme.s)
 (import newton.s)
+
+(set (m "hello"))
+(print m|3)
 
 (quote
 (import "http://test.org/test.s" "test")
