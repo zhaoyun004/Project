@@ -160,7 +160,7 @@ def atom(token):
                 
 # call this to entery Interaction.
 
-def repl(prompt='ZhScheme> '):
+def repl(prompt='Zh> '):
     "A prompt-read-eval_all-print loop."
     while True:
         # 读取输入，并解析，得到字符串列表
