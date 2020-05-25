@@ -15,6 +15,8 @@
 (set (e (dict (list (list "name" d)))))
 (print e)
 
+(print (~ e "name"))
+
 (set (i 1))
 (if (< i 19) (print (+ i 1)))
 
