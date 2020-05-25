@@ -22,7 +22,6 @@ List   = list
 Tuple  = tuple
 Dict   = dict
     
-
 isa = isinstance
 
 # env中有两个变量，其中my存放计算 [块/函数] 时新定义的变量；father指向上层环境变量。
@@ -116,7 +115,8 @@ env_g.my.update({
         'type':    type,
         'getattr': getattr,
         'setattr': setattr,
-        '.' :      lambda x,y: getattr(x, y),
+        
+        '.' :      lambda x,y: getattr(x, y),   
 })
 
 env_g.my.update(vars(math)) # sin, cos, sqrt, pi, ...
@@ -187,6 +187,10 @@ class Procedure(object):
 
     def __init__(self, parms, body, e, type):
         self.parms, self.body, self.e, self.type = parms, body, e, type
+        
+    # 判断本函数是否递归函数
+    def is_recursion():
+        pass
         
     def __call__(self, *args): 
     
@@ -264,7 +268,7 @@ def eval_all(x, e):
         # 如果希望利用Python内置过程，则放进env_g里。
         
         # 用于注释
-        elif x[0] == 'quote':
+        elif x[0] == 'quote' or x[0] == ';':
             return
             
         # 打印当前的环境。
@@ -419,7 +423,9 @@ def eval_all(x, e):
         elif x[0] == 'break':
             return 'break'      
             
-        else:                    
+        else:          
+            print("last call: [", x[0], " ]")        
+            
             #对象成员函数调用
             tmp = eval_all(x[0], e)
             if callable(tmp):
@@ -441,13 +447,12 @@ def eval_all(x, e):
             else:
                 # 内置函数或变量
                 tmp = e0.my[x[0]]
-
+                
             # 函数调用
             if callable(tmp):
                 args = []
                 for i in x[1:]:
                     args = args + [eval_all(i, e)]
-                print(args)
                 return tmp(*args)
                 
             if type(tmp) is types.new_class: 

@@ -1,4 +1,4 @@
-(quote "牛顿法求平方根")
+(; "牛顿法求平方根")
 
 (define (mysqrt x) (begin
 

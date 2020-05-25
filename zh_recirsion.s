@@ -1,4 +1,5 @@
-(quote "该文件用于将Scheme文件转化为Lua字节码")
+(; "尾调用优化")
+
 (set (f (open "test.s" "r")))
 (set (s (f.read)))
 (print s)
@@ -22,7 +23,7 @@
 
 (env_g.my.update d)
 
-(set (l (list (d.keys))))
+(set (l (' (d.keys))))
 
 (define (format d)
     (for-each (lambda x (print x ":" (~ d x))) l|0)
@@ -30,7 +31,7 @@
 
 (format d)
 
+()
 (define (eval_list l e)
     ()
 )
-
