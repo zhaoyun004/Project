@@ -80,7 +80,7 @@ env_g.my.update({
         'car':     lambda x: x[0],
         'cdr':     lambda x: x[1:], 
         'list':    lambda *x: list(x), 
-        '[]':      lambda *x: list(x), 
+        '\'':      lambda *x: list(x), 
         # 考虑用|实现列表下标
         '|':       lambda x, y: x[int(y)], 
         # 字典key访问
