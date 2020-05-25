@@ -88,7 +88,7 @@ env_g.my.update({
 		'len':     len, 		# 列表长度
 		'map':     map,
 		'print':   print,
-		'exit':	   exit,
+		'exit':	   sys.exit,
         
         'open':    open,
                         
@@ -296,10 +296,10 @@ def eval_all(x, e):
                     e.my[x[1][0]] = [Procedure(x[1][1:], x[2], e, "define"), 0] 
                 else:
                     print("Error: define [ ", x[1][0], " ] again.")
-                    exit()
+                    sys.exit(0)
             else:
                 print("Error: Should define a function.")
-                exit()
+                sys.exit(0)
             
         elif x[0] == 'set': 
         
@@ -424,7 +424,6 @@ def eval_all(x, e):
             return 'break'      
             
         else:          
-            print("last call: [", x[0], " ]")        
             
             #对象成员函数调用
             tmp = eval_all(x[0], e)
@@ -432,6 +431,7 @@ def eval_all(x, e):
                 args = []
                 for i in x[1:]:
                     args = args + [eval_all(i, e)]
+                print("[", x[0], *args, " ]")        
                 return tmp(*args)
 
             e0 = find_all(x[0], e)
@@ -453,12 +453,14 @@ def eval_all(x, e):
                 args = []
                 for i in x[1:]:
                     args = args + [eval_all(i, e)]
+                print("[", x[0], *args, " ]")        
                 return tmp(*args)
                 
             if type(tmp) is types.new_class: 
+                print("[", x[0], *args, " ]")        
                 # (point) 创造对象
                 return tmp()
-                
+                               
             # ['+', ['.', 'obj','m'], 2] 表达式解析
             
     if isa(x, String):
@@ -512,7 +514,7 @@ t.test()
 if len(sys.argv) == 1:
     # 逐行解释执行用户输入
     repl()
-    exit()
+    sys.exit(0)
 
 # 以行为单位读取文件并解释执行。
 def eval_as_line(f):
@@ -546,4 +548,4 @@ if len(sys.argv) == 2:
     for i in env_g.my.keys():
         if isa(env_g.my[i] ,List) and env_g.my[i][1] == 0:
             print("Warn : [", i, "] is not used." )
-    exit()
+    sys.exit(0)
