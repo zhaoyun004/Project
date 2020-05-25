@@ -4,19 +4,19 @@
 (print s)
 
 (quote "类未使用没有警告")
-(class envi ([]
-    ([] my (dict ([])))
-    ([] father nil)
-    ([] setfa (lambda x (set (father x))))
+(class envi ('
+    (' my (dict (')))
+    (' father nil)
+    (' setfa (lambda x (set (father x))))
     )
 )
 
 (set (env_g (envi)))
 
-(set (d (dict ([] ([] "+" +) 
-    ([] "-" -)
-    ([] "*" *)
-    ([] "/" /)
+(set (d (dict (' (' "+" +) 
+    (' "-" -)
+    (' "*" *)
+    (' "/" /)
     )))
 )
 
