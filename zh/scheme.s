@@ -12,24 +12,24 @@
 
 (print (d.keys))
 
-(set (e (dict (list (list "name" d)))))
-(print e)
+(set (t (dict (list (list "name" d)))))
+(print t)
 (env)
 
-(print (~ e "name"))
+(print (: t "name"))
 
 (set (i 1))
-(if (< i 19) (print (+ i 1)))
+(if (< i 19) (print (+ i 1)) ())
 
 (while (< i 23) (begin 
     (print i) 
     (set (i (+ i 1)))
-    (if (eq? i 20) break))
+    (if (eq? i 20) break ()))
  )
 
 (for (set (i 23)) (< i 45) (set (i (+ i 2))) (begin 
     (print i) 
-    (if (eq? i 43) break))
+    (if (eq? i 43) break ()))
 )
 
 (set (sum 0))

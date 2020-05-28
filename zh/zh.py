@@ -372,11 +372,13 @@ def eval_all(x, e):
                 
             # (begin (...) (...) (...)) 依次执行。
             elif x[0] == 'begin':
-                for exp in x[1:-1]:
+                for exp in x[1:]:
                     eval_all(exp, e)
-                x = x[-1]
+                #x = x[-1]
                 
             elif x[0] == 'if':     
+                print(len(x))
+                print(x[2])
                 (_, test, conseq, alt) = x
                 x = (conseq if eval_all(test, e) else alt)
         
@@ -456,11 +458,11 @@ def eval_all(x, e):
                     args = []
                     for i in x[1:]:
                         args = args + [eval_all(i, e)]
-                    print("[", x[0], *args, " ]")        
+                    #print("[", x[0], *args, " ]")        
                     return tmp(*args)
                     
                 if type(tmp) is types.new_class: 
-                    print("[", x[0], *args, " ]")        
+                    #print("[", x[0], *args, " ]")        
                     # (point) 创造对象
                     return tmp()
 
@@ -471,7 +473,7 @@ def eval_all(x, e):
                         args = []
                         for i in x[1:]:
                             args = args + [eval_all(i, e)]
-                        print("[", x[0], *args, " ]")        
+                        #print("[", x[0], *args, " ]")        
                         return tmp(*args)  
                     else:
                         print("Error : What is [", x[0], "]?" )

@@ -1,7 +1,7 @@
 (; "牛顿法求平方根")
 
 (define (mysqrt x) (begin
-     (print x)
+    (print x)
      
     (define (sqrt-iter guess)
         (if (good-enough? guess)
@@ -26,11 +26,9 @@
     (print (improve 1))
     (print (good-enough? 1.41))
     
-    (set i (sqrt-iter 1.4))
-    i
+    (sqrt-iter 1.4)
     )
 )
-(set (j (mysqrt 9)))
-j
+(mysqrt 9)
 
    
