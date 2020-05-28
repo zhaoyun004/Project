@@ -26,12 +26,13 @@
 (set (l (' (d.keys))))
 
 (define (format d)
-    (for-each (lambda x (print x ":" (~ d x))) l|0)
+    (each (lambda x (print x[0]:x[1])) l|0)
 )
 
 (format d)
 
-()
-(define (eval_list l e)
-    ()
+(define (testa x)
+    (print x)
 )
+
+(testa 12)

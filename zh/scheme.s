@@ -14,6 +14,7 @@
 
 (set (e (dict (list (list "name" d)))))
 (print e)
+(env)
 
 (print (~ e "name"))
 
@@ -32,7 +33,7 @@
 )
 
 (set (sum 0))
-(for-each (lambda (x) (set (sum (+ sum x)))) (list 3 4 5 6 7 22))
+(each (lambda (x) (set (sum (+ sum x)))) (list 3 4 5 6 7 22))
 (print sum)
 
 (set (abc 123))
