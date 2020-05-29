@@ -416,12 +416,16 @@ def eval_all(x, e):
                     print("Error : [for] needs 4 args.")
                     
                 eval_all(x[1], e)
+                has_break = False
                 while True:
                     if eval_all(x[2], e) == True:
-                        tmp = eval_all(x[4], e)
-                        if tmp == 'break':
-                            break
-                    else:
+                        for i in x[4]:
+                            tmp = eval_all(i, e)
+                            if tmp == 'break':
+                                has_break = True
+                            elif tmp != None:
+                                print(tmp)
+                    if has_break == True:
                         break
                     eval_all(x[3], e)     # (+ i 1) 步长
                     
@@ -572,6 +576,7 @@ def eval_file(f):
     program = f.read()
     program = "(begin" + program + ")"
     tmp = get_list(tokenize(program))
+    
     val = eval_all(tmp, en)
     # 打印计算结果
     if val is not None: 

@@ -21,13 +21,13 @@
 (set (i 1))
 (if (< i 19) (print (+ i 1)) ())
 
-(while (< i 23) (begin 
+(while (< i 23) ( 
     (print i) 
     (set (i (+ i 1)))
     (if (eq? i 20) break ()))
  )
 
-(for (set (i 23)) (< i 45) (set (i (+ i 2))) (begin 
+(for (set (i 23)) (< i 45) (set (i (+ i 2))) ( 
     (print i) 
     (if (eq? i 43) break ()))
 )
