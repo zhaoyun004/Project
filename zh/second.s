@@ -17,7 +17,7 @@
     (define setfa (lambda x (set (father x))))
 ))
 
-(env) (point) (set (env_g (envi))) env_g
+(env)  (set (env_g (envi))) env_g
 
 (set (d (dict (' (' "+" +) 
     (' "-" -)

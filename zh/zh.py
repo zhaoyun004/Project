@@ -366,10 +366,11 @@ def eval_all(x, e):
                 
             # 单元测试，确定某个函数的返回值和预期一致。
             elif x[0] == 'test':
+                print(x[1], x[2])
                 a  = eval_all(x[1], e)
                 b  = eval_all(x[2], e)
                 if a != b:
-                    print(x[1],"=", a, "---- Expected : ", b)
+                    print(x[1]," = ", a, ", Expected :", b)
                 return None
                 
             # (begin (...) (...) (...)) 依次执行。
@@ -383,7 +384,7 @@ def eval_all(x, e):
                 
             elif x[0] == 'if':     
                 (_, test, conseq, alt) = x
-                x = (conseq if eval_all(test, e) else alt)
+                x = (eval_all(conseq, e) if eval_all(test, e) else eval_all(alt, e))
         
             elif x[0] == 'lambda':
             
@@ -399,9 +400,13 @@ def eval_all(x, e):
                 if (len(x) != 3):
                     print("Error : [while] needs 2 args.")
                     
-                while eval_all(x[1], e):
-                    # 检测到break，很可能是跳出循环。
-                    if eval_all(x[2], e) == 'break':
+                while eval_all(x[1], e) == True:
+                    has_break = False
+                    for i in x[2]:
+                        # 检测到break，很可能是跳出循环。
+                        if eval_all(i, e) == 'break':
+                            has_break = True
+                    if has_break == True:
                         break
                 return None
                 
@@ -580,7 +585,7 @@ if len(sys.argv) == 2:
         
     f.close()
     
-    for i in env_g.my.keys():
-        if isa(env_g.my[i] ,List) and env_g.my[i][1] == 0:
+    for i in en.my.keys():
+        if isa(en.my[i] ,List) and en.my[i][1] == 0:
             print("Warn : [", i, "] is not used." )
     sys.exit(0)
