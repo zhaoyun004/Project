@@ -280,14 +280,14 @@ def eval_all(x, e):
     while True:
         if isa(x, List):
             if x == []:
-                return
+                return None
                     
             # 哪些是全局过程，哪些是关键字？
             # 如果希望利用Python内置过程，则放进env_g里。
             
             # 用于注释
             elif x[0] == 'quote' or x[0] == ';':
-                return
+                return None
                 
             # 打印当前的环境。
             if x[0] == 'env':
@@ -299,7 +299,7 @@ def eval_all(x, e):
                     for i in e.my.keys():
                         print(i, " : ", e.my[i])
                 print("...........")
-                return;
+                return None
                 
             elif x[0] == 'time':
             
@@ -307,7 +307,7 @@ def eval_all(x, e):
                 eval_all(x[1], e)
                 end = datetime.datetime.now()    
                 print(end - start)
-                return
+                return None
                 
             # 定义函数
             elif x[0] == 'define':       
@@ -322,13 +322,15 @@ def eval_all(x, e):
                     print("Error: Should define a function.")
                     sys.exit(0)
                 
+                return None
+                
             elif x[0] == 'set': 
             
                 # "obj.he|1.o"  -->  obj.he|1.o
                 def expression_var(x, e):
                     for i in x:
                         if i == '.':
-                            return
+                            return None
                             
                 # (set (a 12) (b 32) (c 44)) 一次定义/赋值多个变量
                 for i in x: 
@@ -355,30 +357,31 @@ def eval_all(x, e):
                 program = "(begin" + program + ")"
                 tmp = get_list(tokenize(program))
                 eval_all(tmp, e)
-                return
+                return None
                 
             # 异常处理的问题在于，那些语句、函数会触发异常？
             # (try ())
             elif x[0] == 'try':
-                return
+                return None
                 
             # 单元测试，确定某个函数的返回值和预期一致。
-            elif x[0] == 'expect':
+            elif x[0] == 'test':
                 a  = eval_all(x[1], e)
                 b  = eval_all(x[2], e)
                 if a != b:
                     print(x[1],"=", a, "---- Expected : ", b)
-                return
+                return None
                 
             # (begin (...) (...) (...)) 依次执行。
             elif x[0] == 'begin':
                 for exp in x[1:]:
-                    eval_all(exp, e)
+                    val = eval_all(exp, e)
+                    if val != None:
+                        print(val)
+                return None
                 #x = x[-1]
                 
             elif x[0] == 'if':     
-                print(len(x))
-                print(x[2])
                 (_, test, conseq, alt) = x
                 x = (conseq if eval_all(test, e) else alt)
         
@@ -400,7 +403,7 @@ def eval_all(x, e):
                     # 检测到break，很可能是跳出循环。
                     if eval_all(x[2], e) == 'break':
                         break
-                return
+                return None
                 
             elif x[0] == 'for':
             
@@ -417,24 +420,29 @@ def eval_all(x, e):
                         break
                     eval_all(x[3], e)     # (+ i 1) 步长
                     
-                return
+                return None
                 
             # for-each
             elif x[0] == 'each':
                 for i in eval_all(x[2], e): 
                     eval_all(x[1], e)(i)
-                return
+                
+                return None
         
             elif x[0] == 'class':
             
-                print(x)
-                tmp = type(x[1],(object,),dict(eval_all(x[2], e)))
+                l = []
+                for i in x[2]:
+                    print(i)
+                    l.append([i[1], eval_all(i[2], e)])
+                tmp = type(x[1],(object,),dict(l))
                 #dir(tmp)
                 if x[1] not in e.my.keys():
-                    e.my[x[1]] = tmp
+                    e.my[x[1]] = [tmp, 0]
                 else:
                     print("Error : define [" + x[1] + "] again.")
-                return
+                
+                return None
                 
             elif x[0] == 'break':
                 return 'break'      
@@ -449,7 +457,7 @@ def eval_all(x, e):
                     tmp = e0.my[x[0]]
                     
                 elif e0 != None:                            
-                    #自定义函数或者变量。使用参数之前，将参数变量对应的列表第二项置为1
+                    #自定义函数、变量、类型。使用参数之前，将参数变量对应的列表第二项置为1
                     e0.my[x[0]][1] = 1
                     tmp = e0.my[x[0]][0]
                     
@@ -475,6 +483,8 @@ def eval_all(x, e):
                             args = args + [eval_all(i, e)]
                         #print("[", x[0], *args, " ]")        
                         return tmp(*args)  
+                    if tmp!= None:
+                        print(tmp)
                     else:
                         print("Error : What is [", x[0], "]?" )
                         
@@ -557,8 +567,10 @@ def eval_file(f):
     program = f.read()
     program = "(begin" + program + ")"
     tmp = get_list(tokenize(program))
-    print(tmp)
-    eval_all(tmp, en)
+    val = eval_all(tmp, en)
+    # 打印计算结果
+    if val is not None: 
+        print(val)
 
 if len(sys.argv) == 2:
     f = open(sys.argv[1], "r")

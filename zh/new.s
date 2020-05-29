@@ -1,10 +1,10 @@
-(set (f (open "test.ss" "r")))
+(set (f (open "test.s" "r")))
 (print (f.read))
 
-(class point (list
-    (list n 12)
-    (list m (lambda x (* 2 x))))
-)
+(class point (
+    (set n 12)
+    (define m (lambda x (* 2 x)))
+))
 
 (set (x (point)))
 (print x.n)
