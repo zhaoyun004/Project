@@ -373,15 +373,19 @@ def eval_all(x, e):
                     print(x[1]," = ", a, ", Expected :", b)
                 return None
                 
-            # (begin (...) (...) (...)) 依次执行。
+            # (begin (...) (...) (...)) 依次执行。begin返回最后一项。
             elif x[0] == 'begin':
-                for exp in x[1:]:
+                for exp in x[1:-1]:
                     val = eval_all(exp, e)
                     if val != None:
                         print(val)
-                return None
-                #x = x[-1]
                 
+                #begin最后一项的返回值不打印，而是作为整个块的返回值。
+                #val = eval_all(x[-1], e)
+                #return val
+                x = x[-1]
+
+            # if返回某一项。
             elif x[0] == 'if':     
                 (_, test, conseq, alt) = x
                 x = (eval_all(conseq, e) if eval_all(test, e) else eval_all(alt, e))
