@@ -22,7 +22,7 @@
 
 
 ;(cons n '())是一个list
-(define (range n) (if (eq? n 1) (list 1) (append (range (- n 1)) (cons n '()))))
+;(define (range n) (if (eq? n 1) (list 1) (append (range (- n 1)) (cons n '()))))
 (define (range n) (if (eq? n 1) (list 1) (append (range (- n 1)) (list n))))
 
 
@@ -35,7 +35,7 @@
 
 (time
 (apply + (range 100000)
-)
+))
 
 
 ;将整数乘以列表
