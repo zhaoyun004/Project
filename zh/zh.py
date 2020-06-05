@@ -65,13 +65,13 @@ env_g.my.update({
         '>=':   op.ge, 
         '<=':   op.le, 
         '=':    op.eq, 
-		'not':     op.not_,
-		'eq?':     op.is_, 
+        'not':     op.not_,
+        'eq?':     op.is_, 
         'equal?':  op.eq, 
-		'max':     max,
+        'max':     max,
         'min':     min,
         'abs':     abs,
-		'round':   round,
+        'round':   round,
         
         'tuple':   lambda *x: tuple(x),
         'dict':    lambda x: dict(x),
@@ -80,15 +80,13 @@ env_g.my.update({
         'cdr':     lambda x: x[1:], 
         'list':    lambda *x: list(x), 
         '\'':      lambda *x: list(x), 
-        # 考虑用|实现列表下标
-        '|':       lambda x, y: x[int(y)], 
         # 字典key访问
-		':':       lambda x, y: x[y], 
+        ':':       lambda x, y: x[y], 
         'append':  op.add,  	# 连接两个列表
-		'len':     len, 		# 列表长度
-		'map':     map,
-		'print':   print,
-		'exit':	   sys.exit,
+        'len':     len, 		# 列表长度
+        'map':     map,
+        'print':   print,
+        'exit':	   sys.exit,
         
         'open':    open,
                         
@@ -96,10 +94,10 @@ env_g.my.update({
         'null?':   lambda x: x == [], 
         # python的bool可能有错 bool("False")返回了True
         'bool?':   lambda x: isa(x, Bool),   
-		'number?': lambda x: isa(x, Number),   
+        'number?': lambda x: isa(x, Number),   
         'string?': lambda x: isa(x, String),
         'tuple?':  lambda x: isa(x, Tuple), 
-		'list?':   lambda x: isa(x, List), 
+        'list?':   lambda x: isa(x, List), 
         'dict?':   lambda x: isa(x, Dict),
         
         'int':     int,
@@ -252,7 +250,7 @@ def has_op(x):
     return False
     
 # obj.he|1.o|2+2*3/4 -->  [| [. obj he] 1]
-def expression_to_list(x, e):
+def expression_to_list(x):
     y = []
     z = x
     while True:
@@ -288,7 +286,7 @@ def eval_all(x, e):
             # 用于注释
             elif x[0] == 'quote' or x[0] == ';':
                 return None
-                
+                                
             # 打印当前的环境。
             if x[0] == 'env':
                 print("env ......")
@@ -300,6 +298,11 @@ def eval_all(x, e):
                         print(i, " : ", e.my[i])
                 print("...........")
                 return None
+                
+            elif x[0] == '|':
+                eval_all(x[1], e)
+                eval_all(x[2], e)
+                return eval_all(x[1], e)[eval_all(x[2], e)]
                 
             elif x[0] == 'time':
             
@@ -342,7 +345,7 @@ def eval_all(x, e):
                             tmp.my[i[0]] = [eval_all(i[1], e), 1]
                         else:
                             if has_op(i[0]):
-                                y = expression_to_list(i[0], e)
+                                y = expression_to_list(i[0])
                                 print("_____", y)     
                                 # eval_all(y, e) = eval_all(x[2], e)
                             else:
@@ -381,8 +384,6 @@ def eval_all(x, e):
                         print(val)
                 
                 #begin最后一项的返回值不打印，而是作为整个块的返回值。
-                #val = eval_all(x[-1], e)
-                #return val
                 x = x[-1]
 
             # if返回某一项。
@@ -392,7 +393,7 @@ def eval_all(x, e):
         
             elif x[0] == 'lambda':
             
-                # (define a (lambda x (print x)))
+                # (set a (lambda x (print x)))
                 # (lambda parms body)
                 if len(x) != 3:
                     print("Error : [lambda] needs 2 args.")
@@ -429,15 +430,19 @@ def eval_all(x, e):
                                 has_break = True
                             elif tmp != None:
                                 print(tmp)
-                    if has_break == True:
-                        break
+                        if has_break == True:
+                          break
+                    else:
+                        break;
+                    
                     eval_all(x[3], e)     # (+ i 1) 步长
                     
                 return None
                 
-            # for-each
-            elif x[0] == 'each':
+            # for_each
+            elif x[0] == 'for_each':
                 for i in eval_all(x[2], e): 
+                    print(i)
                     eval_all(x[1], e)(i)
                 
                 return None
@@ -531,7 +536,7 @@ def eval_all(x, e):
             # (+ j|3.n 3)*2-1
             # obj.he|1.o|2:-1  -->  [| [. obj he] 1]
             if has_op(x):
-                y = expression_to_list(x, e)   
+                y = expression_to_list(x)   
                 return eval_all(y, e)
             else:
                 # 返回字符串，没有双引号的字符串。也许这里应该是Symbol类型。
@@ -549,9 +554,10 @@ def is_blank(line):
 class MyTest(unittest.TestCase):
     def test(self):
         self.assertEqual(is_blank(" \t   \n"), True)
-        self.assertEqual(expression_to_list("obj.m", en), ['.','obj', 'm'])
-        self.assertEqual(expression_to_list("obj.m+2", en), ['+', ['.', 'obj','m'], 2])
-        self.assertEqual(expression_to_list("obj.m|2.a|4", en), ['|', ['.', ['|', ['.', 'obj','m'], 2], 'a'], 4])
+        self.assertEqual(expression_to_list("obj.m"), ['.','obj', 'm'])
+        self.assertEqual(expression_to_list("l|i"), ['|','l', 'i'])
+        self.assertEqual(expression_to_list("obj.m+2"), ['+', ['.', 'obj','m'], 2])
+        self.assertEqual(expression_to_list("obj.m|2.a|4"), ['|', ['.', ['|', ['.', 'obj','m'], 2], 'a'], 4])
 
 t = MyTest()
 t.test()
