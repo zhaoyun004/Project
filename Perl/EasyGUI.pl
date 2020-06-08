@@ -3,6 +3,8 @@
 use strict;
 use warnings;
 
+our $test;
+
 my $file = 'first.gui';
 open my $info, $file or die"Could not open $file: $!";
 
@@ -17,8 +19,18 @@ sub is_blank()
 }
 
 while( my $line = <$info>) {
-  print length $line;
-  print substr($line, 0, 1);
+  print $line;
+  print substr($line, 0, 1)."\n"; 
 }
 
 close $info;
+
+foreach (keys %main::) {
+    print $_ . "\n";
+}
+
+my %data = ('google'=>'google.com', 'runoob'=>'runoob.com', 'taobao'=>'taobao.com');
+
+print "\$data{'google'} = $data{'google'}\n";
+print "\$data{'runoob'} = $data{'runoob'}\n";
+print "\$data{'taobao'} = $data{'taobao'}\n";

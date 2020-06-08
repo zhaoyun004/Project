@@ -10,6 +10,7 @@ import types
 import sys
 import os
 import unittest
+import tkinter
 
 #sys.setrecursionlimit(1000000)
 
@@ -28,7 +29,8 @@ isa = isinstance
 # 查找变量时，必须沿着叶子节点my一直找到根（None）。
 class env:
     def __init__(self, fa):
-        # my中的一项是一对key-value：“i”:[12, 0]，其中value的第一项是变量值，第二项0表示未使用，1表示已经使用. 
+        # my中的一项是一对key-value：“i”:[12, 0]，
+        # value的第一项是变量值，第二项0表示未使用，1表示已经使用. 
         self.my = {}
         self.father = fa
 
@@ -80,8 +82,6 @@ env_g.my.update({
         'cdr':     lambda x: x[1:], 
         'list':    lambda *x: list(x), 
         '\'':      lambda *x: list(x), 
-        # 字典key访问
-        ':':       lambda x, y: x[y], 
         'append':  op.add,  	# 连接两个列表
         'len':     len, 		# 列表长度
         'map':     map,
@@ -113,15 +113,25 @@ env_g.my.update({
         'type':    type,
         'getattr': getattr,
         'setattr': setattr,
+        # 对象访问
+        '.' :      lambda x,y: getattr(x, y),          
+
+        'tkinter':  tkinter,
+        'tkinter.Tk': tkinter.Tk,
+        'tkinter.Label': tkinter.Label,
         
-        '.' :      lambda x,y: getattr(x, y),   
+        # 模块访问
+        '::':      lambda x,y: getattr(__import__(x), y),   
+        
+        # 字典key访问
+        ':':       lambda x, y: x[y], 
 })
 
 env_g.my.update(vars(math)) # sin, cos, sqrt, pi, ...
 #env_g.my.update(vars(os)) 
 #env_g.my.update(vars(sys)) 
 
-# 全局自定义环境
+# 全局自定义变量/函数环境
 en = env(env_g)
               
 def parse(program):
@@ -299,6 +309,7 @@ def eval_all(x, e):
                 print("...........")
                 return None
                 
+            # 列表下标
             elif x[0] == '|':
                 eval_all(x[1], e)
                 eval_all(x[2], e)
@@ -330,27 +341,28 @@ def eval_all(x, e):
             elif x[0] == 'set': 
             
                 # "obj.he|1.o"  -->  obj.he|1.o
-                def expression_var(x, e):
+                def get_expression(x):
                     for i in x:
                         if i == '.':
                             return None
                             
                 # (set (a 12) (b 32) (c 44)) 一次定义/赋值多个变量
-                for i in x: 
-                    if i != 'set':
-                        # 往外层查找变量，是否定义过？
-                        tmp = find_all(i[0], e)
-                        # 为变量赋值
-                        if tmp != None:
-                            tmp.my[i[0]] = [eval_all(i[1], e), 1]
-                        else:
-                            if has_op(i[0]):
-                                y = expression_to_list(i[0])
-                                print("_____", y)     
-                                # eval_all(y, e) = eval_all(x[2], e)
-                            else:
-                                # 首次定义变量
-                                e.my[i[0]] = [eval_all(i[1], e), 0]
+                for i in x[1:]: 
+                  if isa(i, List) == False:
+                    cout<< "(set (...) (...))\n";
+                  # 往外层查找变量，是否定义过？
+                  tmp = find_all(i[0], e)
+                  # 为变量赋值
+                  if tmp != None:
+                      tmp.my[i[0]] = [eval_all(i[1], e), 1]
+                  else:
+                      if has_op(i[0]):
+                          y = expression_to_list(i[0])
+                          # 为list、对象成员赋值。
+                          #eval_all(y, e) = eval_all(i[1], e)
+                      else:
+                          # 首次定义变量
+                          e.my[i[0]] = [eval_all(i[1], e), 0]
                 return None
                 
             elif x[0] == 'import':
