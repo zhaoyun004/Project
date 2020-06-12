@@ -10,10 +10,3 @@
 (set (t ";"))
 
 (print (t.join (' "hello" "world")))
-
-(define (myexpect x y) (if (!= (x) y)
-    (print "PASS")
-    (print "Not Expect!")
-))
-
-(myexpect (' + 3 4) 7)

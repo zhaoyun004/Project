@@ -146,6 +146,9 @@ env_g.my.update({
         # 对象访问
         '.' :      lambda x,y: getattr(x, y),          
 
+        'object':   object,
+        'BaseException': BaseException,
+        
         'tkinter':  tkinter,
         'tkinter.Tk': tkinter.Tk,
         'tkinter.Label': tkinter.Label,
@@ -408,6 +411,10 @@ def eval_all(x, e):
             # (try ())
             elif x[0] == 'try':
                 return None
+            
+            # 触发一个异常
+            elif x[0] == 'raise':
+                raise x[1];
                 
             # 单元测试，确定某个函数的返回值和预期一致。
             elif x[0] == 'test':
@@ -435,7 +442,7 @@ def eval_all(x, e):
         
             elif x[0] == 'lambda':
             
-                # (set a (lambda x (print x)))
+                # (set a (lambda (x y) (+ x y)))
                 # (lambda parms body)
                 if len(x) != 3:
                     print("Error : [lambda] needs 2 args.")
@@ -491,12 +498,16 @@ def eval_all(x, e):
         
             elif x[0] == 'class':
             
+                c = env(e)
+                
                 l = []
-                for i in x[2]:
-                    print(i)
-                    l.append([i[1], eval_all(i[2], e)])
-                tmp = type(x[1],(object,),dict(l))
-                #dir(tmp)
+                if x[3][0] == "set" :
+                    for i in x[3][1:]:
+                      l.append([i[0], eval_all(i[1], c)])
+                    
+                # x[2]为父类型
+                tmp = type(x[1][0],(eval_all(x[2],c),),dict(l))
+                
                 if x[1] not in e.my.keys():
                     e.my[x[1]] = [tmp, 0]
                 else:
@@ -521,18 +532,19 @@ def eval_all(x, e):
                     e0.my[x[0]][1] = 1
                     tmp = e0.my[x[0]][0]
                     
-                # 函数调用
+                # 类和函数，都可以callable.
                 if callable(tmp):
+                    type(tmp)
+                    # 类
+                    if type(tmp)==type:
+                        # (point) 创造对象
+                        print("will create object...\n")                     
+                        return tmp()
                     args = []
                     for i in x[1:]:
                         args = args + [eval_all(i, e)]
                     #print("[", x[0], *args, " ]")        
                     return tmp(*args)
-                    
-                if type(tmp) is types.new_class: 
-                    #print("[", x[0], *args, " ]")        
-                    # (point) 创造对象
-                    return tmp()
 
                 #没找到，很可能是一个中缀表达式。
                 if e0 == None:                  
