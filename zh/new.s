@@ -24,20 +24,18 @@ point.__base__
 (set (add (lambda (a b) (+ a b))))
 (add  3 6)
 
-(; "为什么用__init__创建对象失败，改成其他函数名就可以呢？")
+(; "用__init__创建对象失败，改成其他函数名就可以")
 (class TailRecurseException BaseException 
-    (set (args 0) (kwargs 0)
+    (set (args 23) (kwargs 12)
     )
 )
-(set (TailRecurseException.__init__ (lambda (a b) (set (args a) (kwargs b)))))
+(set (TailRecurseException.__init__ (lambda () (print "in __init__"))))
 
 TailRecurseException.__base__
 34
 (BaseException)
 12
-(set (y (TailRecurseException 465 677)))
-y.args
-y.kwargs
+(set (y (TailRecurseException)))
 (env)
 y
 56

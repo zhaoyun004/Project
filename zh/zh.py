@@ -12,38 +12,6 @@ import os
 import unittest
 import tkinter
 
-#sys.setrecursionlimit(1000000)
-
-class TailRecurseException(BaseException):
-  def __init__(self, args, kwargs):
-    self.args = args
-    self.kwargs = kwargs
-
-def tail_call_optimized(g):
-  """
-  This function decorates a function with tail call
-  optimization. It does this by throwing an exception
-  if it is it's own grandparent, and catching such
-  exceptions to fake the tail call optimization.
-  
-  This function fails if the decorated
-  function recurses in a non-tail context.
-  """
-  def func(*args, **kwargs):
-    f = sys._getframe()
-    if f.f_back and f.f_back.f_back \
-        and f.f_back.f_back.f_code == f.f_code:
-      raise TailRecurseException(args, kwargs)
-    else:
-      while 1:
-        try:
-          return g(*args, **kwargs)
-        except TailRecurseException as e:
-          args = e.args
-          kwargs = e.kwargs
-  func.__doc__ = g.__doc__
-  return func
-
 Bool = bool
 String = str          			
 Number = (int, float)
@@ -506,7 +474,7 @@ def eval_all(x, e):
                       l.append([i[0], eval_all(i[1], c)])
                     
                 # x[2]为父类型
-                tmp = type(x[1][0],(eval_all(x[2],c),),dict(l))
+                tmp = type(x[1],(eval_all(x[2],c),),dict(l))
                 
                 if x[1] not in e.my.keys():
                     e.my[x[1]] = [tmp, 0]
@@ -540,15 +508,17 @@ def eval_all(x, e):
                         # (point) 创造对象
                         print("will create object...\n")                     
                         return tmp()
+                    # 函数调用
                     args = []
                     for i in x[1:]:
                         args = args + [eval_all(i, e)]
                     #print("[", x[0], *args, " ]")        
                     return tmp(*args)
 
-                #没找到，很可能是一个中缀表达式。
+                #没找到，可能是一个中缀表达式。
                 if e0 == None:                  
                     tmp = eval_all(x[0], e)
+                    # 这里的调用期望是对象方法
                     if callable(tmp):
                         args = []
                         for i in x[1:]:
@@ -557,8 +527,6 @@ def eval_all(x, e):
                         return tmp(*args)  
                     if tmp!= None:
                         print(tmp)
-                    else:
-                        print("Error : What is [", x[0], "]?" )
                         
                     return 
                     
@@ -593,7 +561,6 @@ def eval_all(x, e):
                 y = expression_to_list(x)   
                 return eval_all(y, e)
             else:
-                # 返回字符串，没有双引号的字符串。也许这里应该是Symbol类型。
                 return x
             
         # int float
