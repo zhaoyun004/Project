@@ -10,3 +10,4 @@
 (set (t ";"))
 
 (print (t.join (' "hello" "world")))
+()

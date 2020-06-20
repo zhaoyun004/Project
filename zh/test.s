@@ -35,3 +35,5 @@
 (import newton.s)
 (import "http://test.org/test.s" "test")
 )
+
+()

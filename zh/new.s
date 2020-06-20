@@ -26,10 +26,9 @@ point.__base__
 
 (; "用__init__创建对象失败，改成其他函数名就可以")
 (class TailRecurseException BaseException 
-    (set (args 23) (kwargs 12)
-    )
+    (set (args 23) (kwargs 12) (init (lambda () (print "in __init__"))))
 )
-(set (TailRecurseException.__init__ (lambda () (print "in __init__"))))
+
 
 TailRecurseException.__base__
 34
@@ -37,6 +36,8 @@ TailRecurseException.__base__
 12
 (set (y (TailRecurseException)))
 (env)
-y
+y.args
+y.kwargs
+(y.init)
 56
 ()
