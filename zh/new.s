@@ -26,7 +26,7 @@ point.__base__
 
 (; "用__init__创建对象失败，改成其他函数名就可以")
 (class TailRecurseException BaseException 
-    (set (args 23) (kwargs 12) (init (lambda () (print "in __init__"))))
+    (set (args 23) (kwargs 12) (init (lambda (a b) (set (args a) (kwargs b)))))
 )
 
 
@@ -38,6 +38,16 @@ TailRecurseException.__base__
 (env)
 y.args
 y.kwargs
-(y.init)
+y.init
 56
+
+(define (tail_call_optimized g
+  (; 一个*:tuple 两个*:dict)
+  (define (func *args **kwargs)
+    (begin
+      (set (f sys::_getframe))
+    )
+  )
+)
+
 ()

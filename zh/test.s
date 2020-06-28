@@ -5,7 +5,7 @@
 (circle_area 3)
 
 (if (< i 19) (+ i 1) "aaa")
-    
+
 (while (< i 23) (
     (print i) 
     (set (i (+ i 1)))
