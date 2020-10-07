@@ -1,8 +1,0 @@
-1 <window> name=first click=firstclick() title=First top=100 left=100 width=100 height=100 image="D:\test.bmp"
-  "My name is zhang xiao ping \n Hello"
-  2 <window>
-    "My name "
-    3 <div>
-      "Hello world"
-    
-1 <window> name=first click=firstclick() title=First top=100 left=100 width=100 height=100 image="D:\test"
