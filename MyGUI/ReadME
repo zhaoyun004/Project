@@ -1,0 +1,23 @@
+一、排版系统应该从html/css中学习优秀的设计。
+
+二、EasyGUI图形控件支持百分比定位和像素定位。
+
+
+
+四种方式描述图形界面： json格式、S表达式()、XML、以及自创的GUI格式。
+
+<!--
+click：单击
+dblclick：双击
+mousedown：鼠标按下
+mouseup：鼠标抬起
+mouseover：鼠标悬浮
+mouseout：鼠标离开
+mousemove：鼠标移动
+mouseenter：鼠标进入
+mouseleave：鼠标离开
+
+keydown：按键按下
+keyup：按键抬起
+keypress：按键按下抬起
+-->
