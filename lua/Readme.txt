@@ -1,3 +1,3 @@
-luac test.lua
+生成Lua字节码：luac test.lua
 
-luac -l -l -p luac.out
+查看字节码：luac -l -l -p luac.out

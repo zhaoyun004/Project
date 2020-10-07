@@ -1,5 +1,6 @@
 注意区别几个命令胡不同：erl.exe是单行交互程序，erlc.exe是用于编译源文件到字节码；escript.exe则用于执行脚本文件。
 
+
 一、erl shell里直接编译运行
 
 c(tut6)
