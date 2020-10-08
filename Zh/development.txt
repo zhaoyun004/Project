@@ -1,0 +1,22 @@
+开发文档：
+
+
+有好的想法、意见，请Email：zhaoyun004@qq.com
+
+
+
+一、系统需求：Python3
+
+二、安装各种模块：
+
+pip install pdfkit
+
+三、下载源代码、运行测试
+
+git clone https://github.com/zhangyun007/Zh.git
+
+运行python Zh.py进入单行交互模式。
+
+运行python Zh.py test.s解释执行test.s文件，测试文件包括：scheme.s test.s new.s first.s newton.s
+
+四、使用python的pyinstaller模块生成Windows下的exe文件： 
