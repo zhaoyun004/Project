@@ -1,22 +1,39 @@
-开发文档：
-
-
 有好的想法、意见，请Email：zhaoyun004@qq.com
 
 
+系统需求：
 
-一、系统需求：Python3
+XP系统使用Python3.4.2，因为该版本支持WinXP，之后的版本都不支持XP。
 
-二、安装各种模块：
+其他系统上使用Python3.6.8
 
-pip install pdfkit
 
-三、下载源代码、运行测试
+
+一、从源代码解释执行：
 
 git clone https://github.com/zhangyun007/Zh.git
 
 运行python Zh.py进入单行交互模式。
 
-运行python Zh.py test.s解释执行test.s文件，测试文件包括：scheme.s test.s new.s first.s newton.s
+运行python Zh.py test.s解释执行test.s文件
 
-四、使用python的pyinstaller模块生成Windows下的exe文件： 
+
+二、生成最终的zh.exe解释执行（推荐）
+
+升级Pip：
+
+python -m pip install --upgrade pip
+
+安装各种模块：
+
+pip install pdfkit
+pip install pyinstaller
+
+运行pyinstaller -F zh.py，将生成zh.exe
+
+运行zh.exe进入单行交互模式，或者运行zh.exe test.s解释执行
+
+
+三、例子程序
+
+测试文件包括：scheme.s test.s new.s first.s newton.s

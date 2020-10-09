@@ -23,9 +23,43 @@ Dict   = dict
     
 isa = isinstance
 
-# env中有两个变量，其中my存放计算 [块/函数] 时新定义的变量；father指向上层环境变量。
+class TailRecurseException(BaseException):
+  def __init__(self, args, kwargs):
+    self.args = args
+    self.kwargs = kwargs
+
+def tail_call_optimized(g):
+  """
+  This function decorates a function with tail call
+  optimization. It does this by throwing an exception
+  if it is it's own grandparent, and catching such
+  exceptions to fake the tail call optimization.
+  
+  This function fails if the decorated
+  function recurses in a non-tail context.
+  """
+  def func(*args, **kwargs):
+    f = sys._getframe()
+    if f.f_back and f.f_back.f_back \
+        and f.f_back.f_back.f_code == f.f_code:
+      print(args)
+      #print(kwargs)
+      #经测试，args为无默认值的参数对应的元组，kwargs为有默认值的参数对应的数组。
+      raise TailRecurseException(args, kwargs)
+    else:
+      while 1:
+        try:
+          return g(*args, **kwargs)
+        except TailRecurseException as e:
+          args = e.args
+          kwargs = e.kwargs
+  func.__doc__ = g.__doc__
+  return func
+
+# env中有两个变量，其中my存放计算 [块/函数] 时定义的变量；father指向上层环境变量。
 # 查找变量时，必须沿着叶子节点my一直找到根（None）。
 class env:
+    # def __init__(self, fa):
     def __init__(self, fa):
         # my中的一项是一对key-value：“i”:[12, 0]，
         # value的第一项是变量值，第二项0表示未使用，1表示已经使用. 
@@ -52,7 +86,7 @@ def find(var, e):
     else:
         return None
         
-env_g = env(None);
+env_g = env(None)
 
 # 环境变量（全局变量），用户自定义的全局变量和函数也保存在这里。
 env_g.my.update({
@@ -215,14 +249,12 @@ class Procedure(object):
                         is_tail_recursion = True
                         
     def __call__(self, *args): 
-        '''
         # 函数体内定义的变量，存在c.my中，只在函数内可见。
         if self.is_tail_recursion == False:
             c = env(self.e)
         else:
             c = self.e
-        ''' 
-        c = env(self.e)
+        #c = env(self.e)
 
         # parms是形参，args是实参
         for i in range(len(self.parms)):
@@ -300,14 +332,14 @@ def eval_all(x, e):
                                 
             # 打印当前的环境。
             if x[0] == 'env':
-                print("env ......")
+                print("env ...")
                 if len(x) == 2:
                     for i in env_g.my.keys():
                         print(i, " : ", env_g.my[i])
                 else:
                     for i in e.my.keys():
                         print(i, " : ", e.my[i])
-                print("...........")
+                print("...")
                 return None
                 
             # 列表下标
@@ -457,7 +489,7 @@ def eval_all(x, e):
                 return None
                 
             # for_each
-            elif x[0] == 'for_each':
+            elif x[0] == 'each':
                 for i in eval_all(x[2], e): 
                     print(i)
                     eval_all(x[1], e)(i)

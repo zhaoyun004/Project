@@ -9,7 +9,16 @@
 
 using namespace std;
 
-//单元测试
+#define SUM(a, b) { a + b }
+
+//type指定数据类型
+#define SWAP(a, b, type) {type c; c = a; a = b; b = c;}
+
+#define MAX(a,b) ((a) > (b) ? (a) : (b))
+
+#define MAX3(a,b,c) ((a) > (b) ? MAX(a,c) : (MAX(b,c)))
+
+//测试
 #define MyAssert(a, b) {auto _t=a; if (_t!=b) {cout<<__FILE__<<", "<<__LINE__<<": \n\tResult of " <<#a << " is " <<_t <<" \n\tExpect: "<<#b <<"\n"; exit(1);}}
 
 //cout一个实现
