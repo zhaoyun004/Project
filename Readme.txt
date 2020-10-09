@@ -32,6 +32,11 @@ M4(Macro Language 宏语言)
 
 Type T, U;
 
+struct  pair {
+	T a;
+	U b;
+}
+
 Type V {int float char}
 
 T add(T a, T b) {

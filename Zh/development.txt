@@ -26,7 +26,6 @@ python -m pip install --upgrade pip
 
 安装各种模块：
 
-pip install pdfkit
 pip install pyinstaller
 
 运行pyinstaller -F zh.py，将生成zh.exe

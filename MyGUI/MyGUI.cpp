@@ -10,7 +10,6 @@
 #include <map>
 
 #include "../TinyTL/TObject.hpp"
-#include "../TinyTL/MyLib.hpp"
 
 //用于函数SetConsoleOutputCP(65001);更改cmd编码为utf8
 
@@ -34,6 +33,40 @@ map<string, string> var;
 int cxScreen,cyScreen;
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
+
+//去掉line开头的空白字符。
+string Skip_Blank(string line) {
+	int i;
+  for (i=0; i<line.length(); i++) {
+    if (line[i]!=' ' && line[i]!='\t')
+      break;
+  }
+	if (i<line.length()-i)
+		return line.substr(i, line.length()-i);
+	else
+		return "";
+}
+
+//得到一行文本的头一个单词。
+string Get_First(string line) {
+  string s = "";
+  for (int i=0; i<line.length(); i++) {
+    if (line[i] != ' ' && line[i] != '\t' && i < line.length())
+      s += line[i];
+    else
+      break;
+  }
+  return s;
+}
+
+//判断某字符串是否正整数
+bool Is_Int(string s) {
+  for (auto i:s) {
+    if (isdigit(i) == false)
+      return false;
+  }
+  return true;
+}
 
 //判断s是否是Element函数调用，该函数为内置函数，用于返回某个节点。
 bool Is_Fun_Element(string s) {
