@@ -8,6 +8,8 @@ XP系统使用Python3.4.2，因为该版本支持WinXP，之后的版本都不�
 其他系统上使用Python3.6.8
 
 
+计划增加：类似shell直接运行外部命令。
+
 
 一、从源代码解释执行：
 
@@ -22,7 +24,7 @@ git clone https://github.com/zhangyun007/Zh.git
 
 升级Pip：
 
-python -m pip install --upgrade pip
+python -m   install --upgrade pip
 
 安装各种模块：
 

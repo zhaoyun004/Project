@@ -501,6 +501,7 @@ def eval_all(x, e):
                 c = env(e)
                 
                 l = []
+                # wrong ?? why??
                 if x[3][0] == "set" :
                     for i in x[3][1:]:
                       l.append([i[0], eval_all(i[1], c)])
@@ -615,6 +616,10 @@ class MyTest(unittest.TestCase):
 t = MyTest()
 t.test()
 
+# 切换到utf-8代码页
+
+os.system("chcp 65001")
+ 
 if len(sys.argv) == 1:
     # 逐行解释执行用户输入
     repl()

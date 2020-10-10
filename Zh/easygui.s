@@ -1,4 +1,3 @@
-(quote "读取一个GUI排版文件，解释执行图形程序。")
 (set (f (open "test.gui" "r")))
 (set (l (f.readlines)))
 
@@ -7,7 +6,7 @@
 tkinter
 (set (top (tkinter::Tk)))
 top
-(set (label (tkinter::Label top "数据云团")))
+(set (label (tkinter::Label top "data")))
 label
 label.pack
 (tkinter::mainloop)

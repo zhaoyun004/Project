@@ -7,6 +7,8 @@ XP上使用python3.4.2，其余使用3.6.8
 
 (tobedone pdf tk gtk)
 
+增加shell处理功能 --- 能直接运行外部命令。
+
 
 二、C、C++预处理器（宏替换，泛型特化）
 
@@ -53,7 +55,7 @@ int main() {
 
 
 
-三、C++ Easy GUI（移植到Python、ZH平台上）
+三、C++ Easy GUI（移植到ZH平台上）
 
 GUI版面设计应该类似于html、JavaScript、css组合，重点是，版面设计要和程序设计分离。
 
