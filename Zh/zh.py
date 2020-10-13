@@ -15,7 +15,7 @@ import tkinter
 Bool = bool
 String = str          			
 Number = (int, float)
- 	        
+
 # List中可以包含List、Number、String、Bool、Tuple、Dict
 List   = list        
 Tuple  = tuple
@@ -148,7 +148,7 @@ env_g.my.update({
         # 对象访问
         '.' :      lambda x,y: getattr(x, y),          
 
-        'object':   object,
+        'object':   type(object()),
         'BaseException': BaseException,
         
         'tkinter':  tkinter,
@@ -382,7 +382,7 @@ def eval_all(x, e):
                 # (set (a 12) (b 32) (c 44)) 一次定义/赋值多个变量
                 for i in x[1:]: 
                   if isa(i, List) == False:
-                    cout<< "(set (...) (...))\n";
+                    print("语法：(set (...) (...))\n");
                   # 往外层查找变量，是否定义过？
                   tmp = find_all(i[0], e)
                   # 为变量赋值
@@ -436,7 +436,7 @@ def eval_all(x, e):
                 x = x[-1]
 
             # if返回某一项。
-            elif x[0] == 'if':     
+            elif x[0] == 'if':
                 (_, test, conseq, alt) = x
                 x = (eval_all(conseq, e) if eval_all(test, e) else eval_all(alt, e))
         
@@ -495,33 +495,30 @@ def eval_all(x, e):
                     eval_all(x[1], e)(i)
                 
                 return None
-        
+
+            # (class child father (set (...) (...)))
             elif x[0] == 'class':
-            
-                c = env(e)
-                
-                l = []
-                # wrong ?? why??
-                if x[3][0] == "set" :
-                    for i in x[3][1:]:
-                      l.append([i[0], eval_all(i[1], c)])
+                if x[1] not in env_g.my.keys():
+                    # 类型未定义
+                    l = []
+                    if x[3][0] == "set" :
+                        for i in x[3][1:]:
+                            l.append([i[0], eval_all(i[1], e)])                
                     
-                # x[2]为父类型
-                tmp = type(x[1],(eval_all(x[2],c),),dict(l))
-                
-                if x[1] not in e.my.keys():
-                    e.my[x[1]] = [tmp, 0]
+                    # type参数：x[1]为子类型，x[2]为父类型，eval把字符串转化为类, 返回的变量指代一个类。
+                    # 变量添加到env_g里去
+                    env_g.my.update({x[1]: type(x[1],(eval("type("+x[2]+"())"), ), dict(l))})
                 else:
                     print("Error : define [" + x[1] + "] again.")
                 
                 return None
                 
             elif x[0] == 'break':
-                return 'break'      
+                return 'break'
                 
-            else:       
-                tmp = ""
-                
+            else:   
+                  
+                tmp = ""              
                 e0 = find_all(x[0], e)
                 
                 if e0 == env_g:
@@ -533,14 +530,8 @@ def eval_all(x, e):
                     e0.my[x[0]][1] = 1
                     tmp = e0.my[x[0]][0]
                     
-                # 类和函数，都可以callable.
+                # 是一个函数.
                 if callable(tmp):
-                    type(tmp)
-                    # 类
-                    if type(tmp)==type:
-                        # (point) 创造对象
-                        print("will create object...\n")                     
-                        return tmp()
                     # 函数调用
                     args = []
                     for i in x[1:]:
@@ -572,6 +563,11 @@ def eval_all(x, e):
             if x == "False":
                 return False
 
+            # x[0]在globals()中，而且，x[0]的一个类名
+            if x[0] in globals().keys() and type(globals()[x[0]])=="type":
+                print("will create object...\n")                     
+                return globals()[x[0]]();
+                    
             # x - > x
             #如果x在环境变量里，取其值。
             e0 = find_all(x, e)   
@@ -604,7 +600,7 @@ def is_blank(line):
         if ch != ' ' and ch != '\t' and ch != '\n' and ch != '\r':
             return False
     return True
-    
+
 class MyTest(unittest.TestCase):
     def test(self):
         self.assertEqual(is_blank(" \t   \n"), True)
@@ -619,7 +615,7 @@ t.test()
 # 切换到utf-8代码页
 
 os.system("chcp 65001")
- 
+
 if len(sys.argv) == 1:
     # 逐行解释执行用户输入
     repl()

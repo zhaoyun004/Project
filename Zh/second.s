@@ -3,19 +3,21 @@
 (set (f (open "test.s" "r")))
 (set (s (f.read))) s
 
-(define (testa x) x ) (testa 12)
+(define (testa x) x ) 
 
-(class point (
-    (set n 12)
-    (define fun (lambda x (* 2 x)))
-))
+(testa 12)
+
+(class point object 
+    (set (n 12) (fun (lambda x (* 2 x))))
+)
+
+(set (a (point))) a
 
 (quote "类未使用没有警告")
-(class envi (
-    (set my (dict (')))
-    (set father nil)
-    (define setfa (lambda x (set (father x))))
-))
+
+(class envi object 
+    (set (my (dict ('))) (father nil)(setfa (lambda x (set (father x)))))
+)
 
 (env)  (set (env_g (envi))) env_g
 
@@ -23,8 +25,9 @@
     (' "-" -)
     (' "*" *)
     (' "/" /)
+	(' "test" "ttt")
     )))
-) d
+) 
 
 (env_g.my.update d) env_g.my
-(set (l (' (d.keys)))) l ()
+(set (l (list (d.keys)))) l ()

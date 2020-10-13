@@ -24,11 +24,14 @@ git clone https://github.com/zhangyun007/Zh.git
 
 升级Pip：
 
-python -m   install --upgrade pip
+python -m install --upgrade pip
 
 安装各种模块：
 
-pip install pyinstaller
+pip install pexpect （用于完成命令行程序下用户名密码的自动输入）
+pip install PyGtk    （用于完成GUI设计系统）
+pip install PyCairo   
+pip install pyinstaller (生成exe文件)
 
 运行pyinstaller -F zh.py，将生成zh.exe
 

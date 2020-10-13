@@ -26,7 +26,7 @@ end
 2 LINE x1=0 y1=0 x2=1 y2=1
 
 ; RECTANGLE和RECT的区别在于，前者画出矩形。
-2 RECTANGLE name="f1" top=0.0 left=0.0 right=0.2 bottom=0.2 click="f1click" rclick="f4click" image="D:\test 1.bmp" sleep=1000
+2 RECTANGLE name="f1" top=0.0 left=0.0 right=0.2 bottom=0.2 click="f1click" rclick="f4click" sleep=1000
 3 TEXT caption=b sleep=1000
 
 2 RECTANGLE name="f2" top=0.1 left=0.0 right=0.2 bottom=0.4 click="f2click"
@@ -36,7 +36,7 @@ end
 3 TEXT caption=server
 
 ; RECT也是矩形，但是并不在窗口中画出矩形。
-2 RECT name="f4 RECT" top=0.4 left=0.4 right=1 bottom=1 sleep=1000
+2 RECT name="f4 RECT" top=0.4 left=0.4 right=1 bottom=1 sleep=1000 image="D:\test 1.bmp"
 3 TEXT caption=d|1
 
 ; 椭圆
