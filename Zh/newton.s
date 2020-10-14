@@ -28,11 +28,16 @@
     (test (improve 1) 5)
     (test (good-enough? 1.41) False)
     
-	(; "why not exe?")
+	(; "猜1.4是平方根结果")
     (sqrt-iter 1.4)
     )
 )
 (mysqrt 9)
 (mysqrt 8)
 (mysqrt 16)
+
+(env)
+ (; "这里应该报错")
+(averageasf 7 9)
+12
    

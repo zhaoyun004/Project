@@ -230,8 +230,6 @@ i|2         -- 意义同上。
 循环块 -- 可以嵌套使用
 while, for, break
 
-each
-
 
 函数定义define与lambda
 
