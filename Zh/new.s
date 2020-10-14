@@ -24,6 +24,7 @@ point.__base__
 (set (add (lambda (a b) (+ a b))))
 (add  3 6)
 
+
 (; "用__init__创建对象失败，改成其他函数名就可以")
 (class TailRecurseException BaseException 
     (set (args 23) (kwargs 12) (init (lambda (a b) (set (args a) (kwargs b)))))
@@ -41,7 +42,8 @@ y.kwargs
 y.init
 56
 
-(define (tail_call_optimized g
+(; wrong here)
+(define (tail_call_optimized g)
   (; 一个*:tuple 两个*:dict)
   (define (func *args **kwargs)
     (begin
@@ -49,5 +51,3 @@ y.init
     )
   )
 )
-
-()

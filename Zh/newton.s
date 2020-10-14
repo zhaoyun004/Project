@@ -3,6 +3,8 @@
 (define (mysqrt x) (begin
     (print x)
      
+	 (; "函数A内定义的函数只在函数A内可见")
+	 
     (define (sqrt-iter guess)
         (if (good-enough? guess)
             guess
@@ -22,14 +24,15 @@
         (< (abs (- (* guess guess) x)) 0.0001)
     )
     
-    (print (average 7 6))
-    (print (improve 1))
-    (print (good-enough? 1.41))
+    (test (average 7 6) 6.5)
+    (test (improve 1) 5)
+    (test (good-enough? 1.41) False)
     
+	(; "why not exe?")
     (sqrt-iter 1.4)
     )
 )
 (mysqrt 9)
-()
-
+(mysqrt 8)
+(mysqrt 16)
    

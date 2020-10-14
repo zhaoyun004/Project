@@ -13,6 +13,10 @@
 ))
 
 (set (s 0))
+
+
+(; wrong here? because for statment wrong )
+
 (for (set (i 0)) (< i 101) (set (i (+ i 1))) 
     (set (s (+ s i)))
 ) s
@@ -25,7 +29,7 @@
 )
 
 (print (int "12123"))
-(test (sum 100 0) 50560)
+(test (sum 100 0) 5050)
 
 (set (m "hello"))
 (print m|3)
@@ -35,5 +39,3 @@
 (import newton.s)
 (import "http://test.org/test.s" "test")
 )
-
-()

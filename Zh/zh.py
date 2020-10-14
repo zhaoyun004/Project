@@ -292,7 +292,7 @@ def has_op(x):
             return True
     return False
     
-# obj.he|1.o|2+2*3/4 -->  [| [. obj he] 1]
+# "obj.he|1.o|2+2*3/4" -->  ["|" ["." "obj" "he"] 1]
 def expression_to_list(x):
     y = []
     z = x
@@ -379,23 +379,30 @@ def eval_all(x, e):
                         if i == '.':
                             return None
                             
+                def has_set_op(x):
+                    for i in x:
+                        if i == '|':
+                            return True
+                    return False
+
                 # (set (a 12) (b 32) (c 44)) 一次定义/赋值多个变量
                 for i in x[1:]: 
-                  if isa(i, List) == False:
-                    print("语法：(set (...) (...))\n");
-                  # 往外层查找变量，是否定义过？
-                  tmp = find_all(i[0], e)
-                  # 为变量赋值
-                  if tmp != None:
-                      tmp.my[i[0]] = [eval_all(i[1], e), 1]
-                  else:
-                      if has_op(i[0]):
-                          y = expression_to_list(i[0])
-                          # 为list、对象成员赋值。
-                          #eval_all(y, e) = eval_all(i[1], e)
-                      else:
-                          # 首次定义变量
-                          e.my[i[0]] = [eval_all(i[1], e), 0]
+                    if isa(i, List) == False:
+                        print("语法：(set (...) (...))\n");
+                    # 往外层查找变量，是否定义过？
+                    tmp = find_all(i[0], e)
+                    if tmp != None:
+                        # 为变量赋值,并标记为已经用过.
+                        tmp.my[i[0]] = [eval_all(i[1], e), 1]
+                    else:
+                        # 为列表、字典赋值
+                        if has_set_op(i[0]):
+                            y = expression_to_list(i[0])
+                            # 为list、对象成员赋值。
+                            #eval_all(y, e) = eval_all(i[1], e)
+                        else:
+                            # 首次定义变量
+                            e.my[i[0]] = [eval_all(i[1], e), 0]
                 return None
                 
             elif x[0] == 'import':
@@ -418,11 +425,13 @@ def eval_all(x, e):
                 
             # 单元测试，确定某个函数的返回值和预期一致。
             elif x[0] == 'test':
-                print(x[1], x[2])
+                print(x[1], "= ", x[2])
                 a  = eval_all(x[1], e)
                 b  = eval_all(x[2], e)
                 if a != b:
-                    print(x[1]," = ", a, ", Expected :", b)
+                    print("Fail\t")
+                else:
+                    print("OK\t")
                 return None
                 
             # (begin (...) (...) (...)) 依次执行。begin返回最后一项。
@@ -432,8 +441,8 @@ def eval_all(x, e):
                     if val != None:
                         print(val)
                 
-                #begin最后一项的返回值不打印，而是作为整个块的返回值。
-                x = x[-1]
+                #begin最后一项不打印，而是eval后作为begin块的返回值。
+                x = eval_all(x[-1], e)
 
             # if返回某一项。
             elif x[0] == 'if':
@@ -469,15 +478,16 @@ def eval_all(x, e):
                 if (len(x) != 5):
                     print("Error : [for] needs 4 args.")
                     
-                eval_all(x[1], e)
+                eval_all(x[1], e)       # (set (i 1))初始化
                 has_break = False
                 while True:
-                    if eval_all(x[2], e) == True:
+                    if eval_all(x[2], e) == True:   # 结束条件
                         for i in x[4]:
                             tmp = eval_all(i, e)
                             if tmp == 'break':
                                 has_break = True
                             elif tmp != None:
+                                ##pass
                                 print(tmp)
                         if has_break == True:
                           break
