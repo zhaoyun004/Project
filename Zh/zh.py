@@ -479,12 +479,14 @@ def eval_all(x, e):
                 
                 #  (for i l (...)) 列表循环
                 if (len(x) == 4):
-                    for i in eval_all(x[2], e): 
+                    print("in for.....\n")
+                    for i in eval_all(x[2], e):
+                        print(i)
                         e.my[x[1]] = i
                         eval_all(x[3], e)
                 
                 #  () 自增循环
-                if (len(x) == 5):
+                elif (len(x) == 5):
                     eval_all(x[1], e)       # (set (i 1))初始化
                     has_break = False
                     while True:
@@ -497,7 +499,7 @@ def eval_all(x, e):
                                     ##pass
                                     print(tmp)
                             if has_break == True:
-                            break
+                                break
                         else:
                             break;
                     eval_all(x[3], e)     # (+ i 1) 步长
@@ -572,22 +574,19 @@ def eval_all(x, e):
                 
             if x == "False":
                 return False
-
-            # x[0]在当前环境中e.my中，而且，x[0]是一个类名
-            if x[0] in e.my.keys() and type(env_g.my.[x[0]])=="type":
-                print("will create object...\n")                     
-                return e.my[x[0]]();
                     
             #如果x在环境变量里，取其值。这里要处理类的情况。
             e0 = find_all(x, e)   
             if e0 != None:
-                # 用户定义变量
-                if e0 != env_g:
+                # x是一个类名，这里将返回一个对象。
+                if type(e0.my[x][0])=="type":
                     e0.my[x][1] = 1
+                    return e.my[x][0]();
+                    
+                # 用户定义变量或者内置变量
+                if e0 != env_g:
                     return e0.my[x][0]
                 else:
-                    if e0.my[x]
-                    # 内置变量
                     return e0.my[x]
             
             # 第一个和最后一直字符都是"，表示是一个字符串。
