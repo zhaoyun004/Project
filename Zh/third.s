@@ -1,24 +1,24 @@
-(set (i 12))
-(set (a 12) (b 23) (c 34))
+(define (i 12))
+(define (a 12) (b 23) (c 34))
 
-(set (circle_area (lambda (r) (* pi (* r r)))))
+(define (circle_area (lambda (r) (* pi (* r r)))))
 (circle_area 3)
 
 (if (< i 19) (+ i 1) "aaa")
 
 (while (< i 23) (
     (print i) 
-    (set (i (+ i 1)))
+    (define (i (+ i 1)))
     (if (eq? i 19) break ())
 ))
 
-(set (s 0))
+(define (s 0))
 
 
 (; wrong here? because for statment wrong )
 
-(for (set (i 0)) (< i 101) (set (i (+ i 1))) 
-    (set (s (+ s i)))
+(for (define (i 0)) (< i 101) (define (i (+ i 1))) 
+    (define (s (+ s i)))
 ) s
 
 (define (sum x r)
@@ -31,7 +31,7 @@
 (print (int "12123"))
 (test (sum 100 0) 5050)
 
-(set (m "hello"))
+(define (m "hello"))
 (print m|3)
 
 (quote

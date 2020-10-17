@@ -31,8 +31,7 @@ print是Python内置函数，可以直接使用。
 
 关键词是编程系统的核心，不超过100个单词。Zh系统则只有11个关键词，下面是关键词列表和简单的解释：
 
-set  定义并赋值一个变量
-define 定义一个函数
+define 定义一个变量或函数
 lambda 定义一个无名函数
 begin 顺序运算begin之后的语句，返回最后一项。
 if 条件分支，返回其中一项。
@@ -42,11 +41,11 @@ for 循环
 break 跳出循环
 class 自定义类型
 import 导入并执行其他文件
-env 查看当前环境
+show 查看当前环境
 test 测试某个函数
 try 
 raise 
-True False Nil
+True False None
 
 
 六、内置变量
@@ -171,23 +170,23 @@ Zh>(exit)
 
 一、基本数据类型(和Python保持一致)：int float bool string 
 
-多数（标准）Scheme里，变量需要先define(定义)，然后set!(赋值)，其实，定义和赋值用一个关键字更好。我们使用set直接定义并赋值，而且一次能定义多个变量：
+多数（标准）Scheme里，变量需要先define(定义)，然后set!(赋值)，其实，定义和赋值用一个关键字更好。我们使用define直接定义并赋值，而且一次能定义多个变量。之所以用define而不是set，是因为，set在python里用于创建一个集合。
 
-(set (a 12) (b 13) (c "hello"))
+(define (a 12) (b 13) (c "hello"))
 
 
 二、数据结构(和Python保持一致)：
 
 
 定义一个元组: 
-(set a (tuple 12 34))
+(define a (tuple 12 34))
 
 定义一个列表: 
-(set a (list 12 34))，简写: (set a (' 12 34))
+(define a (list 12 34))，简写: (define a (' 12 34))
 
 列表元素访问
-(set (i (list 12 "hello" 34 True)))
-简写：(set (i (' 12 "hello" 34 True)))
+(define (i (list 12 "hello" 34 True)))
+简写：(define (i (' 12 "hello" 34 True)))
 
 (| i 2)      -- 获得i的第二项 34
 i|2         -- 意义同上。
@@ -195,7 +194,7 @@ i|2         -- 意义同上。
 列表元素访问操作符为|，不同于大多程序设计系统使用[]访问数组或者列表，我们使用操作符|访问列表元素。用户少敲一个字符，同时解释器的实现也少写一些代码。 
 
 定义一个字典: 
-(set (d (dict (' (' "+" +) 
+(define (d (dict (' (' "+" +) 
     (' "-" -)
     (' "*" *)
     (' "/" /)
@@ -203,6 +202,10 @@ i|2         -- 意义同上。
 )
 
 字典元素访问：
+
+(: d "+")
+
+模块访问：
 
 
 三、符号中置表达式：
@@ -234,8 +237,8 @@ while, for, break
 函数定义define与lambda
 
 多数程序设计系统提供return语句，函数有返回值，zh函数没有返回值，我们建议使用函数外层的一个变量作为返回值。例如：
-(set (s 0))
-(define (sum a b) ( set (s (+ a b))))
+(define (s 0))
+(define (sum a b) ( define (s (+ a b))))
 (sum 3 4)
 以上，变量s可以在sum函数内部访问到，充当sum的返回值。
 
@@ -259,7 +262,7 @@ class
 程序设计者可以使用Python的type函数创建一个类，但是多数情况下，你应该使用class直接定义一个类，使用.操作符访问对象的成员。尽量避免使用type函数，因为type太低层，除非你想自己实现一套面向对象程序设计系统，可以参考type的函数参数和返回值设计。
 
 (class point object (
-    (set n 12)
+    (define n 12)
     (define fun (lambda x (* 2 x)))
 ))
 
@@ -267,14 +270,14 @@ class
 读写文件
 
 读写文件直接使用Python的file对象，以下程序打开test.ss文件，并读取，打印：
-(set (f (open "test.ss" "r")))
+(define (f (open "test.ss" "r")))
 (print (f.read))
 
 
 一、无用变量的检测警告功能：
 
 new.s文件中定义了一个没有被使用的变量和函数，解释器能够检测到，并给出警告：
-(set (abc 123))
+(define (abc 123))
 (define (efg x) (x))
 
 python Zh.py new.s
@@ -365,20 +368,20 @@ sum在最后可能会调用sum自身。因为在函数的最后调用，函数�
 
 (thread  s1
     (begin
-        (set (s1 0))
-        (set (s1 (sum 1000 500 0)))
+        (define (s1 0))
+        (define (s1 (sum 1000 500 0)))
     )
 )
 
 (thread  s2
     (begin
-        (set (s2 0))
-        (set (s2 (sum 500 0 0)))
+        (define (s2 0))
+        (define (s2 (sum 500 0 0)))
     )
 )
 
 #这里要等上面两个thread的s1 s2的计算完成后才可计算。
-(set (s3 (+ s1 s2)))
+(define (s3 (+ s1 s2)))
 (print s3)
 
 每个therad在一个独立的CPU核心上执行，现代CPU通常有多个核心（2个、4个、8个、16个....）
@@ -412,7 +415,7 @@ ZH系统虽然很像Lisp、Scheme，但是不符合任何一个Lisp，Scheme标�
 
 二、define和set!
 
-Scheme使用define定义变量，使用set!为变量赋值。在ZH中，define只能定义函数，变量直接用set定义并赋值。set可以一次定义/赋值多个变量。
+Scheme使用define定义变量，使用set!为变量赋值。在ZH中，用define定义变量和函数，一次可以定义多个。
 
 三、bool类型
 
@@ -424,7 +427,7 @@ Scheme里bool值为#T和#F,Zh直接使用Python的bool型 -- True和False
 
 Scheme中的cons，作用是构造一个pair，包括左右两个值，在ChezScheme和Racket中，(cons 1 2)的输出是(1 . 2)，用.来区分左右两部分，car取得左值，cdr取得右值，可以对一个list取car和cdr。
 
-六、(env)查看当前的环境变量，你可以在任意位置调用
+六、(show)查看当前的环境变量，你可以在任意位置调用
 
 七、(import test.s)导入并执行test.s文件，可以在任意位置调用。
 

@@ -1,12 +1,12 @@
-(set (f (open "test.gui" "r")))
-(set (l (f.readlines)))
+(define (f (open "test.gui" "r")))
+(define (l (f.readlines)))
 
-(for (set (i 0)) (< i (len l)) (set (i (+ i 1))) ((l|i) "----"))
+(for (define (i 0)) (< i (len l)) (define (i (+ i 1))) ((l|i) "----"))
 
 tkinter
-(set (top (tkinter::Tk)))
+(define (top (tkinter::Tk)))
 top
-(set (label (tkinter::Label top "data")))
+(define (label (tkinter::Label top "data")))
 label
 label.pack
 (tkinter::mainloop)
