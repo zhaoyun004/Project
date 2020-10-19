@@ -102,10 +102,6 @@ env_g.my.update({
         'not':     op.not_,
         'eq?':     op.is_, 
         'equal?':  op.eq, 
-        'max':     max,
-        'min':     min,
-        'abs':     abs,
-        'round':   round,
         
         'tuple':   lambda *x: tuple(x),
         'dict':    lambda x: dict(x),
@@ -117,12 +113,9 @@ env_g.my.update({
         'append':  op.add,  	# 连接两个列表
         'len':     len, 		# 列表长度
         'map':     map,
-        'print':   print,
-        'exit':	   sys.exit,
         
         'open':    open,
                         
-        'procedure?': callable,
         'null?':   lambda x: x == [], 
         # python的bool可能有错 bool("False")返回了True
         'bool?':   lambda x: isa(x, Bool),   
@@ -143,6 +136,7 @@ env_g.my.update({
         
         'dir':     dir,
         
+        'type':     type,
         'getattr': getattr,
         'setattr': setattr,
         
@@ -166,7 +160,6 @@ env_g.my.update({
 
 env_g.my.update(vars(math)) # sin, cos, sqrt, pi, ...
 #env_g.my.update(vars(os)) 
-#env_g.my.update(vars(sys)) 
 
 # 全局自定义变量/函数环境
 en = env(env_g)
@@ -210,7 +203,7 @@ def repl(prompt='Zh> '):
     while True:
         # 读取输入，并解析，得到字符串列表
         tmp = parse(input(prompt))
-        print(tmp)
+        #print(tmp)
         
         # 分析列表的意义，并计算。
         val = eval_all(tmp, en)
@@ -320,24 +313,18 @@ def expression_to_list(x):
 def eval_all(x, e):
     while True:
     
-        print(x)
+        #print(x)
         
         # 是一个Python值
-        if isa(x, int) or isa(x, float) or isa(x, bool) or isa(x, types.BuiltinFunctionType) or type(x)==object:
+        if isa(x, int) or isa(x, float) or isa(x, bool) or isa(x, types.BuiltinFunctionType):
             return x   
             
-        if isa(x, String):
+        if isa(x, String):                
 
             # 第一个和最后一直字符都是"，表示是一个字符串。
             if x[0] == '\"' and x[-1] == '\"':
                 return x[1:-1]
                 
-            # (+ j|3.n 3)*2-1
-            # obj.he|1.o|2:-1  -->  [| [. obj he] 1]
-            if has_op(x):
-                y = expression_to_list(x)   
-                return eval_all(y, e)
-
             #x在环境变量里
             e0 = find_all(x, e)   
             if e0 != None:                    
@@ -348,6 +335,12 @@ def eval_all(x, e):
                 else:
                     #zh内置函数或变量
                     return e0.my[x]             
+                    
+            # (+ j|3.n 3)*2-1
+            # obj.he|1.o|2:-1  -->  [| [. obj he] 1]
+            if has_op(x):
+                y = expression_to_list(x)   
+                return eval_all(y, e)
             
         if isa(x, List):
         
@@ -411,7 +404,7 @@ def eval_all(x, e):
                             print("define的参数必须为列表");
                             
                         if len(i) != 2:
-                            print("define后参数项中有且只有两项\n");
+                            print("define每一项参数有且只有两项\n");
                             
                         # 变量定义
                         if isa(i[0], str):
@@ -441,10 +434,12 @@ def eval_all(x, e):
                 elif x[0] == 'import':
                     __import__(x[1])
                     return None
+                    
                 # 异常处理的问题在于，那些语句、函数会触发异常？
                 # (try ())
                 elif x[0] == 'try':
                     return None
+                    
                 # 触发一个异常
                 elif x[0] == 'raise':
                     raise x[1];
@@ -538,20 +533,19 @@ def eval_all(x, e):
                 
                     return None
                     
-                # (class child father (set (...) (...)))
+                # (class child father (...) (...))
                 elif x[0] == 'class':
                     if x[1] not in e.my.keys():
                         # 类型未定义
                         l = []
-                        if x[3][0] == "set" :
-                            for i in x[3][1:]:
-                                l.append([i[0], eval_all(i[1], e)])                
+                        for i in x[3:]:
+                            l.append([i[0], eval_all(i[1], e)])                
                         
                         # type参数：x[1]为子类型，x[2]为父类型，eval把字符串转化为类, 返回的变量指代一个类。
                         # 变量添加到环境变量e里去
-                        e.my.update({x[1]: type(x[1],(eval("type("+x[2]+"())"), ), dict(l))})
+                        e.my.update({x[1]: type(x[1],(type(eval("x[2]()")), ) , dict(l))})
                     else:
-                        print("Error : define [" + x[1] + "] again.")
+                        print("Error : class [" + x[1] + "] defined again.")
                     
                     return None
                     
@@ -559,49 +553,53 @@ def eval_all(x, e):
                     return 'break'
                     
                 else:               
-                    tmp = eval_all(x[0], e)
+                    
+                    args = []
+                    for i in x[1:]:
+                        args = args + [eval_all(i, e)]
+                    
+                    #print("[--", x[0], *args, "--]") 
+                    
+                    obj = eval_all(x[0], e)
                     
                     # 创建一个对象
-                    if type(tmp) == "type":
-                        return tmp(x[1:])
+                    if type(obj) == "type":
+                        return obj(x[1:])
                     
                     # 调用Python内置函数
-                    if type(tmp) == types.BuiltinFunctionType:
-                        args = []
-                        for i in x[1:]:
-                            args = args + [eval_all(i, e)]
-                        #print("[", x[0], *args, " ]")        
-                        return tmp(*args)
+                    if type(obj) == types.BuiltinFunctionType:       
+                        return obj(*args)
                 
-                    tmp = ""              
                     e0 = find_all(x[0], e)
-                    
                     if e0 == env_g:
-                        # zh内置函数或变量
-                        tmp = e0.my[x[0]]
-                        
+                        print(e0.my[x[0]])
+                        # zh内置函数
+                        if callable(e0.my[x[0]]):
+                            return e0.my[x[0]](*args)
+                        else:
+                            print("变量不能被调用\n")
+                            exit()
+                            
                     elif e0 != None:                            
-                        #自定义函数、变量、类型。使用参数之前，将参数变量对应的列表第二项置为1
+                        #自定义函数。使用之前，将变量对应的列表第二项置为1
                         e0.my[x[0]][1] = 1
-                        tmp = e0.my[x[0]][0]
                         
-                    # 是一个函数.
-                    # if callable(tmp):
+                        if callable(e0.my[x[0]][0]):    
+                            return e0.my[x[0]][0](*args)
+                        else:
+                            print(" --- 变量不能被调用\n")
+                            exit()                    
                 
                     #没找到，可能是一个中缀表达式。
                     if e0 == None:                  
                         tmp = eval_all(x[0], e)
                         # 这里的调用期望是对象方法
                         if callable(tmp):
-                            args = []
-                            for i in x[1:]:
-                                args = args + [eval_all(i, e)]
-                            #print("[", x[0], *args, " ]")        
                             return tmp(*args)  
-                        if tmp!= None:
-                            print(tmp)
+                        else:
+                            print("未知 -- %s \n", x[0])
                             
-                        return 
+                    return 
                         
                     # ['+', ['.', 'obj','m'], 2] 表达式解析
         return None

@@ -50,11 +50,11 @@ True False None
 
 六、内置变量
 
-内置变量可以通过(env g)指令查看:
+内置变量可以通过(show g)指令查看:
 
 E:\Project\Zh>python Zh.py
-Zh> (env g)
-['env']
+Zh> (show g)
+['show']
 env ...
 +  :  <built-in function add>
 -  :  <built-in function sub>
@@ -175,7 +175,7 @@ Zh>(exit)
 (define (a 12) (b 13) (c "hello"))
 
 
-二、数据结构(和Python保持一致)：
+二、复合数据结构(和Python保持一致)：
 
 
 定义一个元组: 
@@ -236,7 +236,7 @@ while, for, break
 
 函数定义define与lambda
 
-多数程序设计系统提供return语句，函数有返回值，zh函数没有返回值，我们建议使用函数外层的一个变量作为返回值。例如：
+多数程序设计系统提供return语句，函数有返回值。Zh函数没有返回值，我们建议使用函数外层的一个变量作为返回值。例如：
 (define (s 0))
 (define (sum a b) ( define (s (+ a b))))
 (sum 3 4)

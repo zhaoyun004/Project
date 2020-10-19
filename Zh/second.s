@@ -3,12 +3,13 @@
 (define (f (open "test.s" "r")))
 (define (s (f.read))) s
 
-(define (testa x) x ) 
+(define ((testa x) x ))
 
 (testa 12)
 
 (class point object 
-    (define (n 12) (fun (lambda x (* 2 x))))
+    (n 12) 
+	(fun (lambda x (* 2 x)))
 )
 
 (define (a (point))) a
@@ -16,7 +17,9 @@
 (quote "类未使用没有警告")
 
 (class envi object 
-    (define (my (dict ('))) (father nil)(define fa (lambda x (define (father x)))))
+    (my (dict ('))) 
+	(father nil)
+	(fa (lambda x (father x)))
 )
 
 (env)  (define (env_g (envi))) env_g
