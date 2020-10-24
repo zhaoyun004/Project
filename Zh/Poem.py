@@ -103,20 +103,19 @@ env_g.my.update({
         'eq?':     op.is_, 
         'equal?':  op.eq, 
         
-        'tuple':   lambda *x: tuple(x),
-        'dict':    lambda x: dict(x),
+        #'dict':    lambda x: dict(x),
         
+        # lambda *x 表示参数可能多于一个
+        '\'':      lambda *x: list(x), 
         'car':     lambda x: x[0],
         'cdr':     lambda x: x[1:], 
-        'list':    lambda *x: list(x), 
-        '\'':      lambda *x: list(x), 
+        
         'append':  op.add,  	# 连接两个列表
         'len':     len, 		# 列表长度
         'map':     map,
+                                
+        'null?':   lambda x: x == [],
         
-        'open':    open,
-                        
-        'null?':   lambda x: x == [], 
         # python的bool可能有错 bool("False")返回了True
         'bool?':   lambda x: isa(x, Bool),   
         'number?': lambda x: isa(x, Number),   
@@ -136,7 +135,6 @@ env_g.my.update({
         
         'dir':     dir,
         
-        'type':     type,
         'getattr': getattr,
         'setattr': setattr,
         
@@ -146,13 +144,8 @@ env_g.my.update({
         'object':   type(object()),
         'BaseException': BaseException,
         
-        #'os':       os,
-        'tkinter':  tkinter,
-        'tkinter.Tk': tkinter.Tk,
-        'tkinter.Label': tkinter.Label,
-        
         # 模块访问
-        '::':      lambda x,y: getattr(__import__(x), y),   
+        # '::':      lambda x,y: getattr(__import__(x), y),   
         
         # 字典key访问
         ':':       lambda x, y: x[y], 
@@ -203,7 +196,6 @@ def repl(prompt='Zh> '):
     while True:
         # 读取输入，并解析，得到字符串列表
         tmp = parse(input(prompt))
-        #print(tmp)
         
         # 分析列表的意义，并计算。
         val = eval_all(tmp, en)
@@ -211,7 +203,6 @@ def repl(prompt='Zh> '):
         # 打印计算结果
         if val is not None: 
             print(val)
-            #print(lispstr(val))
 
 def lispstr(exp):
     "Convert a Python object back into a Lisp-readable string."
@@ -242,11 +233,13 @@ class Procedure(object):
                         
     def __call__(self, *args): 
         # 函数体内定义的变量，存在c.my中，只在函数内可见。
+        '''
         if self.is_tail_recursion == False:
             c = env(self.e)
         else:
             c = self.e
-        #c = env(self.e)
+            '''
+        c = env(self.e)
 
         # parms是形参，args是实参
         for i in range(len(self.parms)):
@@ -257,7 +250,7 @@ class Procedure(object):
                 e0 = find_all(args[i], self.e)
                 if e0 != None:
                     e0.my[args[i]][1] = 1
-        #print(c.my)
+        print(c.my)
         return eval_all(self.body, c)
 
 # x： 待解析的list
@@ -313,43 +306,14 @@ def expression_to_list(x):
 def eval_all(x, e):
     while True:
     
-        #print(x)
-        
-        # 是一个Python值
-        if isa(x, int) or isa(x, float) or isa(x, bool) or isa(x, types.BuiltinFunctionType):
-            return x   
-            
-        if isa(x, String):                
-
-            # 第一个和最后一直字符都是"，表示是一个字符串。
-            if x[0] == '\"' and x[-1] == '\"':
-                return x[1:-1]
-                
-            #x在环境变量里
-            e0 = find_all(x, e)   
-            if e0 != None:                    
-                if e0 != env_g:
-                    # 用户定义变量或函数
-                    e0.my[x][1] = 1
-                    return e0.my[x][0]
-                else:
-                    #zh内置函数或变量
-                    return e0.my[x]             
-                    
-            # (+ j|3.n 3)*2-1
-            # obj.he|1.o|2:-1  -->  [| [. obj he] 1]
-            if has_op(x):
-                y = expression_to_list(x)   
-                return eval_all(y, e)
-            
         if isa(x, List):
         
             # 空列表
             if len(x) == 0:
                 return None
                                 
-            if len(x) >= 1:
-            
+            if len(x) >= 1:                
+                    
                 # 用于注释
                 if x[0] == 'quote' or x[0] == ';':
                     return None
@@ -415,22 +379,27 @@ def eval_all(x, e):
                                 # 为变量赋值,并标记为已经用过.
                                 tmp.my[i[0]] = [eval_all(i[1], e), 1]
                             else:
+                                # 首次定义变量
+                                e.my[i[0]] = [eval_all(i[1], e), 0]
+                                
+                                '''
                                 # 为列表、字典赋值
                                 if has_set_op(i[0]):
                                     y = expression_to_list(i[0])
                                     # 为list、对象成员赋值。
                                     #eval_all(y, e) = eval_all(i[1], e)
-                                else:
-                                    # 首次定义变量
-                                    e.my[i[0]] = [eval_all(i[1], e), 0]
+                                    '''
                         
                         # 函数定义
                         if isa(i[0], List):
-                            if i[0][0] not in e.my.keys():
+                            tmp = find_all(i[0][0], e)
+                            if tmp != None:
+                                print("函数已定义\n")                                
+                            else:
                                 e.my[i[0][0]] = [Procedure(i[0][0], i[0][1:], i[1], e), 0] 
                                 
                     return None
-                    
+                
                 elif x[0] == 'import':
                     __import__(x[1])
                     return None
@@ -446,6 +415,7 @@ def eval_all(x, e):
                     
                 # 单元测试，确定某个函数的返回值和预期一致。
                 elif x[0] == 'test':
+                
                     print(x[1], "= ", x[2])
                     a  = eval_all(x[1], e)
                     b  = eval_all(x[2], e)
@@ -454,18 +424,14 @@ def eval_all(x, e):
                     else:
                         print("OK\t")
                     return None
-                    
-                # (begin (...) (...) (...)) 依次执行。begin返回最后一项。
-                # begin语句块有独立的env，继承自上层env。
-                elif x[0] == 'begin':
-                    c = env(e)
-                    for exp in x[1:-1]:
-                        val = eval_all(exp, c)
-                        if val != None:
-                            print(val)
-                    
-                    #begin最后一项不打印，而是eval后作为begin块的返回值。
-                    x = eval_all(x[-1], e)
+                
+                # 输出多项，返回None
+                elif x[0] == 'look':
+                    for i in x[1:]:
+                        v = eval_all(i, e)
+                        if v != None:
+                            print(v)
+                    return None
                 
                 # if返回某一项。
                 elif x[0] == 'if':
@@ -504,10 +470,9 @@ def eval_all(x, e):
                     
                     #  (for i l (...)) 列表循环
                     if (len(x) == 4):
-                        print("in for.....\n")
-                        for i in eval_all(x[2], c):
-                            print(i)
-                            c.my[x[1]] = i
+                        l = eval_all(x[2], c)
+                        for i in l:
+                            c.my[x[1]] = [i, 0]
                             eval_all(x[3], c)
                     
                     #  () 自增循环
@@ -543,7 +508,7 @@ def eval_all(x, e):
                         
                         # type参数：x[1]为子类型，x[2]为父类型，eval把字符串转化为类, 返回的变量指代一个类。
                         # 变量添加到环境变量e里去
-                        e.my.update({x[1]: type(x[1],(type(eval("x[2]()")), ) , dict(l))})
+                        e.my.update({x[1]: [type(x[1],(type(eval("x[2]()")), ) , dict(l)), 0]})
                     else:
                         print("Error : class [" + x[1] + "] defined again.")
                     
@@ -552,32 +517,48 @@ def eval_all(x, e):
                 elif x[0] == 'break':
                     return 'break'
                     
-                else:               
+                else:        
+                    
+                    #print(x)
+                    
+                    if isa(x[0],List):
+                        # 第一项是一个列表。则为顺序块，依次eval列表各项，返回最后一项。
+                        c = env(e)
+                        for exp in x[0:-1]:
+                            eval_all(exp, c)
+                    
+                        #最后一项eval后返回。
+                        return eval_all(x[-1], c)                
                     
                     args = []
                     for i in x[1:]:
                         args = args + [eval_all(i, e)]
-                    
-                    #print("[--", x[0], *args, "--]") 
+                    #print(args)               
                     
                     obj = eval_all(x[0], e)
                     
-                    # 创建一个对象
-                    if type(obj) == "type":
-                        return obj(x[1:])
+                    #eval单独处理
+                    if obj == eval:
+                        return obj(*x[1:])
+
+                    if obj == list:
+                        return list(args)
                     
-                    # 调用Python内置函数
-                    if type(obj) == types.BuiltinFunctionType:       
+                    if obj == tuple:
+                        return tuple(args)
+                        
+                    # 创建一个对象 或 调用Python内置函数
+                    elif type(obj) == "type" or type(obj) == types.BuiltinFunctionType:
                         return obj(*args)
-                
+                        
                     e0 = find_all(x[0], e)
                     if e0 == env_g:
-                        print(e0.my[x[0]])
-                        # zh内置函数
+                        #print(e0.my[x[0]])
+                        # Poem内置函数
                         if callable(e0.my[x[0]]):
                             return e0.my[x[0]](*args)
                         else:
-                            print("变量不能被调用\n")
+                            print("变量%s不能被调用\n", x[0])
                             exit()
                             
                     elif e0 != None:                            
@@ -587,7 +568,7 @@ def eval_all(x, e):
                         if callable(e0.my[x[0]][0]):    
                             return e0.my[x[0]][0](*args)
                         else:
-                            print(" --- 变量不能被调用\n")
+                            print(" 变量%s不能被调用\n", x[0])
                             exit()                    
                 
                     #没找到，可能是一个中缀表达式。
@@ -602,6 +583,39 @@ def eval_all(x, e):
                     return 
                         
                     # ['+', ['.', 'obj','m'], 2] 表达式解析
+                            # 是一个Python值
+                            
+        if isa(x, int) or isa(x, float) or isa(x, bool) or isa(x, types.BuiltinFunctionType) or type(x) == type:
+            return x
+            
+        if isa(x, String):
+        
+            # x在环境变量里
+            e0 = find_all(x, e)   
+            if e0 != None:                    
+                if e0 == env_g:
+                    #Poem内置函数或变量
+                    return e0.my[x]  
+                else:
+                    # 用户定义变量或函数
+                    e0.my[x][1] = 1
+                    return e0.my[x][0]
+            
+            # (OPEN "TEST.S" "r")
+            
+            # (+ j|3.n 3)*2-1
+            # obj.he|1.o|2:-1  -->  [| [. obj he] 1]
+            
+            if has_op(x):
+                try:
+                    y = expression_to_list(x)   
+                    return eval_all(y, e)
+                except:
+                    # 是一个字符串常量      
+                    return x
+            
+            return x
+                
         return None
                 
 def is_blank(line):
@@ -647,7 +661,6 @@ def eval_as_line(f):
           
 def eval_file(f):
     program = f.read()
-    program = "(begin" + program + ")"
     tmp = get_list(tokenize(program))
     
     val = eval_all(tmp, en)

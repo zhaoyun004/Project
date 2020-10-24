@@ -1,28 +1,18 @@
-(; "尾调用优化")
+(
 
 (define (f (open "test.s" "r")))
-(define (s (f.read))) s
+(define ( abc (f.read))) 
+(; why NULL???)
+(print abc)
+(show)
+
 
 (define ((testa x) x ))
 
 (testa 12)
 
-(class point object 
-    (n 12) 
-	(fun (lambda x (* 2 x)))
-)
+(class point object (n 12) (fun (lambda x (* 2 x))))
 
-(define (a (point))) a
-
-(quote "类未使用没有警告")
-
-(class envi object 
-    (my (dict ('))) 
-	(father nil)
-	(fa (lambda x (father x)))
-)
-
-(env)  (define (env_g (envi))) env_g
 
 (define (d (dict (' (' "+" +) 
     (' "-" -)
@@ -32,5 +22,23 @@
     )))
 ) 
 
+
+(quote "类未使用没有警告")
+
+(class envi object 
+    (my (dict ('))) 
+	(father nil)
+	(fa (lambda x (father x)))
+)
+
+(define (env_g (envi))) env_g
+
+(show)  
+
 (env_g.my.update d) env_g.my
-(define (l (list (d.keys)))) l ()
+
+(print (d.keys))
+ 
+(define (a (point)))
+
+)

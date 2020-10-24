@@ -1,23 +1,23 @@
 一、系统简介
 
-Zh是一套程序设计系统，使用Python实现，基本数据类型和数据结构和Python完全一样，语法很像Scheme。其核心是一个解释器，用于解释运行用户编写的各种程序。为了编写程序，用户只需要一个能满足用户需求的文本（程序）编辑软件，比如开源软件：Notepad++、Sublime Text等等。
+Poem是一套程序设计系统，使用Python实现，基本数据类型和数据结构和Python完全一样，语法很像Scheme。其核心是一个解释器，用于解释运行用户编写的各种程序。为了编写程序，用户只需要一个能满足用户需求的文本（程序）编辑软件，比如开源软件：Notepad++、Sublime Text等等。
 
 
 二、下载Windows下的可执行文件
 
-运行zh.exe进入单行交互模式，或者运行zh.exe test.s解释执行某个文件。
+运行Poem.exe进入单行交互模式，或者运行Poem.exe test.s解释执行某个文件。
 
 
 三、文本编辑环境
 
-Windows系统下，推荐使用Notepad++，在菜单栏语言选项里选择Lisp，会将部分关键词彩色显示。注意，不能选择Scheme，选择Scheme，只有黑白显示文本。
+Windows系统下，推荐使用Notepad++，在菜单栏语言选项里选择Lisp或者Schmer，会将部分关键词彩色显示。
 
-其次是Sublime Text3。ST虽然很好，但是对于中文支持总是需要你做一些额外的任务，这种任务是枯燥的，为什么不配置好，下载就能支持UTF-8呢。多次折腾之后，我厌倦了自己去下载插件支持UTF-8。于是，我回头用上了Notepad++。
+其次是Sublime Text3。ST虽然很好，但是对于中文支持总是需要你做一些额外的任务，这种任务是枯燥的，为什么不配置好，下载就能支持UTF-8呢。多次折腾之后，笔者厌倦了自己去下载插件支持UTF-8。于是，回头用上了Notepad++。
 
 
 四、单行交互模式
 
-运行python Zh.py，进入单行交互模式。
+运行python Poem.py，进入单行交互模式。
 
 打印hello world:
 (print "hello , world!")
@@ -29,138 +29,34 @@ print是Python内置函数，可以直接使用。
 
 五、系统关键词
 
-关键词是编程系统的核心，不超过100个单词。Zh系统则只有11个关键词，下面是关键词列表和简单的解释：
+关键词是编程系统的核心，不超过100个单词。Poem系统则只有11个关键词，下面是关键词列表和简单的解释：
 
-define 定义一个变量或函数
-lambda 定义一个无名函数
-begin 顺序运算begin之后的语句，返回最后一项。
-if 条件分支，返回其中一项。
-each 遍历一个列表
-while 循环
-for 循环
-break 跳出循环
-class 自定义类型
-import 导入并执行其他文件
-show 查看当前环境
-test 测试某个函数
+look	输出多项
+define 	定义一个变量或函数
+lambda 	定义一个无名函数
+if 		条件分支，返回其中一项。
+while 	循环
+for 	循环
+break 	跳出循环
+class 	自定义类型
+import 	导入一个Python模块
+show 	查看当前环境
+test 	测试某个函数
 try 
-raise 
+raise
 True False None
 
+短词：
 
 六、内置变量
 
 内置变量可以通过(show g)指令查看:
 
-E:\Project\Zh>python Zh.py
-Zh> (show g)
-['show']
-env ...
-+  :  <built-in function add>
--  :  <built-in function sub>
-*  :  <built-in function mul>
-/  :  <built-in function truediv>
->  :  <built-in function gt>
-<  :  <built-in function lt>
->=  :  <built-in function ge>
-<=  :  <built-in function le>
-=  :  <built-in function eq>
-not  :  <function <lambda> at 0x0000000002C2ABF8>
-eq?  :  <built-in function is_>
-equal?  :  <built-in function eq>
-max  :  <built-in function max>
-min  :  <built-in function min>
-abs  :  <built-in function abs>
-round  :  <built-in function round>
-tuple  :  <function <lambda> at 0x0000000002C2A510>
-dict  :  <function <lambda> at 0x0000000002C2A598>
-car  :  <function <lambda> at 0x0000000002C2A620>
-cdr  :  <function <lambda> at 0x0000000002C2A6A8>
-list  :  <function <lambda> at 0x0000000002C2A730>
-|  :  <function <lambda> at 0x0000000002C2A7B8>
-append  :  <built-in function add>
-len  :  <built-in function len>
-map  :  <class 'map'>
-print  :  <built-in function print>
-exit  :  Use exit() or Ctrl-Z plus Return to exit
-open  :  <built-in function open>
-procedure?  :  <built-in function callable>
-null?  :  <function <lambda> at 0x0000000002C2A840>
-bool?  :  <function <lambda> at 0x0000000002C2A8C8>
-number?  :  <function <lambda> at 0x0000000002C2A950>
-string?  :  <function <lambda> at 0x0000000002C2A9D8>
-tuple?  :  <function <lambda> at 0x0000000002C2AA60>
-list?  :  <function <lambda> at 0x0000000002C2AAE8>
-dict?  :  <function <lambda> at 0x0000000002C2AB70>
-and  :  <function <lambda> at 0x0000000002C2AC80>
-or  :  <function <lambda> at 0x0000000002C2AD08>
-isa  :  <built-in function isinstance>
-dir  :  <built-in function dir>
-type  :  <class 'type'>
-getattr  :  <built-in function getattr>
-setattr  :  <built-in function setattr>
-.  :  <function <lambda> at 0x0000000002C2AD90>
-int  :  {}
-__name__  :  math
-__doc__  :  This module is always available.  It provides access to the
-mathematical functions defined by the C standard.
-__package__  :
-__loader__  :  <class '_frozen_importlib.BuiltinImporter'>
-__spec__  :  ModuleSpec(name='math', loader=<class '_frozen_importlib.BuiltinImp
-orter'>, origin='built-in')
-acos  :  <built-in function acos>
-acosh  :  <built-in function acosh>
-asin  :  <built-in function asin>
-asinh  :  <built-in function asinh>
-atan  :  <built-in function atan>
-atan2  :  <built-in function atan2>
-atanh  :  <built-in function atanh>
-ceil  :  <built-in function ceil>
-copysign  :  <built-in function copysign>
-cos  :  <built-in function cos>
-cosh  :  <built-in function cosh>
-degrees  :  <built-in function degrees>
-erf  :  <built-in function erf>
-erfc  :  <built-in function erfc>
-exp  :  <built-in function exp>
-expm1  :  <built-in function expm1>
-fabs  :  <built-in function fabs>
-factorial  :  <built-in function factorial>
-floor  :  <built-in function floor>
-fmod  :  <built-in function fmod>
-frexp  :  <built-in function frexp>
-fsum  :  <built-in function fsum>
-gamma  :  <built-in function gamma>
-gcd  :  <built-in function gcd>
-hypot  :  <built-in function hypot>
-isclose  :  <built-in function isclose>
-isfinite  :  <built-in function isfinite>
-isinf  :  <built-in function isinf>
-isnan  :  <built-in function isnan>
-ldexp  :  <built-in function ldexp>
-lgamma  :  <built-in function lgamma>
-log  :  <built-in function log>
-log1p  :  <built-in function log1p>
-log10  :  <built-in function log10>
-log2  :  <built-in function log2>
-modf  :  <built-in function modf>
-pow  :  <built-in function pow>
-radians  :  <built-in function radians>
-sin  :  <built-in function sin>
-sinh  :  <built-in function sinh>
-sqrt  :  <built-in function sqrt>
-tan  :  <built-in function tan>
-tanh  :  <built-in function tanh>
-trunc  :  <built-in function trunc>
-pi  :  3.141592653589793
-e  :  2.718281828459045
-tau  :  6.283185307179586
-inf  :  inf
-nan  :  nan
-....
-Zh>(exit)
+E:\Project\Poem>python Poem.py
+Poem> (show g)
+Poem>(exit)
 
-用户可在程序的任何位置调用(env)查看当前块的环境，该关键字用于调试程序，有时候可能比手工打印更方便，毕竟(env)一次打印当前块的所有变量值。
+用户可在程序的任何位置调用(show)查看当前块的环境，该关键字用于调试程序，可能比手工打印更方便，毕竟(show)一次打印当前环境的所有变量值。
 
 注意：打印出的变量值是一个Python列表：["abc" 1]，第一项是变量值，第二项表示变量是否使用，1意为已经使用过，0表示未使用。
 
@@ -208,6 +104,24 @@ i|2         -- 意义同上。
 模块访问：
 
 
+look输出
+
+Python的print一次可以输出多项：
+
+(print a b c d e)
+
+空行隔开：
+
+(print a "\n"  b  "\n"  c  "\n" d "\n" e "\n")
+
+在实际编程中，你也可以使用look一次性输出多项替代print：
+
+(look b c d e)
+
+look的好处是避免了多次添加换行字符“\n”.
+
+
+
 三、符号中置表达式：
 
 支持符号中置表达式：j|3.n+3*2-1。符号的运算从左到右。该表达式+在*左边，所以先算+，后算*，这和数学中定义的运算符优先级是不一致的 --- 3+4*2的结果为14。
@@ -224,46 +138,84 @@ i|2         -- 意义同上。
 
 
 
-顺序块 (begin (...) (...) (...))
+顺序块 ((...) (...) (...))
 将依次计算各项，返回最后一项的值；可以嵌套使用。注意：返回值不会在其所在的语句块里打印，而其余各项的值均被打印。
 
 条件块 (if (1) (2) (3)) 
 判断1的结果，如果为True，则计算2并返回，否则计算3并返回；23项必须有，可以为();可以嵌套使用。同样，返回值不打印。
 
-循环块 -- 可以嵌套使用
-while, for, break
+while 	循环块
+for		自增循环
 
+break跳出循环
+
+
+诗词模式：在这个模式里，我们并不讲究形式上括号的对称，而是尝试尽量让程序像诗词。最有名的诗词程序可能是一段名为“Love Letter”的Perl程序。
+
+(poem
+
+change a to b
+
+listen me please
+
+
+My name is Poemangxiaoping
+
+I am 21 years old
+
+I am a student.
+
+One day,  i go to school,
+
+
+
+A is int
+
+B is str
+
+C is int or str
+
+
+Value of b is 
+
+Value of a is 
+
+look a b
+
+
+C is function with x  y
+
+
+return 10
+
+
+Value of D is Call C with a b Please
+
+
+)
 
 函数定义define与lambda
 
-多数程序设计系统提供return语句，函数有返回值。Zh函数没有返回值，我们建议使用函数外层的一个变量作为返回值。例如：
-(define (s 0))
-(define (sum a b) ( define (s (+ a b))))
-(sum 3 4)
-以上，变量s可以在sum函数内部访问到，充当sum的返回值。
+(define ((mysum a b) (+ a b)))
+(mysum 3 4)
 
 函数内部可以定义函数，参见newton.s，函数A内定义的函数只能在函数A内使用，A外部的其他函数不能使用。
-
-当函数内有多条语句时，用begin包起来；根节点块可以省略begin。
-
-
-注意：和多数程序设计不一样，zh函数没有返回值，但是语句块有返回值。
 
 
 函数调用
 
 函数调用时实参个数不一定要和形参个数一样。
 
-几乎所有的程序设计系统中，函数的调用都是通过名为"栈"(stack)的数据结构，通常，栈空间是连续的。如果用C程序来实现一个栈，最简单的方式是定义一个字符数组：  char s[1024]；你可以用s这个字符数组才存储函数参数、变量以及返回值。不过，在我们的程序设计系统中，函数调用形成的并不是栈结构，而是树结构。
+几乎所有的程序设计系统中，函数的调用都是通过名为"栈"(stack)的数据结构，通常，栈空间是连续的。如果用C程序来实现一个栈，最简单的方式是定义一个字符数组：  char s[1024]；你可以用s这个字符数组存储函数参数、变量以及返回值。不过，在我们的程序设计系统中，函数调用形成的并不是栈结构，而是树结构。
 
 
 class
 
-程序设计者可以使用Python的type函数创建一个类，但是多数情况下，你应该使用class直接定义一个类，使用.操作符访问对象的成员。尽量避免使用type函数，因为type太低层，除非你想自己实现一套面向对象程序设计系统，可以参考type的函数参数和返回值设计。
+程序设计者可以使用Python的type函数创建一个类，但是多数情况下，你应该使用class直接定义一个类，使用.操作符访问对象的成员。尽量避免使用type函数，因为type太低层。
 
 (class point object (
-    (define n 12)
-    (define fun (lambda x (* 2 x)))
+    (define (n 12))
+    (define (fun (lambda x (* 2 x))))
 ))
 
 
@@ -280,9 +232,9 @@ new.s文件中定义了一个没有被使用的变量和函数，解释器能够
 (define (abc 123))
 (define (efg x) (x))
 
-python Zh.py new.s
+python Poem.py new.s
 
-E:\Project\Zh>python Zh.py new.s
+E:\Project\Poem>python Poem.py new.s
 45150
 0
 0:00:00.012001
@@ -295,11 +247,10 @@ Warn : [ efg ] is not used.
 time --- 关键字，time后只能有一项参数，运行参数项，并打印运行时间。
 例如：(time (+ 4 5)) --- 计算”4+5“，并打印运行时间。
 
-你可以用begin将一系列语句包装起来，作为time的参数:
-(time (begin (...) (...) (...) (...)))
+(time ((...) (...) (...) (...)))
 
 嵌套使用：
-(time (begin (...) (time (...)) (...) (...)))
+(time ((...) (time (...)) (...) (...)))
 
 
 三、单元测试
@@ -389,7 +340,7 @@ sum在最后可能会调用sum自身。因为在函数的最后调用，函数�
 
 六、中文编程
 
-Zh支持使用中文作为过程名（函数名）。对于中文编程，已经有人作出一些尝试，如易语言中文编程、文言文编程。
+Poem支持使用中文作为过程名（函数名）。对于中文编程，已经有人作出一些尝试，如易语言中文编程、文言文编程。
 
 电子计算机诞生于美国，最先支持的是英文字母，中文等其他国家的文字的支持比较流行的方案是UTF8，早期还有GBK中文编码等方案。
 
@@ -407,7 +358,7 @@ Zh支持使用中文作为过程名（函数名）。对于中文编程，已经
 附录：  和Lisp/Scheme的一些区别（不完全）：
 
 
-ZH系统虽然很像Lisp、Scheme，但是不符合任何一个Lisp，Scheme标准，作者无意实现一个符合某个标准的Scheme或者Lisp，其内置函数、类多是直接使用最常用的Python库。
+Poem系统虽然很像Lisp、Scheme，但是不符合任何一个Lisp，Scheme标准，作者无意实现一个符合某个标准的Scheme或者Lisp，其内置函数、类多是直接使用最常用的Python库。
 
 一、quote和;用于注释。
 
@@ -415,11 +366,11 @@ ZH系统虽然很像Lisp、Scheme，但是不符合任何一个Lisp，Scheme标�
 
 二、define和set!
 
-Scheme使用define定义变量，使用set!为变量赋值。在ZH中，用define定义变量和函数，一次可以定义多个。
+Scheme使用define定义变量，使用set!为变量赋值。在Poem中，用define定义变量和函数，一次可以定义多个。
 
 三、bool类型
 
-Scheme里bool值为#T和#F,Zh直接使用Python的bool型 -- True和False
+Scheme里bool值为#T和#F, Poem直接使用Python的bool型 -- True和False
 
 四、实现了C风格的while，for循环，循环体中可以使用break跳出循环。
 

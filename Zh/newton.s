@@ -36,7 +36,7 @@
 (mysqrt 8)
 (mysqrt 16)
 
-(env)
+(show)
  (; "这里应该报错")
 (averageasf 7 9)
 12
