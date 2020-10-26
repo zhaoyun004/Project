@@ -162,11 +162,11 @@ def YinHao(line):
     a = ""
     i=0
     for ch in line:
-        if if != "\"":
+        if ch !=  "\"":
             a=a+ch
         else:
             pass
-              
+            
 def parse(program):
     "Read a Scheme expression from a string."
     return read_from_tokens(tokenize(program))
@@ -413,8 +413,7 @@ def eval_all(x, e):
                     return None
                 
                 elif x[0] == 'import':
-                    __import__(x[1])
-                    return None
+                    return __import__(x[1])
                     
                 # 异常处理的问题在于，那些语句、函数会触发异常？
                 # (try ())
