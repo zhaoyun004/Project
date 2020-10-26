@@ -156,6 +156,16 @@ env_g.my.update(vars(math)) # sin, cos, sqrt, pi, ...
 
 # 全局自定义变量/函数环境
 en = env(env_g)
+
+# 把Line中的双引号去掉，换成变量。
+def YinHao(line):
+    a = ""
+    i=0
+    for ch in line:
+        if if != "\"":
+            a=a+ch
+        else:
+            pass
               
 def parse(program):
     "Read a Scheme expression from a string."
@@ -165,7 +175,7 @@ def tokenize(s):
     "Convert a string into a list of tokens."
     return s.replace('(',' ( ').replace(')',' ) ').split()
 
-# 返回的列表中各项已经判断了其数据类型。
+# 返回的列表中各项已经判断了其数据类型。注意，怎么处理带空格的字符串？
 def read_from_tokens(tokens):
     "Read an expression from a sequence of tokens."
     if len(tokens) == 0:
@@ -196,6 +206,8 @@ def repl(prompt='Zh> '):
     while True:
         # 读取输入，并解析，得到字符串列表
         tmp = parse(input(prompt))
+        
+        print(tmp)
         
         # 分析列表的意义，并计算。
         val = eval_all(tmp, en)
@@ -315,7 +327,7 @@ def eval_all(x, e):
             if len(x) >= 1:                
                     
                 # 用于注释
-                if x[0] == 'quote' or x[0] == ';':
+                if x[0] == ';':
                     return None
                                     
                 # 打印当前的环境。

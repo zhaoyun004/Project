@@ -358,30 +358,4 @@ Poem支持使用中文作为过程名（函数名）。对于中文编程，已�
 附录：  和Lisp/Scheme的一些区别（不完全）：
 
 
-Poem系统虽然很像Lisp、Scheme，但是不符合任何一个Lisp，Scheme标准，作者无意实现一个符合某个标准的Scheme或者Lisp，其内置函数、类多是直接使用最常用的Python库。
-
-一、quote和;用于注释。
-
-取消了Symbol类型，使用python字符串。
-
-二、define和set!
-
-Scheme使用define定义变量，使用set!为变量赋值。在Poem中，用define定义变量和函数，一次可以定义多个。
-
-三、bool类型
-
-Scheme里bool值为#T和#F, Poem直接使用Python的bool型 -- True和False
-
-四、实现了C风格的while，for循环，循环体中可以使用break跳出循环。
-
-五、取消了cons，实现了car和cdr
-
-Scheme中的cons，作用是构造一个pair，包括左右两个值，在ChezScheme和Racket中，(cons 1 2)的输出是(1 . 2)，用.来区分左右两部分，car取得左值，cdr取得右值，可以对一个list取car和cdr。
-
-六、(show)查看当前的环境变量，你可以在任意位置调用
-
-七、(import test.s)导入并执行test.s文件，可以在任意位置调用。
-
-八、取消了call/cc。笔者认为call/cc相对循环和break语句，更难掌握，因此删掉了call/cc相关代码，增加了break关键字 -- 跳出循环。
-
-九、中缀表达式
+Poem系统虽然很像Lisp、Scheme，但是不符合任何一个Lisp，Scheme标准，作者无意实现一个符合某个标准的Scheme或者Lisp，其目的是以Scheme语法形式使用各种Python库。
