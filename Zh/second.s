@@ -23,7 +23,7 @@
 ) 
 
 
-(quote "类未使用没有警告")
+(; "类未使用没有警告")
 
 (class envi object 
     (my (dict ('))) 

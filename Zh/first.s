@@ -31,9 +31,14 @@
 
 )
 
+(dir __builtins__)
+
 (' 12 34)
 (tuple 12 34)
 (list 12 34)
+
+os 
+sys
 
 (sys.exit)
 

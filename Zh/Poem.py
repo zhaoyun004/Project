@@ -85,6 +85,14 @@ def find(var, e):
         return e
     else:
         return None
+
+# (. sys (exit) (open)) 
+def getatt(x, y):
+    if isa(y, List):
+        for i in y:
+            i = getattr(x, i[0])
+    if isa(y, Str):
+        return getattr(x, y)
         
 env_g = env(None)
 
@@ -102,9 +110,7 @@ env_g.my.update({
         'not':     op.not_,
         'eq?':     op.is_, 
         'equal?':  op.eq, 
-        
-        #'dict':    lambda x: dict(x),
-        
+                
         # lambda *x 表示参数可能多于一个
         '\'':      lambda *x: list(x), 
         'car':     lambda x: x[0],
@@ -139,7 +145,8 @@ env_g.my.update({
         'setattr': setattr,
         
         # 对象访问
-        '.' :      lambda x,y: getattr(x, y),          
+        #'.' :      lambda x,y: getattr(x, y),          
+        '.':        getatt,
 
         'object':   type(object()),
         'BaseException': BaseException,
@@ -150,7 +157,7 @@ env_g.my.update({
         # 字典key访问
         ':':       lambda x, y: x[y], 
 })
-
+        
 env_g.my.update(vars(math)) # sin, cos, sqrt, pi, ...
 #env_g.my.update(vars(os)) 
 
@@ -413,7 +420,9 @@ def eval_all(x, e):
                     return None
                 
                 elif x[0] == 'import':
-                    return __import__(x[1])
+                    for i in x[1:]:
+                        e.my[i] = [__import__(i), 0]
+                    return None
                     
                 # 异常处理的问题在于，那些语句、函数会触发异常？
                 # (try ())
