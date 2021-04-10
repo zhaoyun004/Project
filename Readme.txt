@@ -32,9 +32,10 @@ M4(Macro Language 宏语言)
 
 @define  (Swap a b) ()
 
-4. 文件包含
+3. 文件包含
 
-3. 泛型编程
+
+4. 泛型编程
 
 Type T, U;
 
