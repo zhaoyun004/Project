@@ -10,7 +10,16 @@ XP上使用python3.4.2，其余使用3.6.8
 增加shell处理功能 --- 能直接运行外部命令。
 
 
-二、C、C++预处理器（宏替换，泛型特化）
+二、C++ Easy GUI（移植到ZH平台上）
+
+GUI版面设计应该类似于html、JavaScript、css组合，重点是，版面设计要和程序设计分离。
+
+作者设计的这套GUI编写规则，是和程序设计语言无关的，理论上适用于任何程序设计语言。
+
+移植到Python，使用tk，canvas库，可能会使用cario库。Cario是一个跨平台的图形库，在Windows上是一个类似gdi的做图库。
+
+
+三、C、C++预处理器（宏替换，泛型特化）
 
 支持宏的程序设计系统 -- C/C++ Lisp/Scheme ErLang Perl Filter :: CPP  Template :: Toolkit
 
@@ -57,16 +66,6 @@ int main() {
     add(12.3, 34.5)     //特化成为add_float
 	add(12.3, 34)		//特化报错！
 }
-
-
-
-三、C++ Easy GUI（移植到ZH平台上）
-
-GUI版面设计应该类似于html、JavaScript、css组合，重点是，版面设计要和程序设计分离。
-
-作者设计的这套GUI编写规则，是和程序设计语言无关的，理论上适用于任何程序设计语言。
-
-移植到Python，使用tk，canvas库，可能会使用cario库。Cario是一个跨平台的图形库，在Windows上是一个类似gdi的做图库。
 
 
 
