@@ -16,12 +16,14 @@ GUI版面设计应该类似于html、JavaScript、css组合，重点是，版面
 
 作者设计的这套GUI编写规则，是和程序设计语言无关的，理论上适用于任何程序设计语言。
 
-移植到Python，使用tk，canvas库，可能会使用cario库。Cario是一个跨平台的图形库，在Windows上是一个类似gdi的做图库。
+移植到Python，使用tk，canvas，cario库。Cario是一个跨平台的图形库，在Windows上是一个类似gdi的绘图库。
+
 
 
 三、C、C++预处理器（宏替换，泛型特化）
 
-支持宏的程序设计系统 -- C/C++ Lisp/Scheme ErLang Perl Filter :: CPP  Template :: Toolkit
+支持宏的程序设计系统 -- C/C++ ErLang Perl Filter :: CPP  Template :: Toolkit  Lisp/Scheme
+
 
 M4(Macro Language 宏语言)
 
@@ -30,7 +32,7 @@ M4(Macro Language 宏语言)
 你可以把这一套规则用在任何你熟悉的程序设计系统甚至是简单的配置文件之上。比如你也可以用这套宏系统来编写First.gui（窗口设计代码）。
 
 
-用宏替代泛型
+用宏替代泛型？
 
 
 1. 定义常量
