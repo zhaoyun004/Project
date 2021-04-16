@@ -19,8 +19,12 @@ GUI版面设计应该类似于html、JavaScript、css组合，重点是，版面
 移植到Python，使用tk，canvas，cario库。Cario是一个跨平台的图形库，在Windows上是一个类似gdi的绘图库。
 
 
+三、XML2Class
 
-三、C、C++预处理器（宏替换，泛型特化）
+该项目的目标是把传统面向对象语言的类定义，放到XML文件中。这样做的好处是，类型是运行时读取XML才知道类型，避免多次编译链接。
+
+
+四、C、C++预处理器（宏替换，泛型特化）
 
 支持宏的程序设计系统 -- C/C++ ErLang Perl Filter :: CPP  Template :: Toolkit  Lisp/Scheme
 
@@ -66,5 +70,6 @@ float sub(T a, U b)
 int main() {
     add(12, 34)         //特化成为add_int
     add(12.3, 34.5)     //特化成为add_float
-	add(12.3, 34)		//特化报错！
+    add(12.3, 34)		//特化报错！
 }
+
