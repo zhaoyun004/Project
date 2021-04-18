@@ -1,13 +1,13 @@
 一、系统简介
 
-Poem是一套程序设计系统，使用Python实现。虽然ZH很像Lisp和Scheme，但是不符合任何一个Lisp、Scheme标准，作者无意实现一个符合某个标准的Scheme或者Lisp，而是希望以Scheme语法形式使用Python库。
+Zh是一套程序设计系统，使用Python实现。虽然ZH很像Lisp和Scheme，但是不符合任何一个Lisp、Scheme标准，作者无意实现一个符合某个标准的Scheme或者Lisp，而是希望以Scheme语法形式使用Python库。
 
 ZH的基本数据类型、数据结构和Python完全一样。其核心是一个解释器，用于解释运行用户编写的各种程序。为了编写程序，用户只需要一个能满足用户需求的文本（程序）编辑软件，比如开源软件：Notepad++、Sublime Text等等。
 
 
 二、下载Windows下的可执行文件
 
-运行Poem.exe进入单行交互模式，或者运行Poem.exe test.s解释执行某个文件。
+运行Zh.exe进入单行交互模式，或者运行Zh.exe test.s解释执行某个文件。
 
 
 三、文本编辑环境
@@ -19,7 +19,7 @@ Windows系统下，推荐使用Notepad++，在菜单栏语言选项里选择Lisp
 
 四、单行交互模式
 
-运行python Poem.py，进入单行交互模式。
+运行python Zh.py，进入单行交互模式。
 
 打印hello world:
 (print "hello , world!")
@@ -31,7 +31,7 @@ print是Python内置函数，可以直接使用。
 
 五、系统关键词
 
-关键词是编程系统的核心，一般不超过100个单词。Poem系统目前只有11个关键词，下面是关键词列表和简单的解释：
+关键词是编程系统的核心，一般不超过100个单词。Zh系统目前只有11个关键词，下面是关键词列表和简单的解释：
 
 quote 	引用
 look	输出多项
@@ -54,9 +54,9 @@ True False None
 
 内置变量可以通过(show g)指令查看:
 
-E:\Project\Poem>python Poem.py
-Poem> (show g)
-Poem>(exit)
+E:\Project\Zh>python Zh.py
+Zh> (show g)
+Zh>(exit)
 
 用户可在程序的任何位置调用(show)查看当前块的环境，该关键字用于调试程序，可能比手工打印更方便，毕竟(show)一次打印当前环境的所有变量值。
 
@@ -155,50 +155,6 @@ for		自增循环
 break   跳出循环
 
 
-诗词模式：在这个模式里，我们并不讲究形式上括号的对称，而是尝试尽量让程序像诗词。最有名的诗词程序可能是一段名为“Love Letter”的Perl程序。
-
-(poem
-
-change a to b
-
-listen me please
-
-
-My name is Poemangxiaoping
-
-I am 21 years old
-
-I am a student.
-
-One day,  i go to school,
-
-
-
-A is int
-
-B is str
-
-C is int or str
-
-
-Value of b is 
-
-Value of a is 
-
-look a b
-
-
-C is function with x  y
-
-
-return 10
-
-
-Value of D is Call C with a b Please
-
-
-)
-
 
 函数定义define与lambda
 
@@ -264,9 +220,9 @@ new.s文件中定义了一个没有被使用的变量和函数，解释器能够
 (define (abc 123))
 (define (efg x) (x))
 
-python Poem.py new.s
+python Zh.py new.s
 
-E:\Project\Poem>python Poem.py new.s
+E:\Project\Zh>python Zh.py new.s
 45150
 0
 0:00:00.012001
@@ -296,7 +252,7 @@ time --- 关键字，time后只能有一项参数，运行参数项，并打印�
 test关键字运算第二个参数（预期是一个函数调用），如果其结果和第三个参数不符，则打印出错误信息。
 
 
-我们使用Poem实现test的功能：
+我们使用Zh实现test的功能：
 (define (mytest x y) (if (!= (x) y)
     (print "Not Expect!")
 ))
@@ -378,7 +334,7 @@ sum在最后可能会调用sum自身。因为在函数的最后调用，函数�
 
 七、中文编程
 
-Poem支持使用中文作为过程名（函数名）。对于中文编程，已经有人作出一些尝试，如易语言中文编程、文言文编程。
+Zh支持使用中文作为过程名（函数名）。对于中文编程，已经有人作出一些尝试，如易语言中文编程、文言文编程。
 
 电子计算机诞生于美国，最先支持的是英文字母，中文等其他国家的文字的支持比较流行的方案是UTF8，早期还有GBK中文编码等方案。
 
