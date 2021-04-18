@@ -156,6 +156,8 @@ env_g.my.update({
         
         # 字典key访问
         ':':       lambda x, y: x[y], 
+        
+        'exit':    exit,
 })
         
 env_g.my.update(vars(math)) # sin, cos, sqrt, pi, ...
