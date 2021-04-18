@@ -46,6 +46,6 @@ pip install pillow
 
 四、Bug：
 
-1. (exit)不能退出，使用(sys..exit)退出。
+1. (exit)不能退出，使用(sys.exit)退出。
 2. 
 
