@@ -41,3 +41,9 @@ pip install pillow
 三、例子程序
 
 测试文件包括：scheme.s test.s new.s first.s newton.s
+
+
+
+四、Bug：
+
+(exit)不能退出。

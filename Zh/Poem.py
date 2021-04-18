@@ -350,7 +350,11 @@ def eval_all(x, e):
                             print("\t", i, " : ", e.my[i])
                     print("}")
                     return None
-                    
+
+                # quote返回包含后续表达式的list，不进行计算。
+                elif x[0] == 'quote':
+                    return list(x[1:])
+                
                 # 列表下标
                 elif x[0] == '|':
                     eval_all(x[1], e)

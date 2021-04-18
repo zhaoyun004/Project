@@ -10,6 +10,7 @@ XP上使用python3.4.2，其余使用3.6.8
 增加shell处理功能 --- 能直接运行外部命令。
 
 
+
 二、C++ Easy GUI（移植到ZH平台上）
 
 GUI版面设计应该类似于html、JavaScript、css组合，重点是，版面设计要和程序设计分离。
@@ -18,10 +19,6 @@ GUI版面设计应该类似于html、JavaScript、css组合，重点是，版面
 
 移植到Python，使用tk，canvas，cario库。Cario是一个跨平台的图形库，在Windows上是一个类似gdi的绘图库。
 
-
-三、XML2Class
-
-该项目的目标是把传统面向对象语言的类定义，放到XML文件中。这样做的好处是，类型是运行时读取XML才知道类型，避免多次编译链接。
 
 
 四、C、C++预处理器（宏替换，泛型特化）
