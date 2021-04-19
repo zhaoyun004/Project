@@ -28,5 +28,6 @@ keypress：按键按下抬起
 游戏角色使用面向对象设计。
 
 
-
 Windows上使用GDI+绘制窗口控件，而不能依赖Windows的CreateWindow的控件！自己画控件，是创造；用WIndows风格的控件，则是死板。
+
+SetLayeredWindowAttributes
