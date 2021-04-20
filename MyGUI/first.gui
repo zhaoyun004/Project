@@ -1,6 +1,7 @@
 ;类型定义
 @class
 
+
 ; 全局变量定义。
 @var
 
@@ -16,6 +17,7 @@ e="abc":12,"232 bv":45 e|"abc"=34 e|"bbb"=45
 end
 
 
+
 ; 图形界面描述。
 ; 每一个控件可指定处理过程，后绘制的矩形可能会覆盖先绘制的。
 ; 命令行式的绘图软件
@@ -25,9 +27,11 @@ end
 ; 每行开始的数字，表示控件的层次，用于控件定位。
 ; 每一层控件以其上层控件所形成矩形区域为参照，进行定位。
 ; top和botton为上层控件的纵向高度比例，left和right为父层控件的横向宽度比例。
+; alpha表示透明度
 
-1 WINDOW name="First" top=0.1 left=0.2 right=1.0 bottom=1.0 image="D:\test 1.bmp" click="WindowClick" sleep=2000 fun=winfun,12,"abc"@localhost
+1 WINDOW name="First" top=0.1 left=0.2 right=1.0 bottom=1.0 image="D:\test 1.bmp" click="WindowClick" sleep=2000 fun=winfun,12,"abc"@localhost alpha=0
 
+; 在上层矩形内部划直线
 2 LINE x1=0 y1=0 x2=1 y2=1
 
 ; RECTANGLE和RECT的区别在于，前者画出矩形。
@@ -55,6 +59,8 @@ end
 2 TEXT caption=e|"12"
 
 end
+
+
 
 
 ; 初始化过程
