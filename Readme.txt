@@ -18,8 +18,6 @@ MyGUI类似于html、JavaScript、css组合。
 Python，使用tk，canvas，cario库。Cario是一个跨平台的图形库，在Windows上是一个类似gdi的绘图库。
 
 
-cl /EHsc test.cpp
-
 
 
 三、C、C++预处理器（宏替换，泛型特化）
