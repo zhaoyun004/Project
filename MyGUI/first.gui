@@ -1,40 +1,40 @@
-;���Ͷ���
+;类型定义
 @class
 
 
-; ȫ�ֱ������塣
+; 全局变量定义。
 @var
 
-; \\��ʾ�ַ�'\' \"��ʾ�ַ�"  \'��ʾ'
+; \\表示字符'\' \"表示字符"  \'表示'
 a=12 b="GVIM is nice" c=12.5 server="gui://edu.cn" 
 
-;�б�
+;列表
 d="GVIM is nice",12,34,"123" d=5 d|0=12
 
-;�ֵ�
+;字典
 e="abc":12,"232 bv":45 e|"abc"=34 e|"bbb"=45
 
 end
 
 
 
-; ͼ�ν���������
-; ÿһ���ؼ���ָ���������̣�����Ƶľ��ο��ܻḲ���Ȼ��Ƶġ�
-; ������ʽ�Ļ�ͼ����
+; 图形界面描述。
+; 每一个控件可指定处理过程，后绘制的矩形可能会覆盖先绘制的。
+; 命令行式的绘图软件
 
 @gui
 
-; ÿ�п�ʼ�����֣���ʾ�ؼ��Ĳ�Σ����ڿؼ���λ��
-; ÿһ��ؼ������ϲ�ؼ����γɾ�������Ϊ���գ����ж�λ��
-; top��bottonΪ�ϲ�ؼ�������߶ȱ�����left��rightΪ����ؼ��ĺ�����ȱ�����
-; alpha��ʾ͸����
+; 每行开始的数字，表示控件的层次，用于控件定位。
+; 每一层控件以其上层控件所形成矩形区域为参照，进行定位。
+; top和botton为上层控件的纵向高度比例，left和right为父层控件的横向宽度比例。
+; alpha表示透明度
 
 1 WINDOW name="First" top=0.1 left=0.2 right=0.6 bottom=0.6 image="D:\test 1.bmp" click="WindowClick" sleep=2000 fun=winfun,12,"abc"@localhost alpha=0
 
-; ���ϲ�����ڲ���ֱ��
+; 在上层矩形内部划直线
 2 LINE x1=0 y1=0 x2=1 y2=1
 
-; RECTANGLE��RECT���������ڣ�ǰ�߻������Ρ�
+; RECTANGLE和RECT的区别在于，前者画出矩形。
 2 RECTANGLE name="f1" top=0.0 left=0.0 right=0.2 bottom=0.2 click="f1click" rclick="f4click" sleep=1000
 3 TEXT caption=b sleep=1000
 
@@ -44,15 +44,15 @@ end
 2 RECTANGLE name="f3" top=0.5 left=0.5 right=1 bottom=1
 3 TEXT caption=server
 
-; RECTҲ�Ǿ��Σ����ǲ����ڴ����л������Σ����ڶ�λ����ʾͼ�� ע�⣺͸��������ͼƬ������죿
+; RECT也是矩形，但是并不在窗口中画出矩形，用于定位、显示图像。 注意：透明背景的图片如何制造？
 2 RECT name="f4 RECT" top=0.4 left=0.4 right=1 bottom=1 sleep=1000 image="D:\test 1.bmp"
 3 TEXT caption=d|1
 
-; ��Բ
+; 椭圆
 2 Ellipse
 
-2 A href="file://d/second.gui" caption="�����������ʾ������"
-2 A href="file://d/third.gui" caption="����"
+2 A href="file://d/second.gui" caption="点击文字运行示例程序"
+2 A href="file://d/third.gui" caption="测试"
 
 
 1 WINDOW name="second"
@@ -63,29 +63,29 @@ end
 
 
 
-; ��ʼ������
+; 初始化过程
 @init
 
-;ElementΪ���ù��̣����ؽڵ㡣
+;Element为内置过程，返回节点。
 a=$"first".title 
 
 $"first".title="Test"
 
-;ɾ��ĳ�ڵ㣬���������е��ӽڵ�
-,���ڷָ������()��ʾ���ȼ���
+;删除某节点，包括其所有的子节点
+,用于分割参数，()表示优先计算
 $"first".Delete
 
-;Ϊ@gui����һ�нڵ� ���ｫ�ڵ�һ������ָ��Ŀؼ�������һ���ؼ��ڵ㡣�ú��������ؼ�"���"��顣
-;������ڵ�һ��ؼ������ӵ�����ؼ���Ҳ����˵����ʹ��push_back�ɹ��ˣ�����ʾ��Ĵ�������������ȷ�ġ�
-;ϵͳ�ڴ��������ƿؼ�ʱ���������,�����鵽������νṹ�У���һ��ؼ��ڵ��и��������ӽڵ㣬������
+;为@gui添加一行节点 这里将在第一个参数指向的控件后，添加一个控件节点。该函数不做控件"层次"检查。
+;你可以在第一层控件后添加第三层控件。也就是说，即使你push_back成功了，不表示你的窗口描述就是正确的。
+;系统在创建并绘制控件时，会做检查,如果检查到你的树形结构中，第一层控件节点有个第三层子节点，报错。
 
-$"first".Insert,"t1",4,"TEXT","caption","�ں��������ӿؼ�"
+$"first".Insert,"t1",4,"TEXT","caption","在函数里添加控件"
 
 end
 
 
-; �ؼ��ļ��̡���괦������
-; �ӿؼ����������Ḳ�Ǹ��ؼ��Ĵ�������
+; 控件的键盘、鼠标处理过程
+; 子控件处理函数会覆盖父控件的处理函数
 @WindowClick
 
 $"first".left=0.2
@@ -96,9 +96,9 @@ end
 @f1click
 
 hosta="localhost"
-; ָ��������
+; 指定服务器
 a=cpp_fun1,12,"hello"@hosta
-; ����������ӵķ�����
+; 调用最后连接的服务器
 a=cpp_fun1,45,"hello"
 cpp_fun2,12,"hello"
 
@@ -108,10 +108,10 @@ end
 @f2click
 
 hostb="163.com"
-;��һ�����������ú���
+;换一个服务器调用函数
 a=cpp_fun,12,"hello"@hostb
 
-;�����ʹ��163.com��Ϊ������
+;这里会使用163.com作为服务器
 a=cpp_fun1,12,"hello"
 
 end

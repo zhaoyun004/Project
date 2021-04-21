@@ -11,7 +11,7 @@
 
 #include "../TinyTL/TObject.hpp"
 
-//ÓÃÓÚº¯ÊıSetConsoleOutputCP(65001);¸ü¸Äcmd±àÂëÎªutf8
+//ç”¨äºå‡½æ•°SetConsoleOutputCP(65001);æ›´æ”¹cmdç¼–ç ä¸ºutf8
 
 using namespace Gdiplus;
 using namespace std;
@@ -24,17 +24,17 @@ using namespace std;
 
 #define IDT_TIMER1 12
 
-// ×Ö·û´®³£Á¿
+// å­—ç¬¦ä¸²å¸¸é‡
 vector<string> Val;
 
-//´æ´¢@var²¿·ÖµÄ±äÁ¿ÃûºÍÖµValµÄÏÂ±ê¡£
+//å­˜å‚¨@varéƒ¨åˆ†çš„å˜é‡åå’Œå€¼Valçš„ä¸‹æ ‡ã€‚
 map<string, string> var;
 
 int cxScreen,cyScreen;
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
-//È¥µôline¿ªÍ·µÄ¿Õ°××Ö·û¡£
+//å»æ‰lineå¼€å¤´çš„ç©ºç™½å­—ç¬¦ã€‚
 string Skip_Blank(string line) {
 	int i;
   for (i=0; i<line.length(); i++) {
@@ -47,7 +47,7 @@ string Skip_Blank(string line) {
 		return "";
 }
 
-//µÃµ½Ò»ĞĞÎÄ±¾µÄÍ·Ò»¸öµ¥´Ê¡£
+//å¾—åˆ°ä¸€è¡Œæ–‡æœ¬çš„å¤´ä¸€ä¸ªå•è¯ã€‚
 string Get_First(string line) {
   string s = "";
   for (int i=0; i<line.length(); i++) {
@@ -59,7 +59,7 @@ string Get_First(string line) {
   return s;
 }
 
-//ÅĞ¶ÏÄ³×Ö·û´®ÊÇ·ñÕıÕûÊı
+//åˆ¤æ–­æŸå­—ç¬¦ä¸²æ˜¯å¦æ­£æ•´æ•°
 bool Is_Int(string s) {
   for (auto i:s) {
     if (isdigit(i) == false)
@@ -68,12 +68,12 @@ bool Is_Int(string s) {
   return true;
 }
 
-//ÅĞ¶ÏsÊÇ·ñÊÇElementº¯Êıµ÷ÓÃ£¬¸Ãº¯ÊıÎªÄÚÖÃº¯Êı£¬ÓÃÓÚ·µ»ØÄ³¸ö½Úµã¡£
+//åˆ¤æ–­sæ˜¯å¦æ˜¯Elementå‡½æ•°è°ƒç”¨ï¼Œè¯¥å‡½æ•°ä¸ºå†…ç½®å‡½æ•°ï¼Œç”¨äºè¿”å›æŸä¸ªèŠ‚ç‚¹ã€‚
 bool Is_Fun_Element(string s) {
   return true;
 }
 
-//×î½üÒ»´ÎÁ¬½ÓµÄÔ¶³Ì·şÎñÆ÷
+//æœ€è¿‘ä¸€æ¬¡è¿æ¥çš„è¿œç¨‹æœåŠ¡å™¨
 string lasthost = "";
 
 string Get_Host(string s) {
@@ -94,7 +94,7 @@ string Get_Host(string s) {
   return lasthost;
 }
 
-//È¡µÃº¯ÊıÃû
+//å–å¾—å‡½æ•°å
 string Get_Fun_Call(string s) {
   for (int i = 0; i < s.length(); i++) {
     if (s[i] == '@') {
@@ -104,7 +104,7 @@ string Get_Fun_Call(string s) {
   return s;
 }
 
-//¼ì²âsÊÇ·ñ°üº¬ch
+//æ£€æµ‹sæ˜¯å¦åŒ…å«ch
 bool HasChar(string s, char ch) {
   for (int i=0; i<=s.length(); i++) {
     if (s[i] == ch)
@@ -120,24 +120,24 @@ class Connection {
     SOCKET sock;
     Connection(string s);
     ~Connection();
-    //µ÷ÓÃ·şÎñÆ÷Ô¶³Ìº¯Êı£¬µÃµ½·µ»ØÖµ
+    //è°ƒç”¨æœåŠ¡å™¨è¿œç¨‹å‡½æ•°ï¼Œå¾—åˆ°è¿”å›å€¼
     string RPC(string s);
 };
 
 vector<class Connection*> vc;
 
-//¹¹Ôìº¯Êı
+//æ„é€ å‡½æ•°
 Connection::Connection(string h) {
   Host = h;
   
-  //³õÊ¼»¯DLL
+  //åˆå§‹åŒ–DLL
   WSADATA wsaData;
   WSAStartup(MAKEWORD(2, 2), &wsaData);
-  //´´½¨Ì×½Ó×Ö
+  //åˆ›å»ºå¥—æ¥å­—
   SOCKET sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
-  //Ïò·şÎñÆ÷·¢ÆğÇëÇó
+  //å‘æœåŠ¡å™¨å‘èµ·è¯·æ±‚
   sockaddr_in sockAddr;
-  memset(&sockAddr, 0, sizeof(sockAddr));  //Ã¿¸ö×Ö½Ú¶¼ÓÃ0Ìî³ä
+  memset(&sockAddr, 0, sizeof(sockAddr));  //æ¯ä¸ªå­—èŠ‚éƒ½ç”¨0å¡«å……
   sockAddr.sin_family = PF_INET;
   sockAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
   sockAddr.sin_port = htons(9999);
@@ -145,43 +145,43 @@ Connection::Connection(string h) {
 }
 
 Connection::~Connection() {
-  //¹Ø±ÕÌ×½Ó×Ö
+  //å…³é—­å¥—æ¥å­—
   closesocket(sock);
-  //ÖÕÖ¹Ê¹ÓÃ DLL
+  //ç»ˆæ­¢ä½¿ç”¨ DLL
   WSACleanup();
 }
 
 string Connection::RPC(string s) {
-  //½ÓÊÕ·şÎñÆ÷´«»ØµÄÊı¾İ
+  //æ¥æ”¶æœåŠ¡å™¨ä¼ å›çš„æ•°æ®
   char szBuffer[64] = {0};
   send(sock, s.c_str(), s.length(), 0);
   recv(sock, szBuffer, 64, NULL);
-  //Êä³ö½ÓÊÕµ½µÄÊı¾İ
+  //è¾“å‡ºæ¥æ”¶åˆ°çš„æ•°æ®
   printf("Message form server: %s\n", szBuffer);
   return szBuffer;
 }
 
 
-// ¼ÆËãS¡£×¢Òâ£¬ÔËËã·ûÓÅÏÈ¼¶¡£
+// è®¡ç®—Sã€‚æ³¨æ„ï¼Œè¿ç®—ç¬¦ä¼˜å…ˆçº§ã€‚
 string Evaluate(string f) {	  
   for (int i=0; i<f.length(); i++) {
-    //¸³ÖµÓï¾ä
+    //èµ‹å€¼è¯­å¥
     if (f[i]=='=') {
       string v = f.substr(0, i);
       
-      //ÁĞ±í»òÕß×ÖµäÔªËØ¸³Öµ
+      //åˆ—è¡¨æˆ–è€…å­—å…¸å…ƒç´ èµ‹å€¼
       if (HasChar(v, '|') == true) {
         break;
       }
       
-      //ÒÔ$¿ªÍ·£¬±íÊ¾Îª½ÚµãÊôĞÔ¸³Öµ
+      //ä»¥$å¼€å¤´ï¼Œè¡¨ç¤ºä¸ºèŠ‚ç‚¹å±æ€§èµ‹å€¼
       if (v[0]=='$') {
         break;
       }
       
       for (auto j: var) {
         if (j.first == v) {
-          //±äÁ¿¸³Öµ
+          //å˜é‡èµ‹å€¼
           var[v] = Evaluate(f.substr(i+1, f.length()));
           break;
         }
@@ -191,15 +191,15 @@ string Evaluate(string f) {
     }
   }
   
-  //½ÚµãInsert Delete 
+  //èŠ‚ç‚¹Insert Delete 
   if (f[0]=='$') {
   
   }
   
-  //µÃµ½Ô¶³Ì·şÎñÆ÷¡£
+  //å¾—åˆ°è¿œç¨‹æœåŠ¡å™¨ã€‚
   string host = Get_Host(f);
   
-  //µÃµ½º¯ÊıÃûºÍ²ÎÊı
+  //å¾—åˆ°å‡½æ•°åå’Œå‚æ•°
   string n = Get_Fun_Call(f);
   
   for (auto i:vc) {
@@ -218,8 +218,8 @@ string Evaluate(string f) {
 
 class Proc {
 public:
-  string name;    //¹ı³ÌÃû£¬¿ÉÄÜÊÇ"@init" "" ...
-  vector<string> s; //°Ñ¹ı³ÌµÄÄÚÈİÒÔ¿Õ¸ñÇø·Ö£¬´æ½øvector<string> s
+  string name;    //è¿‡ç¨‹åï¼Œå¯èƒ½æ˜¯"@init" "" ...
+  vector<string> s; //æŠŠè¿‡ç¨‹çš„å†…å®¹ä»¥ç©ºæ ¼åŒºåˆ†ï¼Œå­˜è¿›vector<string> s
   void Call();
 };
 
@@ -230,11 +230,11 @@ void Proc::Call(){
 	}
 }
 
-//¹ı³ÌÁĞ±í
+//è¿‡ç¨‹åˆ—è¡¨
 vector<class Proc *> vp;
 
 
-//·µ»ØË÷Òı£¬-1±íÊ¾Ã»ÕÒµ½¡£
+//è¿”å›ç´¢å¼•ï¼Œ-1è¡¨ç¤ºæ²¡æ‰¾åˆ°ã€‚
 int InVal(string s) {
 	for (int i=0; i<Val.size(); i++) {
 		if (Val[i] == s) {
@@ -244,8 +244,8 @@ int InVal(string s) {
 	return -1;
 }
 
-/*½«×Ö·û´®´æ´¢µ½vector<string> valÖĞ£¬²¢ÓÃ¶ÔÓ¦µÄvectorÏÂ±êÀ´Ìæ»»×Ö·û´®¡£
-  ÕâÃ´×öµÄÄ¿µÄÊÇÎªÁË·½±ã×ö´Ê·¨·ÖÎö£ºÒÔ¿Õ¸ñÎª¼ä¸ô¡£*/
+/*å°†å­—ç¬¦ä¸²å­˜å‚¨åˆ°vector<string> valä¸­ï¼Œå¹¶ç”¨å¯¹åº”çš„vectorä¸‹æ ‡æ¥æ›¿æ¢å­—ç¬¦ä¸²ã€‚
+  è¿™ä¹ˆåšçš„ç›®çš„æ˜¯ä¸ºäº†æ–¹ä¾¿åšè¯æ³•åˆ†æï¼šä»¥ç©ºæ ¼ä¸ºé—´éš”ã€‚*/
 string String_2_Int(string line){
   int i = 0;
   string str = "";
@@ -261,22 +261,22 @@ string String_2_Int(string line){
       i++;
     }
     
-    //´Ë´¦£¬¼ì²âµ½µÚÒ»¸ö¡°
+    //æ­¤å¤„ï¼Œæ£€æµ‹åˆ°ç¬¬ä¸€ä¸ªâ€œ
     i++;
     
     while (line[i] != '\"') {
       s+=line[i];
       if (i == (line.length()-1)) {
-        cout << " ¡°²»³É¶Ô¡£\n";
+        cout << " â€œä¸æˆå¯¹ã€‚\n";
         exit(0);
       }
       i++;
     }
     
-    //´Ë´¦£¬µÚ¶ş¸ö"±»¼ì²âµ½
+    //æ­¤å¤„ï¼Œç¬¬äºŒä¸ª"è¢«æ£€æµ‹åˆ°
     int m = InVal(s);
     
-    //´æÊı×ÖË÷Òı   
+    //å­˜æ•°å­—ç´¢å¼•   
     char buf[10];
     
     if (m >= 0 ) {
@@ -299,25 +299,25 @@ string String_2_Int(string line){
 class GUI_Element {
 public:  
   
-  unsigned short Level;         //¿Ø¼şÔÚµÚ¼¸Level£¿
-  string Name;                  //¿Ø¼şÃû³Æ £¬¿ÉÄÜµÄValÎª"<window>" "<text>" "<div>" ...
-  map<string, string> Property; //¿Ø¼şÊôĞÔ  titile=1, 1ÎªValµÄindex.
+  unsigned short Level;         //æ§ä»¶åœ¨ç¬¬å‡ Levelï¼Ÿ
+  string Name;                  //æ§ä»¶åç§° ï¼Œå¯èƒ½çš„Valä¸º"<window>" "<text>" "<div>" ...
+  map<string, string> Property; //æ§ä»¶å±æ€§  titile=1, 1ä¸ºValçš„index.
   
-  //¿Ø¼ş¾ØĞÎ×ø±ê  µ¥Î»ÊÇ·Ö±æÂÊ  left top right bottom
+  //æ§ä»¶çŸ©å½¢åæ ‡  å•ä½æ˜¯åˆ†è¾¨ç‡  left top right bottom
   int l;
   int t;
   int r;
   int b;
   
-  class GUI_Element *parent;    //¸¸½Úµã
-  class GUI_Element *child;     //µÚÒ»¸ö×Ó½Úµã
-  class GUI_Element *brother;   //µÚÒ»¸öĞÖµÜ½Úµã
+  class GUI_Element *parent;    //çˆ¶èŠ‚ç‚¹
+  class GUI_Element *child;     //ç¬¬ä¸€ä¸ªå­èŠ‚ç‚¹
+  class GUI_Element *brother;   //ç¬¬ä¸€ä¸ªå…„å¼ŸèŠ‚ç‚¹
 
   GUI_Element(string line);  
   
 };
 
-//lineÊÇÎÄ¼şÖĞµÄÒ»ĞĞ£º1 window title="µÚÒ»¸ö ´°¿Ú"
+//lineæ˜¯æ–‡ä»¶ä¸­çš„ä¸€è¡Œï¼š1 window title="ç¬¬ä¸€ä¸ª çª—å£"
 GUI_Element::GUI_Element(string line) {  
   string s = Get_First(line);
                             
@@ -335,7 +335,7 @@ GUI_Element::GUI_Element(string line) {
   
   tmp = Skip_Blank(tmp.substr(Name.length()));
   string f = Get_First(tmp);
-  //²»ÊÇ×îºóÒ»¸öµ¥´Ê
+  //ä¸æ˜¯æœ€åä¸€ä¸ªå•è¯
   while (f != tmp) {
     for (int i=0; i<f.length(); i++) {
       if (f[i]=='=') {
@@ -363,15 +363,15 @@ struct Window_Element {
   class GUI_Element *head;
 };
 
-//´°¿ÚÁĞ±í
+//çª—å£åˆ—è¡¨
 vector<struct Window_Element *> v_window;
 
-//»æÖÆWindow
+//ç»˜åˆ¶Window
 void Draw_Window(struct Window_Element *w_e) {
   
   class GUI_Element *tmp = w_e->head;
   
-  //»æÖÆ¶¥²ã´°¿Ú
+  //ç»˜åˆ¶é¡¶å±‚çª—å£
   if (tmp->Name == "WINDOW") {
     MSG         msg;
     string      title = "Test Window";
@@ -405,10 +405,10 @@ void Draw_Window(struct Window_Element *w_e) {
     ShowWindow(w_e->hwnd, 1);
     UpdateWindow(w_e->hwnd);
 		
-	//·¢ËÍÒ»¸öWM_PAINTERÏûÏ¢£¬»æÖÆ×Ó¿Ø¼ş¡£
+	//å‘é€ä¸€ä¸ªWM_PAINTERæ¶ˆæ¯ï¼Œç»˜åˆ¶å­æ§ä»¶ã€‚
     //InvalidateRect(w_e->hwnd, NULL, TRUE);
 
-    //ÏûÏ¢Ñ­»·
+    //æ¶ˆæ¯å¾ªç¯
     while(GetMessage(&msg, NULL, 0, 0)) {
       TranslateMessage(&msg);
       DispatchMessage(&msg);
@@ -416,12 +416,12 @@ void Draw_Window(struct Window_Element *w_e) {
   }
 }
 
-//»æÖÆWindowÒÔÍâµÄ×Ó¿Ø¼ş¡£Í¬Ò»²ã£¬ºó»æÖÆµÄ¿ÉÄÜ»á¸²¸ÇÏÈ»æÖÆµÄ;  ÏÈ¸¸ºó×Ó£¬ÏÈĞÖºóµÜ¡£
+//ç»˜åˆ¶Windowä»¥å¤–çš„å­æ§ä»¶ã€‚åŒä¸€å±‚ï¼Œåç»˜åˆ¶çš„å¯èƒ½ä¼šè¦†ç›–å…ˆç»˜åˆ¶çš„;  å…ˆçˆ¶åå­ï¼Œå…ˆå…„åå¼Ÿã€‚
 void Draw_Element(class GUI_Element *tmp, HDC hdc, HWND hwnd) {
 
-  //Ê¹ÓÃgdiº¯Êı»æÖÆ¾ØĞÎ
+  //ä½¿ç”¨gdiå‡½æ•°ç»˜åˆ¶çŸ©å½¢
   if (tmp->Name == "RECT") {   
-    //ÏñËØÖµ
+    //åƒç´ å€¼
     int pt = tmp->parent->t;
     int pl = tmp->parent->l;
     int pr = tmp->parent->r;
@@ -438,10 +438,10 @@ void Draw_Element(class GUI_Element *tmp, HDC hdc, HWND hwnd) {
 		tmp->b = b;
   }
   
-  //RECTºÍRECTANGELµÄÇø±ğÊÇÇ°ÕßÖ»×ö¶¨Î»Ê¹ÓÃ£¬²¢²»»æÖÆ£»ºóÕß»á»æÖÆ¾ØĞÎ¡£
+  //RECTå’ŒRECTANGELçš„åŒºåˆ«æ˜¯å‰è€…åªåšå®šä½ä½¿ç”¨ï¼Œå¹¶ä¸ç»˜åˆ¶ï¼›åè€…ä¼šç»˜åˆ¶çŸ©å½¢ã€‚
  
   if (tmp->Name == "RECTANGLE") {
-    //ÏñËØÖµ
+    //åƒç´ å€¼
     int pt = tmp->parent->t;
     int pl = tmp->parent->l;
     int pr = tmp->parent->r;
@@ -491,11 +491,11 @@ void Draw_Element(class GUI_Element *tmp, HDC hdc, HWND hwnd) {
     DrawText(hdc, Val[i].c_str(), Val[i].length(), &re, DT_LEFT);
   }
   
-  //»æÖÆÖ±Ïß
+  //ç»˜åˆ¶ç›´çº¿
   if (tmp->Name == "LINE") {
   }
   
-  //Á´½Ó
+  //é“¾æ¥
   if (tmp->Name == "A") {
     cout<< "A...\n";
   }
@@ -509,7 +509,7 @@ void Draw_Element(class GUI_Element *tmp, HDC hdc, HWND hwnd) {
     Draw_Element(tmp->brother, hdc, hwnd);
 }
 
-//ÕÒµ½hwnd¶ÔÓ¦µÄWindow_ElementµÄÊı×éÏÂ±ê£¬Èç¹û·µ»Ø-1±íÊ¾Ã»ÓĞÕÒµ½¡£
+//æ‰¾åˆ°hwndå¯¹åº”çš„Window_Elementçš„æ•°ç»„ä¸‹æ ‡ï¼Œå¦‚æœè¿”å›-1è¡¨ç¤ºæ²¡æœ‰æ‰¾åˆ°ã€‚
 int Find_Window(HWND hwnd) {
   for (int i=0; i< v_window.size(); i++){
     if (v_window[i]->hwnd == hwnd) {
@@ -519,7 +519,7 @@ int Find_Window(HWND hwnd) {
   return -1;
 }
 
-//¶ÁÈ¡GUIÃèÊöÎÄ¼ş£¬Éú³ÉÊ÷ĞÎ½á¹¹¡£
+//è¯»å–GUIæè¿°æ–‡ä»¶ï¼Œç”Ÿæˆæ ‘å½¢ç»“æ„ã€‚
 void read_gui(char *gui){
   ifstream in(gui);
   string line;
@@ -529,7 +529,7 @@ void read_gui(char *gui){
   if (in) {
       
     class GUI_Element *last = NULL;
-    // lineÖĞ²»°üÀ¨Ã¿ĞĞµÄ»»ĞĞ·û
+    // lineä¸­ä¸åŒ…æ‹¬æ¯è¡Œçš„æ¢è¡Œç¬¦
     while (getline (in, line)) { 
     
       line = Skip_Blank(line);
@@ -538,11 +538,11 @@ void read_gui(char *gui){
       if (line == "")
         continue;
 	
-      // £»¿ªÍ·±íÊ¾×¢ÊÍ
+      // ï¼›å¼€å¤´è¡¨ç¤ºæ³¨é‡Š
       if (line[0] == ';')
         continue;                
         
-      //±äÁ¿¶¨Òå
+      //å˜é‡å®šä¹‰
       if (line=="@var") {
         while (getline (in, line)) {
           line = Skip_Blank(line);
@@ -559,7 +559,7 @@ void read_gui(char *gui){
           cout << l << " ..\n";
           
           string f = Get_First(l);
-          //²»ÊÇ×îºóÒ»¸öµ¥´Ê
+          //ä¸æ˜¯æœ€åä¸€ä¸ªå•è¯
           while (f != l) {
             Evaluate(f);
             l = Skip_Blank(l.substr(f.length()));
@@ -569,8 +569,8 @@ void read_gui(char *gui){
         }
       }
 
-      //Í¼ĞÎÃèÊö
-      if (line=="@gui") {        
+      //å›¾å½¢æè¿°
+      if (line=="@gui") { 
         while (getline (in, line)) {
           line = Skip_Blank(line);
           cout << line << "\n";
@@ -587,7 +587,7 @@ void read_gui(char *gui){
 
           class GUI_Element *con = new GUI_Element(l);
           
-          //¶¥²ã¿Ø¼ş
+          //é¡¶å±‚æ§ä»¶
           if (con->Level == 1 && con->Name=="WINDOW") {
             con->parent=NULL;
             con->child=NULL;
@@ -600,9 +600,9 @@ void read_gui(char *gui){
             continue;
           } 
           
-          //·Ç¶¥²ã¿Ø¼ş
+          //éé¡¶å±‚æ§ä»¶
           if (last != NULL) {
-            //lastµÄ×Ó¿Ø¼ş
+            //lastçš„å­æ§ä»¶
             if (con->Level - last->Level == 1) {
               con->parent=last;
               con->child=NULL;
@@ -612,7 +612,7 @@ void read_gui(char *gui){
               continue;
             }
 
-            //lastµÄĞÖµÜ¿Ø¼ş
+            //lastçš„å…„å¼Ÿæ§ä»¶
             if (con->Level == last->Level) {
               last->brother=con;
               
@@ -622,7 +622,7 @@ void read_gui(char *gui){
               last = con;
               continue;
             }
-            //lastÉÏ²ã¿Ø¼ş
+            //lastä¸Šå±‚æ§ä»¶
             if (con->Level < last->Level && con->Level > 1) {
               while (con->Level != last->Level)
                 last = last->parent;
@@ -633,7 +633,7 @@ void read_gui(char *gui){
               last = con;
               continue;
             }
-            //¿Ø¼ş²ã´Î´íÎó
+            //æ§ä»¶å±‚æ¬¡é”™è¯¯
             cout << con->Level  << "..\n";
             cout << last->Level  << "..\n";
             if (con->Level - last->Level > 1) {
@@ -646,7 +646,7 @@ void read_gui(char *gui){
       
 	  /*
 	  
-      //³õÊ¼»¯º¯Êı
+      //åˆå§‹åŒ–å‡½æ•°
       if (line=="@init") {
         while (getline (in, line)) {
           line = Skip_Blank(line);
@@ -662,7 +662,7 @@ void read_gui(char *gui){
         }
       }
 
-      //ÒÔ@¿ªÍ·£¬¿ÉÄÜÎª@init--³õÊ¼»¯º¯Êı»òÕß¼üÅÌÊó±ê´¦Àíº¯Êı¡£
+      //ä»¥@å¼€å¤´ï¼Œå¯èƒ½ä¸º@init--åˆå§‹åŒ–å‡½æ•°æˆ–è€…é”®ç›˜é¼ æ ‡å¤„ç†å‡½æ•°ã€‚
       if (line[0] == '@') {
         class Proc *p = new(class Proc);
         p->name = line.substr(1);
@@ -680,7 +680,7 @@ void read_gui(char *gui){
           string l = String_2_Int(line);
 
           string f = Get_First(l);
-          //²»ÊÇ×îºóÒ»¸öµ¥´Ê
+          //ä¸æ˜¯æœ€åä¸€ä¸ªå•è¯
           while (f != l) {
             p->s.push_back(f);
             l = Skip_Blank(l.substr(f.length()));
@@ -709,7 +709,7 @@ int main(int argc, char **argv) {
   WNDCLASS            wndClass;
   
   wndClass.style          = CS_HREDRAW | CS_VREDRAW;
-  //Í¬Ò»´°¿ÚÀà¹«ÓÃÒ»¸ö´°¿Ú´¦Àí¹ı³Ì
+  //åŒä¸€çª—å£ç±»å…¬ç”¨ä¸€ä¸ªçª—å£å¤„ç†è¿‡ç¨‹
   wndClass.lpfnWndProc    = WndProc;
   wndClass.cbClsExtra     = 0;
   wndClass.cbWndExtra     = 0;
@@ -723,12 +723,12 @@ int main(int argc, char **argv) {
   RegisterClass(&wndClass);
   Draw_Window(v_window[0]);
 
-  //ÊÍ·ÅÄÚ´æ
+  //é‡Šæ”¾å†…å­˜
   
   return 0;
 }
 
-//·µ»ØpËù´¦µÄ¿Ø¼ş
+//è¿”å›pæ‰€å¤„çš„æ§ä»¶
 GUI_Element * Find_Element(POINT p, GUI_Element *e) {
   GUI_Element *last = NULL;
 
@@ -756,7 +756,7 @@ GUI_Element * Find_Element(POINT p, GUI_Element *e) {
   return last;
 }
 
-// vpÀï²éÕÒÃûÎªnameµÄ¹ı³Ì
+// vpé‡ŒæŸ¥æ‰¾åä¸ºnameçš„è¿‡ç¨‹
 class Proc * Find_Proc(string name) {
 		for (auto i:vp) {
 			if (i->name == name)
@@ -765,7 +765,7 @@ class Proc * Find_Proc(string name) {
 		return NULL;
 }
 
-//Í¬Ò»¸ö´°¿ÚÀà¹«ÓÃÒ»¸ö´°¿Ú´¦Àí¹ı³Ì
+//åŒä¸€ä¸ªçª—å£ç±»å…¬ç”¨ä¸€ä¸ªçª—å£å¤„ç†è¿‡ç¨‹
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, 
    WPARAM wParam, LPARAM lParam)
 {
@@ -774,14 +774,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
   RECT r;  
   
   switch(message) {
-    //ÒÆ¶¯±êÌâÀ¸µÈ
+    //ç§»åŠ¨æ ‡é¢˜æ ç­‰
     case WM_SYSCOMMAND:
       i = Find_Window(hWnd);
       
-      //È¡µÃ´°¿Ú¿Í»§Çø×ø±ê
+      //å–å¾—çª—å£å®¢æˆ·åŒºåæ ‡
       GetClientRect(hWnd, &r);
       
-      //È¡µÃÒÆ¶¯ºó£¬ĞŞ¸Ä´°ÌåµÄ¿Í»§Çø×ø±ê¡£
+      //å–å¾—ç§»åŠ¨åï¼Œä¿®æ”¹çª—ä½“çš„å®¢æˆ·åŒºåæ ‡ã€‚
       v_window[i]->head->l = r.left;
       v_window[i]->head->t = r.top;
       v_window[i]->head->t = r.right;
@@ -795,13 +795,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
       
       POINT point;
       
-      GetCursorPos(&point);            // »ñÈ¡Êó±êÖ¸ÕëÎ»ÖÃ£¨ÆÁÄ»×ø±ê£©
-      ScreenToClient(hWnd, &point);    // ½«Êó±êÖ¸ÕëÎ»ÖÃ×ª»»Îª´°¿Ú×ø±ê
+      GetCursorPos(&point);            // è·å–é¼ æ ‡æŒ‡é’ˆä½ç½®ï¼ˆå±å¹•åæ ‡ï¼‰
+      ScreenToClient(hWnd, &point);    // å°†é¼ æ ‡æŒ‡é’ˆä½ç½®è½¬æ¢ä¸ºçª—å£åæ ‡
       cout << point.x << " "<< point.y << "\n";
       
       i = Find_Window(hWnd);
-      //±éÀúWindow_Element£¬µÃµ½Êó±êµã»÷µãËùÔÚµÄ¿Ø¼ş£¬²¢µ÷ÓÃÆä´¦Àíº¯Êı¡£
-      //±éÀú·½Ê½£ºÏÈ¸¸ºó×Ó£¬ÏÈĞÖºóµÜ¡£
+      //éå†Window_Elementï¼Œå¾—åˆ°é¼ æ ‡ç‚¹å‡»ç‚¹æ‰€åœ¨çš„æ§ä»¶ï¼Œå¹¶è°ƒç”¨å…¶å¤„ç†å‡½æ•°ã€‚
+      //éå†æ–¹å¼ï¼šå…ˆçˆ¶åå­ï¼Œå…ˆå…„åå¼Ÿã€‚
       class GUI_Element * tmp;
       tmp = Find_Element(point, v_window[i]->head);
       
@@ -830,14 +830,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
       return 0;
     case WM_MBUTTONDBLCLK:
       return 0;
-    //ÉèÖÃEdit¿Ø¼şµÄÎÄ±¾
+    //è®¾ç½®Editæ§ä»¶çš„æ–‡æœ¬
     case WM_SETTEXT:
       return 0;
     case WM_TIMER: 
       //InvalidateRect(hWnd, NULL, TRUE);
       return 0;
       
-    // WINDOWÒÔÍâÍ¼ĞÎÔªËØµÄ»æÖÆ
+    // WINDOWä»¥å¤–å›¾å½¢å…ƒç´ çš„ç»˜åˆ¶
     case WM_PAINT:
       PAINTSTRUCT pt;
       HDC hdc;
@@ -849,10 +849,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
       
       i = Find_Window(hWnd);
             
-      //È¡µÃ´°¿Ú¿Í»§Çø×ø±ê
+      //å–å¾—çª—å£å®¢æˆ·åŒºåæ ‡
       GetClientRect(hWnd, &r);
             
-      //´æ´¢µ±Ç°´°¿Ú¿Í»§ÇøµÄtop left right bottom
+      //å­˜å‚¨å½“å‰çª—å£å®¢æˆ·åŒºçš„top left right bottom
       v_window[i]->head->l = r.left;
       v_window[i]->head->t = r.top;
       v_window[i]->head->r = r.right;
