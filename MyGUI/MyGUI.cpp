@@ -113,6 +113,7 @@ bool HasChar(string s, char ch) {
   return false;
 }
 
+
 class Connection {
   public:
     string Host;
@@ -214,6 +215,7 @@ string Evaluate(string f) {
   return "";
 }
 
+
 class Proc {
 public:
   string name;    //过程名，可能是"@init" "" ...
@@ -228,6 +230,10 @@ void Proc::Call(){
 	}
 }
 
+//过程列表
+vector<class Proc *> vp;
+
+
 //返回索引，-1表示没找到。
 int InVal(string s) {
 	for (int i=0; i<Val.size(); i++) {
@@ -237,9 +243,6 @@ int InVal(string s) {
 	}
 	return -1;
 }
-
-//过程列表
-vector<class Proc *> vp;
 
 /*将字符串存储到vector<string> val中，并用对应的vector下标来替换字符串。
   这么做的目的是为了方便做词法分析：以空格为间隔。*/
@@ -361,7 +364,7 @@ struct Window_Element {
 };
 
 //窗口列表
-vector<struct Window_Element *> v;
+vector<struct Window_Element *> v_window;
 
 //绘制Window
 void Draw_Window(struct Window_Element *w_e) {
@@ -402,7 +405,7 @@ void Draw_Window(struct Window_Element *w_e) {
     ShowWindow(w_e->hwnd, 1);
     UpdateWindow(w_e->hwnd);
 		
-		//发送一个WM_PAINTER消息，绘制子控件。
+	//发送一个WM_PAINTER消息，绘制子控件。
     //InvalidateRect(w_e->hwnd, NULL, TRUE);
 
     //消息循环
@@ -488,6 +491,7 @@ void Draw_Element(class GUI_Element *tmp, HDC hdc, HWND hwnd) {
     DrawText(hdc, Val[i].c_str(), Val[i].length(), &re, DT_LEFT);
   }
   
+  //绘制直线
   if (tmp->Name == "LINE") {
   }
   
@@ -507,8 +511,8 @@ void Draw_Element(class GUI_Element *tmp, HDC hdc, HWND hwnd) {
 
 //找到hwnd对应的Window_Element的数组下标，如果返回-1表示没有找到。
 int Find_Window(HWND hwnd) {
-  for (int i=0; i< v.size(); i++){
-    if (v[i]->hwnd == hwnd) {
+  for (int i=0; i< v_window.size(); i++){
+    if (v_window[i]->hwnd == hwnd) {
       return i;
     }
   }
@@ -520,7 +524,7 @@ void read_gui(char *gui){
   ifstream in(gui);
   string line;
       
-  MyAssert(Get_First("hedllo world"), "hedllo");
+  MyAssert(Get_First("hello world"), "hello");
   
   if (in) {
       
@@ -533,6 +537,7 @@ void read_gui(char *gui){
           
       if (line == "")
         continue;
+	
       // ；开头表示注释
       if (line[0] == ';')
         continue;                
@@ -591,7 +596,7 @@ void read_gui(char *gui){
             struct Window_Element *e = (struct Window_Element *)malloc(sizeof(struct Window_Element));
             e->hwnd = 0;
             e->head = con;
-            v.push_back(e);
+            v_window.push_back(e);
             continue;
           } 
           
@@ -639,6 +644,8 @@ void read_gui(char *gui){
         }
       }
       
+	  /*
+	  
       //初始化函数
       if (line=="@init") {
         while (getline (in, line)) {
@@ -682,6 +689,7 @@ void read_gui(char *gui){
         }
         vp.push_back(p);
       }
+	  */
     }
   } else {
       cout <<"no such file" << endl;
@@ -713,7 +721,7 @@ int main(int argc, char **argv) {
   wndClass.lpszClassName  = TEXT("MyClass");
   
   RegisterClass(&wndClass);
-  Draw_Window(v[0]);
+  Draw_Window(v_window[0]);
 
   //释放内存
   
@@ -774,10 +782,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
       GetClientRect(hWnd, &r);
       
       //取得移动后，修改窗体的客户区坐标。
-      v[i]->head->l = r.left;
-      v[i]->head->t = r.top;
-      v[i]->head->t = r.right;
-      v[i]->head->b = r.bottom;
+      v_window[i]->head->l = r.left;
+      v_window[i]->head->t = r.top;
+      v_window[i]->head->t = r.right;
+      v_window[i]->head->b = r.bottom;
 			
       //InvalidateRect(hWnd, NULL, TRUE);
       
@@ -795,7 +803,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
       //遍历Window_Element，得到鼠标点击点所在的控件，并调用其处理函数。
       //遍历方式：先父后子，先兄后弟。
       class GUI_Element * tmp;
-      tmp = Find_Element(point, v[i]->head);
+      tmp = Find_Element(point, v_window[i]->head);
       
       s = tmp->Property["click"];
 			cout << s  << " s = \n";
@@ -845,13 +853,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
       GetClientRect(hWnd, &r);
             
       //存储当前窗口客户区的top left right bottom
-      v[i]->head->l = r.left;
-      v[i]->head->t = r.top;
-      v[i]->head->r = r.right;
-      v[i]->head->b = r.bottom;
+      v_window[i]->head->l = r.left;
+      v_window[i]->head->t = r.top;
+      v_window[i]->head->r = r.right;
+      v_window[i]->head->b = r.bottom;
 
-			Sleep(atoi(v[i]->head->Property["sleep"].c_str()));
-      Draw_Element(v[i]->head->child, hdc, hWnd);
+			Sleep(atoi(v_window[i]->head->Property["sleep"].c_str()));
+      Draw_Element(v_window[i]->head->child, hdc, hWnd);
       
       EndPaint(hWnd,&pt);
 			return 0;

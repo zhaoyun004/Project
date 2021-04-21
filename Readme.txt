@@ -69,3 +69,9 @@ int main() {
     add(12.3, 34)		//特化报错！
 }
 
+
+设置环境变量：
+
+INLUCDE	： D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include;D:\Windows Kits\10\Include\10.0.19041.0\shared;D:\Windows Kits\10\Include\10.0.19041.0\ucrt;D:\Windows Kits\10\Include\10.0.19041.0\um;D:\Windows Kits\10\Include\10.0.19041.0\winrt;
+
+Lib	： D:\Windows Kits\10\Lib\10.0.19041.0\ucrt\x64;D:\Windows Kits\10\Lib\10.0.19041.0\um\x64;D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\lib\x64;
