@@ -361,15 +361,16 @@ GUI_Element::GUI_Element(string line) {
 struct Window_Element {
   HWND  hwnd;
   class GUI_Element *head;
+  void Draw_Window();
 };
 
 //窗口列表
 vector<struct Window_Element *> v_window;
 
 //绘制Window
-void Draw_Window(struct Window_Element *w_e) {
+void Window_Element::Draw_Window() {
   
-  class GUI_Element *tmp = w_e->head;
+  class GUI_Element *tmp = this->head;
   
   //绘制顶层窗口
   if (tmp->Name == "WINDOW") {
@@ -381,7 +382,7 @@ void Draw_Window(struct Window_Element *w_e) {
     int w = (atof(tmp->Property["right"].c_str()) - atof(tmp->Property["left"].c_str())) * cxScreen;
     int h = (atof(tmp->Property["bottom"].c_str()) - atof(tmp->Property["top"].c_str())) * cyScreen;
     
-    w_e->hwnd = CreateWindow(
+    this->hwnd = CreateWindow(
       TEXT("MyClass"),   			  // window class name
       TEXT(title.c_str()),  		        
       WS_OVERLAPPEDWINDOW,     	// window style
@@ -402,11 +403,11 @@ void Draw_Window(struct Window_Element *w_e) {
 
     SetWindowText(w.hwnd, "aaa");    */
   
-    ShowWindow(w_e->hwnd, 1);
-    UpdateWindow(w_e->hwnd);
+    ShowWindow(this->hwnd, 1);
+    UpdateWindow(this->hwnd);
 		
 	//发送一个WM_PAINTER消息，绘制子控件。
-    //InvalidateRect(w_e->hwnd, NULL, TRUE);
+    //InvalidateRect(this->hwnd, NULL, TRUE);
 
     //消息循环
     while(GetMessage(&msg, NULL, 0, 0)) {
@@ -721,7 +722,7 @@ int main(int argc, char **argv) {
   wndClass.lpszClassName  = TEXT("MyClass");
   
   RegisterClass(&wndClass);
-  Draw_Window(v_window[0]);
+  v_window[0]->Draw_Window();
 
   //释放内存
   
@@ -858,7 +859,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
       v_window[i]->head->r = r.right;
       v_window[i]->head->b = r.bottom;
 
-			Sleep(atoi(v_window[i]->head->Property["sleep"].c_str()));
+		//Sleep(atoi(v_window[i]->head->Property["sleep"].c_str()));
       Draw_Element(v_window[i]->head->child, hdc, hWnd);
       
       EndPaint(hWnd,&pt);
