@@ -488,6 +488,7 @@ void Draw_Element(class GUI_Element *tmp, HDC hdc, HWND hwnd) {
     int i;
     if (s.substr(0, 4) == "_VAL")
        i = atoi(s.substr(4).c_str());
+   
     //TextOut(hdc, l, t, s.c_str(), s.length());
     DrawText(hdc, Val[i].c_str(), Val[i].length(), &re, DT_LEFT);
   }
@@ -501,8 +502,8 @@ void Draw_Element(class GUI_Element *tmp, HDC hdc, HWND hwnd) {
     cout<< "A...\n";
   }
   
-	if (tmp->Property["sleep"]!="")
-		Sleep(atoi(tmp->Property["sleep"].c_str()));
+  if (tmp->Property["sleep"]!="")
+	Sleep(atoi(tmp->Property["sleep"].c_str()));
 	
   if (tmp->child)
     Draw_Element(tmp->child, hdc, hwnd);
@@ -645,7 +646,6 @@ void read_gui(char *gui){
         }
       }
       
-	  /*
 	  
       //初始化函数
       if (line=="@init") {
@@ -690,7 +690,6 @@ void read_gui(char *gui){
         }
         vp.push_back(p);
       }
-	  */
     }
   } else {
       cout <<"no such file" << endl;
@@ -814,13 +813,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
         cout<< j << " j =\n";
       }
       cout << Val[j] << " is clicked\n";
-      
-			class Proc * p;
-			p = Find_Proc(Val[j]);
+	  class Proc * p;
+	  p = Find_Proc(Val[j]);
       if (p!=NULL)
-				p->Call();
-			
-			return 0;
+		p->Call();	
+	  return 0;
     case WM_LBUTTONDBLCLK:
       return 0;
     case WM_RBUTTONDOWN:
@@ -859,11 +856,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
       v_window[i]->head->r = r.right;
       v_window[i]->head->b = r.bottom;
 
-		//Sleep(atoi(v_window[i]->head->Property["sleep"].c_str()));
+	  //Sleep(atoi(v_window[i]->head->Property["sleep"].c_str()));
       Draw_Element(v_window[i]->head->child, hdc, hWnd);
       
       EndPaint(hWnd,&pt);
-			return 0;
+	  return 0;
     case WM_DESTROY:
       PostQuitMessage(0);
       return 0;

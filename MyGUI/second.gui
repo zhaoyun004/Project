@@ -1,22 +1,48 @@
+@company
+
+;客户端公司代码，用于统计客户公司的文件使用次数
+Server=www.gui.com  client=Microsoft  
+
 @var
 
 ;变量后的"|"表示该变量是一个数组变量。
 a|=“0000”,1,2,3
 
+end
+
+
 @gui
 
 1 WINDOW name="a" 
-2 RECT name="db" layout="horizon“
+
+2 RECTANGLE name="f1" top=0.0 left=0.0 right=0.5 bottom=0.5 click="f1click" rclick="f4click" sleep=0 fill=red
+3   name="f1" top=0.2 left=0.2 right=0.5 bottom=0.5 click="f2click" rclick="f4click" sleep=0 fill=red
 ; a|0引用数组的某一元素，等价于多数程序中的a[0]，使用单符号操作符，解析更加容易。
-3 TEXT name="t1" caption=a|0
-3 TEXT name="t2" caption="My..."
-3 TEXT name="t3" caption="My..."
 
-1 WINDOW name="first" click="firstclick" title="测试" top=100 left=100 width=100 height=100 image="D:\test 1.bmp"
-2 RECT
-3 A href="GUI://gnu.org/test.gui" caption="GNU官网"
-3 TEXT name="t1" caption="My..."
+4 TEXT name="t2" caption="My name is zhang xiao ping..." click="textclick"
+4 TEXT name="t1" caption="张小平"
 
-@init
-；调用C++/Python等实现语言函数，获得数据库记录，存在数组变量中.
-a|=cpp_fun@@"edn.cn" $db.w=10 $t1.caption=a|0 $t2.caption=a|1 $t3.caption=a|2
+2 RECTANGLE name="f1" top=0.5 left=0.0 right=0.5 bottom=1.0 click="f1click" rclick="f4click" sleep=0 fill=red
+
+2 RECTANGLE name="f1" top=0.0 left=0.5 right=1.0 bottom=0.5 click="f1click" rclick="f4click" sleep=0 fill=red
+3 RECTANGLE name="f1" top=0.0 left=0.9 right=1.0 bottom=0.1 click="f1click" rclick="f4click" sleep=0 fill=red
+
+2 RECTANGLE name="f1" top=0.5 left=0.5 right=1.0 bottom=1.0 click="f1click" rclick="f4click" sleep=0 fill=red
+
+; RECT也是矩形，但是并不在窗口中画出矩形，用于定位、显示图像。 注意：透明背景的图片如何制造？
+2 RECT name="f4 RECT" top=0.4 left=0.4 right=1 bottom=1 sleep=0 image="D:\test 1.bmp"
+3 TEXT caption="This is A Rect"
+
+
+
+始于图形
+
+一层 窗口 名是第一 长是十分之三  宽是十分之四
+
+二层 无边矩形
+
+三层 文本 
+
+末
+
+end
