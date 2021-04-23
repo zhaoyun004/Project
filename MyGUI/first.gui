@@ -1,3 +1,9 @@
+@company
+
+;客户端公司代码，用于统计客户公司的文件使用次数
+Server=www.gui.com  client=Microsoft  
+
+
 ;类型定义
 @class
 
