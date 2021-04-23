@@ -22,12 +22,8 @@ end
 4 TEXT name="t2" caption="My name is zhang xiao ping..." click="textclick"
 4 TEXT name="t1" caption="张小平"
 
-2 RECTANGLE name="f1" top=0.5 left=0.0 right=0.5 bottom=1.0 click="f1click" rclick="f4click" sleep=0 fill=red
-
-2 RECTANGLE name="f1" top=0.0 left=0.5 right=1.0 bottom=0.5 click="f1click" rclick="f4click" sleep=0 fill=red
-3 RECTANGLE name="f1" top=0.0 left=0.9 right=1.0 bottom=0.1 click="f1click" rclick="f4click" sleep=0 fill=red
-
-2 RECTANGLE name="f1" top=0.5 left=0.5 right=1.0 bottom=1.0 click="f1click" rclick="f4click" sleep=0 fill=red
+#test.gui #PART1
+#test.gui #PART2
 
 ; RECT也是矩形，但是并不在窗口中画出矩形，用于定位、显示图像。 注意：透明背景的图片如何制造？
 2 RECT name="f4 RECT" top=0.4 left=0.4 right=1 bottom=1 sleep=0 image="D:\test 1.bmp"
