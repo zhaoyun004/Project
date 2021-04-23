@@ -1,0 +1,1 @@
+del MyGUI.exe MyGUI.obj
