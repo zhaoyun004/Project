@@ -21,8 +21,8 @@ end
 4 TEXT name="t2" caption="My name is zhang xiao ping..." click="textclick"
 ; 4 TEXT name="t1" caption="张小平"
 
-; #test.gui PART1
-; #test.gui PART2
+; #test.gui S1
+; #test.gui s2
 
 
 ; RECT也是矩形，但是并不在窗口中画出矩形，用于定位、显示图像。 注意：透明背景的图片如何制造？

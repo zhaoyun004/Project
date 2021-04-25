@@ -7,7 +7,7 @@ end
 
 @gui
 
-#PART1
+#define S1
 
 2 RECTANGLE name="f1" top=0.5 left=0.0 right=0.5 bottom=1.0 click="f1click" rclick="f4click" sleep=0 fill=red
 
@@ -15,3 +15,5 @@ end
 3 RECTANGLE name="f3" top=0.0 left=0.9 right=1.0 bottom=0.1 click="f1click" rclick="f4click" sleep=0 fill=red
 
 2 RECTANGLE name="f4" top=0.5 left=0.5 right=1.0 bottom=1.0 click="f1click" rclick="f4click" sleep=0 fill=red
+
+end

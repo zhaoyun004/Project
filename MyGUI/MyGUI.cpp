@@ -296,6 +296,38 @@ string String_2_Int(string line){
   return str;
 }
 
+/* 指令块结构。一个指令块形式如下：
+
+#LOOP i=0 i+1 i<4
+.....
+END
+
+#IF i>12
+.....
+END
+
+#DEF S1
+.....
+END
+
+一个指令块里可能包含N个指令块
+
+#LOOP i=0 i+1 i<4
+
+#IF i>12
+.....
+END
+.....
+
+END
+
+*/
+
+class Instruction_Block {
+	char * instruction;		//这里存第一行，也就是指令行  “#LOOP i=0 i+1 i<4”
+	
+};
+
 class GUI_Element {
 public:  
   
@@ -864,8 +896,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
     case WM_PAINT:
       PAINTSTRUCT pt;
       HDC hdc;
+	  HPEN hpen; // 画笔
       
       hdc=BeginPaint(hWnd,&pt);
+
+	  // 创建画笔
+      hpen = CreatePen(PS_SOLID, 1, RGB(0, 0, 255));
+	  // 选中画笔
+      SelectObject(hdc, hpen);
+
+			
       SetTextColor(hdc,RGB(255,0,0));
       SetBkColor(hdc,RGB(0,255,0));
       SetBkMode(hdc,TRANSPARENT);
@@ -884,6 +924,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
 	  //Sleep(atoi(v_window[i]->head->Property["sleep"].c_str()));
       Draw_Element(v_window[i]->head->child, hdc, hWnd);
       
+	  // 删除画笔
+      DeleteObject(hpen);
+	  
       EndPaint(hWnd,&pt);
 	  return 0;
     case WM_DESTROY:
