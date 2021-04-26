@@ -325,7 +325,6 @@ END
 
 class Instruction_Block {
 	char * instruction;		//这里存第一行，也就是指令行  “#LOOP i=0 i+1 i<4”
-	
 };
 
 class GUI_Element {
@@ -449,6 +448,16 @@ void Window_Element::Draw_Window() {
   }
 }
 
+void DrawBezier(HDC hdc, POINT apt[]) {
+    PolyBezier(hdc, apt, 4);
+
+    MoveToEx(hdc, apt[0].x, apt[0].y, NULL);
+    LineTo(hdc, apt[1].x, apt[1].y);
+
+    MoveToEx(hdc, apt[2].x, apt[2].y, NULL);
+    LineTo(hdc, apt[3].x, apt[3].y);
+}
+
 //绘制Window以外的子控件。同一层，后绘制的可能会覆盖先绘制的;  先父后子，先兄后弟。
 void Draw_Element(class GUI_Element *tmp, HDC hdc, HWND hwnd) {
 
@@ -492,6 +501,25 @@ void Draw_Element(class GUI_Element *tmp, HDC hdc, HWND hwnd) {
 	if (tmp->Name == "ELIPSE") {    
 	Ellipse(hdc,l,t,r,b);
 	}
+  }
+  
+  if (tmp->Name == "BEZIER") {
+	POINT apt[4];
+	
+	apt[0].x = 10;
+    apt[0].y = 10;
+
+    apt[1].x = 50;
+    apt[1].y = 50;
+
+    apt[2].x = 80;
+    apt[2].y = 80;
+
+    apt[3].x = 200;
+    apt[3].y = 200;
+	
+	DrawBezier(hdc, apt);
+
   }
   
   if (tmp->Name == "TEXT") {
@@ -556,7 +584,7 @@ void read_gui(char *gui){
       
     class GUI_Element *last = NULL;
     // line中不包括每行的换行符
-    while (getline (in, line)) { 
+    while (getline (in, line)) {
     
       line = Skip_Blank(line);
       cout << line << endl;
@@ -596,7 +624,7 @@ void read_gui(char *gui){
       }
 
       //图形描述
-      if (line=="@gui") { 
+      if (line=="@gui") {
         while (getline (in, line)) {
           line = Skip_Blank(line);
           cout << line << "\n";
@@ -669,7 +697,19 @@ void read_gui(char *gui){
           }
         }
       }
-      
+
+      if (line=="@ZHUSHI") {
+		while (getline (in, line)) {
+		  line = Skip_Blank(line);
+            cout << line << "\n";
+          if (line == "")
+            continue;
+          if (line[0] == ';')
+            continue;
+          if (line=="END")
+            break;
+		}
+	  }
 	  
       //初始化函数
       if (line=="@init") {
