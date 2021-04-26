@@ -12,6 +12,8 @@ end
 
 ; 椭圆
 2 ELIPSE top=0.5 left=0.5 right=1.0 bottom=1.0
+3 LINE top=0.0 left=0.1 right=0.4 bottom=0.2
+
 3 ELIPSE top=0.5 left=0.5 right=1.0 bottom=1.0
 
 2 RECTANGLE name="f1" top=0.0 left=0.0 right=0.5 bottom=0.5 click="f1click" rclick="f4click" sleep=0 fill=red
@@ -19,11 +21,9 @@ end
 ; a|0引用数组的某一元素，等价于多数程序中的a[0]，使用单符号操作符，解析更加容易。
 
 4 TEXT name="t2" caption="My name is zhang xiao ping..." click="textclick"
-; 4 TEXT name="t1" caption="张小平"
 
 ; #test.gui S1
 ; #test.gui s2
-
 
 ; RECT也是矩形，但是并不在窗口中画出矩形，用于定位、显示图像。 注意：透明背景的图片如何制造？
 2 RECT name="f4 RECT" top=0.4 left=0.4 right=1 bottom=1 sleep=0 image="D:\test 1.bmp"

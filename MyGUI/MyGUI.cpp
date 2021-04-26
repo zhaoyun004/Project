@@ -452,50 +452,46 @@ void Window_Element::Draw_Window() {
 //绘制Window以外的子控件。同一层，后绘制的可能会覆盖先绘制的;  先父后子，先兄后弟。
 void Draw_Element(class GUI_Element *tmp, HDC hdc, HWND hwnd) {
 
-  //使用gdi函数绘制矩形
-  if (tmp->Name == "RECT") {   
-    //像素值
-    int pt = tmp->parent->t;
-    int pl = tmp->parent->l;
-    int pr = tmp->parent->r;
-    int pb = tmp->parent->b;
-    
-    int l = atof(tmp->Property["left"].c_str()) * (pr - pl) + pl;
-    int t = atof(tmp->Property["top"].c_str()) * (pb - pt) + pt;
-    int r = atof(tmp->Property["right"].c_str()) * (pr - pl) + pl;
-    int b = atof(tmp->Property["bottom"].c_str()) * (pb - pt) + pt;
-    
-		tmp->l = l;
-		tmp->t = t;
-		tmp->r = r;
-		tmp->b = b;
-  }
-  
-  //RECT和RECTANGEL的区别是前者只做定位使用，并不绘制；后者会绘制矩形。
- 
-  if (tmp->Name == "RECTANGLE") {
-    //像素值
-    int pt = tmp->parent->t;
-    int pl = tmp->parent->l;
-    int pr = tmp->parent->r;
-    int pb = tmp->parent->b;
-    
-    int l = atof(tmp->Property["left"].c_str()) * (pr - pl) + pl;
-    int t = atof(tmp->Property["top"].c_str()) * (pb - pt) + pt;
-    int r = atof(tmp->Property["right"].c_str()) * (pr - pl) + pl;
-    int b = atof(tmp->Property["bottom"].c_str()) * (pb - pt) + pt;
-
+  if (tmp->Name == "RECTANGLE" || tmp->Name == "RECT" || tmp->Name == "ELIPSE" || tmp->Name == "LINE") {
+	
+	//像素值
+	int pt = tmp->parent->t;
+	int pl = tmp->parent->l;
+	int pr = tmp->parent->r;
+	int pb = tmp->parent->b;
+	
+	int l = atof(tmp->Property["left"].c_str()) * (pr - pl) + pl;
+	int t = atof(tmp->Property["top"].c_str()) * (pb - pt) + pt;
+	int r = atof(tmp->Property["right"].c_str()) * (pr - pl) + pl;
+	int b = atof(tmp->Property["bottom"].c_str()) * (pb - pt) + pt;
+	
 	cout << tmp->parent->Name << " parent name .. \n";
-    cout << pl << " "<< pt << " " << pr  << " " << pb <<"  parent ... RECTANGLE\n";
-    cout << l << " "<< t  << " " << r  << " " << b <<" local ... RECTANGLE\n";
-
+	cout << pl << " "<< pt << " " << pr  << " " << pb <<"  parent ... RECTANGLE\n";
+	cout << l << " "<< t  << " " << r  << " " << b <<" local ... RECTANGLE\n";
+	
 	tmp->l = l;
 	tmp->t = t;
 	tmp->r = r;
 	tmp->b = b;
-    
-    Rectangle(hdc,l,t,r,b);
-    //Draw_Rectangle();
+	
+	//RECT和RECTANGEL的区别是前者只做定位使用，并不绘制；后者会绘制矩形。
+	if (tmp->Name == "RECT") {   
+	//像素值
+	}
+	
+	if (tmp->Name == "RECTANGLE") {
+	Rectangle(hdc,l,t,r,b);
+	}
+	
+	//绘制直线
+	if (tmp->Name == "LINE") {
+	MoveToEx(hdc, l, t, NULL);
+	LineTo(hdc, r, b);
+	}
+	
+	if (tmp->Name == "ELIPSE") {    
+	Ellipse(hdc,l,t,r,b);
+	}
   }
   
   if (tmp->Name == "TEXT") {
@@ -523,35 +519,6 @@ void Draw_Element(class GUI_Element *tmp, HDC hdc, HWND hwnd) {
    
     //TextOut(hdc, l, t, s.c_str(), s.length());
     DrawText(hdc, Val[i].c_str(), Val[i].length(), &re, DT_LEFT);
-  }
-  
-  //绘制直线
-  if (tmp->Name == "LINE") {
-  }
-  
-  if (tmp->Name == "ELIPSE") {
-	
-	//像素值
-    int pt = tmp->parent->t;
-    int pl = tmp->parent->l;
-    int pr = tmp->parent->r;
-    int pb = tmp->parent->b;
-    
-    int l = atof(tmp->Property["left"].c_str()) * (pr - pl) + pl;
-    int t = atof(tmp->Property["top"].c_str()) * (pb - pt) + pt;
-    int r = atof(tmp->Property["right"].c_str()) * (pr - pl) + pl;
-    int b = atof(tmp->Property["bottom"].c_str()) * (pb - pt) + pt;
-
-	cout << tmp->parent->Name << " parent name .. \n";
-    cout << pl << " "<< pt << " " << pr  << " " << pb <<"  parent ... RECTANGLE\n";
-    cout << l << " "<< t  << " " << r  << " " << b <<" local ... RECTANGLE\n";
-
-	tmp->l = l;
-	tmp->t = t;
-	tmp->r = r;
-	tmp->b = b;
-    
-    Ellipse(hdc,l,t,r,b);
   }
   
   //链接
@@ -904,11 +871,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
       hpen = CreatePen(PS_SOLID, 1, RGB(0, 0, 255));
 	  // 选中画笔
       SelectObject(hdc, hpen);
-
 			
       SetTextColor(hdc,RGB(255,0,0));
-      SetBkColor(hdc,RGB(0,255,0));
-      SetBkMode(hdc,TRANSPARENT);
+      //SetBkColor(hdc,RGB(0,255,0));
+	  //设置背景透明？
+      //SetBkMode(hdc,TRANSPARENT);
       
       i = Find_Window(hWnd);
             
