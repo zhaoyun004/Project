@@ -463,7 +463,11 @@ void DrawBezier(HDC hdc, POINT apt[]) {
 
 //绘制Window以外的子控件。同一层，后绘制的可能会覆盖先绘制的;  先父后子，先兄后弟。
 void Draw_Element(class GUI_Element *tmp, HDC hdc, HWND hwnd) {
-
+	/*
+	Graphics g(hdc);
+	FontFamily fontFamily = new FontFamily("微软雅黑");  
+	Font font = new Font(fontFamily,16,FontStyle.Regular,GraphicsUnit.Pixel);
+	*/
   if (tmp->Name == "RECTANGLE" || tmp->Name == "RECT" || tmp->Name == "ELIPSE" || tmp->Name == "LINE") {
 	
 	//像素值
@@ -492,11 +496,14 @@ void Draw_Element(class GUI_Element *tmp, HDC hdc, HWND hwnd) {
 	}
 	
 	if (tmp->Name == "RECTANGLE") {
-/*	
-		m_pBrush = new SolidBrush(Color(128, GetRValue(clrMask), GetGValue(clrMask), GetBValue(clrMask))); // 透明度 128 步骤2）使用画刷绘图
-		Graphics graphics(hDC);
-		graphics.FillPolygon(&m_pBrush, pts, 3, FillModeAlternate);
-*/
+		
+		Graphics graphics(hdc);
+		
+		Pen blackPen(Color(255,255, 0, 0), 3);
+		Rect rect(l, t, r, b);
+		graphics.DrawRectangle(&blackPen, rect);
+
+/*
 		HBRUSH hbrush;
 		HPEN hpen;
 
@@ -511,6 +518,7 @@ void Draw_Element(class GUI_Element *tmp, HDC hdc, HWND hwnd) {
 		// 清理资源
 		DeleteObject(hpen);
 		DeleteObject(hbrush);
+		*/
 	}
 	
 	//绘制直线
@@ -544,8 +552,6 @@ void Draw_Element(class GUI_Element *tmp, HDC hdc, HWND hwnd) {
   
 	//GDI 文本呈现通常提供比 GDI + 更好的性能和更准确的文本度量。
   if (tmp->Name == "TEXT") {
-	  
-	Graphics *g = new Graphics(hdc);
 	
     string s;
     
@@ -569,7 +575,9 @@ void Draw_Element(class GUI_Element *tmp, HDC hdc, HWND hwnd) {
     if (s.substr(0, 4) == "_VAL")
        i = atoi(s.substr(4).c_str());
    
-
+//	g.DrawString("cnblogs.com", &font, new SolidBrush(Color.White), 10, 10);
+	
+	/*
 	SetTextColor(hdc,RGB(0,255,0));
 	SetBkColor(hdc, 0x0000FF);
 	//设置背景颜色为红色
@@ -581,6 +589,7 @@ void Draw_Element(class GUI_Element *tmp, HDC hdc, HWND hwnd) {
 	 //换行显示，超出边界自动换行显示
     //TextOut(hdc, l, t, s.c_str(), s.length());
     DrawText(hdc, Val[i].c_str(), Val[i].length(), &re, DT_LEFT|DT_END_ELLIPSIS | DT_EDITCONTROL | DT_WORDBREAK);
+	*/
   }
   
   //链接
@@ -797,6 +806,10 @@ void read_gui(char *gui){
 }
 
 int main(int argc, char **argv) {
+  
+  GdiplusStartupInput gdiplusStartupInput;
+  ULONG_PTR           gdiplusToken;
+	
   SetConsoleOutputCP(65001);
   cxScreen=GetSystemMetrics(SM_CXSCREEN);
   cyScreen=GetSystemMetrics(SM_CYSCREEN);
@@ -804,6 +817,9 @@ int main(int argc, char **argv) {
     cout << "Need file name as args.\n";
     exit(1);
   }
+  
+  GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
+
   read_gui(argv[1]);
   
   WNDCLASS            wndClass;
@@ -824,6 +840,7 @@ int main(int argc, char **argv) {
   v_window[0]->Draw_Window();
 
   //释放内存
+  GdiplusShutdown(gdiplusToken);
   
   return 0;
 }

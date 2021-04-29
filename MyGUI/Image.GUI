@@ -1,9 +1,12 @@
 @GUI
 1 WINDOW name="a"  
 2 RECTANGLE  top=0.0 left=0.0 right=0.9 bottom=1.0
-2 RECTANGLE  top=0.0 left=0.8 right=1.0 bottom=1.0
+2 RECTANGLE  top=0.0 left=0.9 right=1.0 bottom=1.0
+
 3 RECTANGLE  top=0.0 left=0.0 right=1.0 bottom=0.1
 4 TEXT caption="OPEN"
+
 3 RECTANGLE  top=0.1 left=0.0 right=1.0 bottom=0.2
 4 TEXT caption="Test"
+
 END
