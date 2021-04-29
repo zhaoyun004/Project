@@ -1,27 +1,23 @@
 @var
-
 ;变量后的"|"表示该变量是一个数组变量。
 a|=“0000”,1,2,3
-
 end
-
 
 @gui
 
 1 WINDOW name="a" 
-
-@ZHUSHI
-
 2 ELIPSE top=0.5 left=0.5 right=1.0 bottom=1.0
 3 LINE top=0.0 left=0.1 right=0.4 bottom=0.2
+3 TEXT name="t2" caption="My name is zhang xiao ping... this is text in parent REGTANGLE....My name is zhang xiao ping... this is text in parent REGTANGLE....My name is zhang xiao ping... this is text in parent REGTANGLE....My name is zhang xiao ping... this is text in parent REGTANGLE...." click="textclick" color=green bkcolor=red bkmode=transparent
+; 这里的文字会覆盖上一行的文字
+3 TEXT name="t2" caption="She is a student..." click="textclick" color=green bkcolor=red bkmode=transparent
+
 
 3 ELIPSE top=0.5 left=0.5 right=1.0 bottom=1.0
-
 2 RECTANGLE name="f1" top=0.0 left=0.0 right=0.5 bottom=0.5 click="f1click" rclick="f4click" sleep=0 fill=red
+3 LINE top=0.0 left=0.1 right=0.3 bottom=0.4
 3 RECTANGLE name="f1" top=0.2 left=0.2 right=0.5 bottom=0.5 click="f2click" rclick="f4click" sleep=0 fill=red
 ; a|0引用数组的某一元素，等价于多数程序中的a[0]，使用单符号操作符，解析更加容易。
-
-4 TEXT name="t2" caption="My name is zhang xiao ping..." click="textclick"
 
 ; #test.gui S1
 ; #test.gui s2
@@ -30,9 +26,6 @@ end
 2 RECT name="f4 RECT" top=0.4 left=0.4 right=1 bottom=1 sleep=0 image="D:\test 1.bmp"
 3 TEXT caption="This is A Rect"
 
-END
-
-2 BEZIER caption="This is A Rect"
-
+; 2 BEZIER caption="This is A Rect"
 
 end

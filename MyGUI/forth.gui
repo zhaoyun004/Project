@@ -1,0 +1,6 @@
+@GUI
+
+1 WINDOW name="a" 
+2 ELIPSE top=0.5 left=0.5 right=1.0 bottom=1.0
+
+END

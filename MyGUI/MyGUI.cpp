@@ -24,6 +24,9 @@ using namespace std;
 
 #define IDT_TIMER1 12
 
+#define RED_COLOR RGB(255,0,0)
+#define BLUE_COLOR RGB(0,0,255)
+
 // 字符串常量
 vector<string> Val;
 
@@ -489,17 +492,35 @@ void Draw_Element(class GUI_Element *tmp, HDC hdc, HWND hwnd) {
 	}
 	
 	if (tmp->Name == "RECTANGLE") {
-	Rectangle(hdc,l,t,r,b);
+/*	
+		m_pBrush = new SolidBrush(Color(128, GetRValue(clrMask), GetGValue(clrMask), GetBValue(clrMask))); // 透明度 128 步骤2）使用画刷绘图
+		Graphics graphics(hDC);
+		graphics.FillPolygon(&m_pBrush, pts, 3, FillModeAlternate);
+*/
+		HBRUSH hbrush;
+		HPEN hpen;
+
+		hpen = CreatePen(PS_SOLID, 10, RED_COLOR);  // 创建红色实心10px粗的画笔
+		hbrush = CreateSolidBrush(BLUE_COLOR); // 创建蓝色画刷
+		
+		SelectObject(hdc, hpen);    // 指定画笔
+		SelectObject(hdc, hbrush);  // 指定画刷
+		
+		Rectangle(hdc,l,t,r,b);
+		
+		// 清理资源
+		DeleteObject(hpen);
+		DeleteObject(hbrush);
 	}
 	
 	//绘制直线
 	if (tmp->Name == "LINE") {
-	MoveToEx(hdc, l, t, NULL);
-	LineTo(hdc, r, b);
+		MoveToEx(hdc, l, t, NULL);
+		LineTo(hdc, r, b);
 	}
 	
 	if (tmp->Name == "ELIPSE") {    
-	Ellipse(hdc,l,t,r,b);
+		Ellipse(hdc,l,t,r,b);
 	}
   }
   
@@ -519,10 +540,13 @@ void Draw_Element(class GUI_Element *tmp, HDC hdc, HWND hwnd) {
     apt[3].y = 200;
 	
 	DrawBezier(hdc, apt);
-
   }
   
+	//GDI 文本呈现通常提供比 GDI + 更好的性能和更准确的文本度量。
   if (tmp->Name == "TEXT") {
+	  
+	Graphics *g = new Graphics(hdc);
+	
     string s;
     
     s = tmp->Property["caption"];
@@ -545,8 +569,18 @@ void Draw_Element(class GUI_Element *tmp, HDC hdc, HWND hwnd) {
     if (s.substr(0, 4) == "_VAL")
        i = atoi(s.substr(4).c_str());
    
+
+	SetTextColor(hdc,RGB(0,255,0));
+	SetBkColor(hdc, 0x0000FF);
+	//设置背景颜色为红色
+    //SetBkMode(hdc,TRANSPARENT);
+	//设置背景透明
+	  
+	 // 单行显示 DT_SINGLELINE
+	 //多行显示, 遇到\r\n能自动换行显示
+	 //换行显示，超出边界自动换行显示
     //TextOut(hdc, l, t, s.c_str(), s.length());
-    DrawText(hdc, Val[i].c_str(), Val[i].length(), &re, DT_LEFT);
+    DrawText(hdc, Val[i].c_str(), Val[i].length(), &re, DT_LEFT|DT_END_ELLIPSIS | DT_EDITCONTROL | DT_WORDBREAK);
   }
   
   //链接
@@ -597,7 +631,7 @@ void read_gui(char *gui){
         continue;                
         
       //变量定义
-      if (line=="@var") {
+      if (line=="@VAR") {
         while (getline (in, line)) {
           line = Skip_Blank(line);
           cout << line << "\n";          
@@ -606,7 +640,7 @@ void read_gui(char *gui){
             continue;
           if (line[0] == ';')
             continue;
-          if (line == "end")
+          if (line == "END")
             break;
           
           string l = String_2_Int(line);
@@ -624,7 +658,7 @@ void read_gui(char *gui){
       }
 
       //图形描述
-      if (line=="@gui") {
+      if (line=="@GUI") {
         while (getline (in, line)) {
           line = Skip_Blank(line);
           cout << line << "\n";
@@ -633,7 +667,7 @@ void read_gui(char *gui){
             continue;
           if (line[0] == ';')
             continue;   
-          if (line=="end")
+          if (line=="END")
             break;          
           
           string l = String_2_Int(line);
@@ -698,10 +732,11 @@ void read_gui(char *gui){
         }
       }
 
+/*
       if (line=="@ZHUSHI") {
 		while (getline (in, line)) {
 		  line = Skip_Blank(line);
-            cout << line << "\n";
+            cout << line << " ............................... \n";
           if (line == "")
             continue;
           if (line[0] == ';')
@@ -710,9 +745,10 @@ void read_gui(char *gui){
             break;
 		}
 	  }
-	  
+	*/
+	
       //初始化函数
-      if (line=="@init") {
+      if (line=="@INIT") {
         while (getline (in, line)) {
           line = Skip_Blank(line);
           cout << line << "\n";
@@ -720,7 +756,7 @@ void read_gui(char *gui){
             continue;
           if (line[0] == ';')
             continue;
-          if (line=="end")
+          if (line=="END")
             break;
           string l = String_2_Int(line);
           continue;
@@ -739,7 +775,7 @@ void read_gui(char *gui){
             continue;
           if (line[0] == ';')
             continue;
-          if (line=="end")
+          if (line=="END")
             break;
           
           string l = String_2_Int(line);
@@ -911,11 +947,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
       hpen = CreatePen(PS_SOLID, 1, RGB(0, 0, 255));
 	  // 选中画笔
       SelectObject(hdc, hpen);
-			
-      SetTextColor(hdc,RGB(255,0,0));
-      //SetBkColor(hdc,RGB(0,255,0));
-	  //设置背景透明？
-      //SetBkMode(hdc,TRANSPARENT);
       
       i = Find_Window(hWnd);
             
