@@ -1,9 +1,9 @@
-@var
+@VAR
 ;变量后的"|"表示该变量是一个数组变量。
 a|=“0000”,1,2,3
-end
+END
 
-@gui
+@GUI
 
 1 WINDOW name="a" 
 2 ELIPSE top=0.5 left=0.5 right=1.0 bottom=1.0
@@ -28,4 +28,4 @@ end
 
 ; 2 BEZIER caption="This is A Rect"
 
-end
+END
