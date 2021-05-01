@@ -209,6 +209,11 @@ string Connection::RPC(string s) {
 
 // 计算S。注意，运算符优先级。
 string Evaluate(string f) {	  
+  //@GUI节点的增删指令
+  if (f[0]=='#') {
+  
+  }
+  
   for (int i=0; i<f.length(); i++) {
 	  
     //赋值语句
@@ -220,7 +225,7 @@ string Evaluate(string f) {
         break;
       }
       
-      //以$开头，表示为节点属性赋值
+      //以$开头，表示要查改@GUI节点
       if (v[0]=='$') {
         break;
       }
@@ -235,11 +240,6 @@ string Evaluate(string f) {
       
       break;
     }
-  }
-  
-  //@GUI节点的增删查改
-  if (f[0]=='$') {
-  
   }
   
   /*

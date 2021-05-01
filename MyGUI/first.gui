@@ -1,15 +1,15 @@
-@company
+@COMPANY
 
 ;客户端公司代码，用于统计客户公司的文件使用次数
 Server=www.gui.com  client=Microsoft  
 
 
 ;类型定义
-@class
+@CLASS
 
 
 ; 全局变量定义。
-@var
+@VAR
 
 ; \\表示字符'\' \"表示字符"  \'表示'
 a=12 b="GVIM is nice" c=12.5 server="gui://edu.cn" 
@@ -22,7 +22,7 @@ e="abc":12,"232 bv":45 e|"abc"=34 e|"bbb"=45
 
 f=12,23,45,67;23,12,34,56;
 
-end
+END
 
 
 
@@ -30,7 +30,7 @@ end
 ; 每一个控件可指定处理过程，后绘制的矩形可能会覆盖先绘制的。
 ; 命令行式的绘图软件
 
-@gui
+@GUI
 
 ; 每行开始的数字，表示控件的层次，用于控件定位。
 ; 每一层控件以其上层控件所形成矩形区域为参照，进行定位。
@@ -63,61 +63,4 @@ end
 1 WINDOW name="second"
 2 TEXT caption=e|"12"
 
-end
-
-
-; 初始化过程
-@init
-
-$first返回Windows节点
-a=$first.title 
-$first.title="Test"
-
-;删除某节点，包括其所有的子节点  ,用于分割参数，()表示优先计算
-$first.Delete
-
-;为@gui添加一行节点 这里将在第一个参数指向的控件后，添加一个控件节点。该函数不做控件"层次"检查。
-;你可以在第一层控件后添加第三层控件。也就是说，即使你push_back成功了，不表示你的窗口描述就是正确的。
-;系统在创建并绘制控件时，会做检查,如果检查到你的树形结构中，第一层控件节点有个第三层子节点，报错。
-$first.Insert/"f4"/3/"TEXT"/  
-
-end
-
-
-; 控件的键盘、鼠标处理过程
-; 子控件处理函数会覆盖父控件的处理函数
-@WindowClick
-
-$first.left=0.2
-
-end
-
-
-@f1click
-
-$f1.top=0.2
-$f1.left=0.2
-
-end
-
-
-
-
-@f2click
-
-hosta="localhost"
-; 指定服务器
-a=cpp_fun1/12/"hello"@hosta
-; 调用最后连接的服务器
-a=cpp_fun1/45/"hello"
-cpp_fun2/12/"hello"
-
-
-hostb="163.com"
-;换一个服务器调用函数
-a=cpp_fun/12/"hello"@hostb
-
-;这里会使用163.com作为服务器
-a=cpp_fun1/12/"hello"
-
-end
+END

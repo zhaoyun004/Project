@@ -2,19 +2,40 @@
 1 WINDOW name="a"  
 2 RECTANGLE  name="JuXing1" top=0.0 left=0.0 right=0.8 bottom=1.0 click="JuXing1Click"
 2 RECTANGLE  name="JuXing2" top=0.0 left=0.8 right=1.0 bottom=1.0 click="JuXing2Click"
-
 3 RECTANGLE  top=0.0 left=0.0 right=1.0 bottom=0.1
 4 TEXT  name=“Text1” caption="OPEN"
-
 3 RECTANGLE  top=0.1 left=0.0 right=1.0 bottom=0.2
 4 TEXT caption="Test"
 END
 
+; 初始化过程
 @INTT
-$Text1.caption="Open in ....."
+	$Text1.caption="Open in ....."
 END
 
-@JuXing1Click
-a=1 b=a
+; 子控件处理函数会覆盖父控件的处理函数
+@JuXing1Click 
+	a=1 b=a 
+
+	;查改
+	$JuXing1.top=0.2 
+
+	; 增删
+	; 为@gui添加一行节点 这里将在指定节点之后添加一个节点，该函数不做控件"层次"检查，你可以在第一层控件后添加第三层控件。也就是说，即使你PUSH成功了，不表示你的窗口描述就是正确的。
+	; 系统在绘制控件时，会做检查，如果检查到你的树形结构中，第一层控件节点后面紧接着有个第三层子节点，则报错。
+	#PUSH JuXing2 2 RECTANGLE  top=0.1 left=0.0 right=1.0 bottom=0.2
+	#DELETE JuXing1
+	
+	#LOOP i=0 i<10 i=i+1
+		a=i
+	END
+	
+	#IF
+	END
+	
+	#CONNECT www.163.com 56 
+		#SET A  #CALL FUN1 arg1 args2 arg3
+	#END
+
 END
 
