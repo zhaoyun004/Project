@@ -26,6 +26,6 @@ END
 2 RECT name="f4 RECT" top=0.4 left=0.4 right=1 bottom=1 sleep=0 image="D:\test 1.bmp"
 3 TEXT caption="This is A Rect"
 
-; 2 BEZIER caption="This is A Rect"
+2 BEZIER caption="This is A Rect"
 
 END

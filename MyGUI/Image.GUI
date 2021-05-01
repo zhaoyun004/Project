@@ -1,12 +1,17 @@
 @GUI
 1 WINDOW name="a"  
-2 RECTANGLE  top=0.0 left=0.0 right=0.9 bottom=1.0
-2 RECTANGLE  top=0.0 left=0.9 right=1.0 bottom=1.0
+2 RECTANGLE  name="JuXing1" top=0.0 left=0.0 right=0.8 bottom=1.0 click="JuXing1Click"
+2 RECTANGLE  name="JuXing2" top=0.0 left=0.8 right=1.0 bottom=1.0 click="JuXing2Click"
 
 3 RECTANGLE  top=0.0 left=0.0 right=1.0 bottom=0.1
-4 TEXT caption="OPEN"
+4 TEXT  name=“Text1” caption="OPEN"
 
 3 RECTANGLE  top=0.1 left=0.0 right=1.0 bottom=0.2
 4 TEXT caption="Test"
+
+@INTT
+$Text1.caption="Open in ....."
+END
+
 
 END
