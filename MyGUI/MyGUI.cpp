@@ -41,24 +41,29 @@ LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 void save_bmp(const char *filename, HDC hdcWindow)
 {
-	int width = 1024;	// 图片宽度
-	int heigth = 768;	// 图片高度
+	int width;
+	int height;
 	int xpos = 0;		// 起始x坐标
 	int ypos = 0;		// 起始y坐标
 
 	// 获取窗口的设备上下文（Device Contexts）
 	// HDC hdcWindow = GetDC(NULL); // 要截图的窗口句柄，为空则全屏
 	// 获取设备相关信息的尺寸大小
+	width = GetDeviceCaps(hdcWindow, HORZRES);     
+	height = GetDeviceCaps(hdcWindow, VERTRES);
+	
+	cout << width << height << "\n" ;
+	
 	int nBitPerPixel = GetDeviceCaps(hdcWindow, BITSPIXEL);
 	
 	CImage image;
 	// 创建图像，设置宽高，像素
-	image.Create(width, heigth, nBitPerPixel);
+	image.Create(width, height, nBitPerPixel);
 	// 对指定的源设备环境区域中的像素进行位块（bit_block）转换
 	BitBlt(
 		image.GetDC(),	// 保存到的目标 图片对象 上下文
 		xpos, ypos,		// 起始 x, y 坐标
-		width, heigth,	// 截图宽高
+		width, height,	// 截图宽高
 		hdcWindow,		// 截取对象的 上下文句柄
 		0, 0,			// 指定源矩形区域左上角的 X, y 逻辑坐标
 		SRCCOPY);
@@ -205,6 +210,7 @@ string Connection::RPC(string s) {
 // 计算S。注意，运算符优先级。
 string Evaluate(string f) {	  
   for (int i=0; i<f.length(); i++) {
+	  
     //赋值语句
     if (f[i]=='=') {
       string v = f.substr(0, i);
@@ -231,10 +237,12 @@ string Evaluate(string f) {
     }
   }
   
-  //节点Insert Delete 
+  //@GUI节点的增删查改
   if (f[0]=='$') {
   
   }
+  
+  /*
   
   //得到远程服务器。
   string host = Get_Host(f);
@@ -251,6 +259,7 @@ string Evaluate(string f) {
       return con->RPC(n);
     }
   }
+  */
   
   return "";
 }
@@ -969,11 +978,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
         cout<< j << " j =\n";
       }
       cout << Val[j] << " is clicked\n";
-	  
+	  	  
 	  save_bmp("test.bmp", GetDC(hWnd));
 	  
 	  class Proc * p;
-	  p = Find_Proc(Val[j]);
+	  p = Find_Proc(Val[j]);	  
       if (p!=NULL)
 		p->Call();	
 	  return 0;

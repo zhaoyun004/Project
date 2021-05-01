@@ -8,10 +8,13 @@
 
 3 RECTANGLE  top=0.1 left=0.0 right=1.0 bottom=0.2
 4 TEXT caption="Test"
+END
 
 @INTT
 $Text1.caption="Open in ....."
 END
 
-
+@JuXing1Click
+a=1 b=a
 END
+
