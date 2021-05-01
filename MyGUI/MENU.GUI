@@ -1,23 +1,19 @@
-@gui
+@GUI
 
-1 WINDOW name="menutest" 
+	1 WINDOW name="menutest" 
 
-#loop i=0 i+1 i<4
+	#LOOP i=0 i+1 i<4
+		2 RECTANGLE name="f1" top=0.0 left=0.1*i right=0.1*(i+1) bottom=0.1 click="f1click" rclick="f4click" sleep=0 fill=red
+		3 TEXT caption="文件"
+	END
+	
+	2 RECTANGLE name="f1" top=0.0 left=0.1 right=0.2 bottom=0.1 click="f1click" rclick="f4click" sleep=0 fill=red
+	3 TEXT caption="工具"
+	
+	2 RECTANGLE name="f1" top=0.0 left=0.2 right=0.3 bottom=0.1 click="f1click" rclick="f4click" sleep=0 fill=red
+	3 TEXT caption="视图"
+	
+	2 RECTANGLE name="f1" top=0.0 left=0.3 right=0.4 bottom=0.1 click="f1click" rclick="f4click" sleep=0 fill=red
+	3 TEXT caption="This is A Rect"
 
-2 RECTANGLE name="f1" top=0.0 left=0.1*i right=0.1*(i+1) bottom=0.1 click="f1click" rclick="f4click" sleep=0 fill=red
-3 TEXT caption="文件"
-
-end
-
-
-2 RECTANGLE name="f1" top=0.0 left=0.1 right=0.2 bottom=0.1 click="f1click" rclick="f4click" sleep=0 fill=red
-3 TEXT caption="工具"
-
-2 RECTANGLE name="f1" top=0.0 left=0.2 right=0.3 bottom=0.1 click="f1click" rclick="f4click" sleep=0 fill=red
-3 TEXT caption="视图"
-
-2 RECTANGLE name="f1" top=0.0 left=0.3 right=0.4 bottom=0.1 click="f1click" rclick="f4click" sleep=0 fill=red
-3 TEXT caption="This is A Rect"
-
-
-end
+END

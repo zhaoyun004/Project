@@ -1,4 +1,4 @@
-@gui
+@GUI
 
 ; 每行开始的数字，表示控件的层次，用于控件定位。
 ; 每一层控件以其上层控件所形成矩形区域为参照，进行定位。
@@ -29,4 +29,4 @@
 2 A href="file://d/second.gui" caption="点击文字运行示例程序"
 2 A href="file://d/third.gui" caption="测试"
 
-end
+END

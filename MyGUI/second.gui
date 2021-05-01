@@ -19,8 +19,8 @@ END
 3 RECTANGLE name="f1" top=0.2 left=0.2 right=0.5 bottom=0.5 click="f2click" rclick="f4click" sleep=0 fill=red
 ; a|0引用数组的某一元素，等价于多数程序中的a[0]，使用单符号操作符，解析更加容易。
 
-; #test.gui S1
-; #test.gui s2
+; #IMPORT test.gui S1
+; #IMPORT test.gui s2
 
 ; RECT也是矩形，但是并不在窗口中画出矩形，用于定位、显示图像。 注意：透明背景的图片如何制造？
 2 RECT name="f4 RECT" top=0.4 left=0.4 right=1 bottom=1 sleep=0 image="D:\test 1.bmp"
