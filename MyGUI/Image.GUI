@@ -1,6 +1,7 @@
 @GUI
+	#VAR a=12 b=13 c="This is a string."
 	1 WINDOW name="a"  
-	2 RECTANGLE  name="JuXing1" top=0.0 left=0.0 right=0.8 bottom=1.0 click="JuXing1Click"
+	2 RECTANGLE  name="JuXing1" top=0.0 left=0.0 right=0.8 bottom=1.0 click=(JuXing1Click test hello)
 	2 RECTANGLE  name="JuXing2" top=0.0 left=0.8 right=1.0 bottom=1.0 click="JuXing2Click"
 	3 RECTANGLE  top=0.0 left=0.0 right=1.0 bottom=0.1
 	4 TEXT  name=“Text1” caption="OPEN"
@@ -9,7 +10,7 @@
 END
 
 ; 初始化过程
-@INTT
+@INIT
 	$Text1.caption="Open in ....."
 END
 
@@ -33,8 +34,9 @@ END
 	#IF
 	END
 	
+	; 调用服务器上的函数
 	#CONNECT www.163.com 56 
-		#SET A  #CALL FUN1 arg1 args2 arg3
+		#SET A  (FUN1 arg1 args2 arg3)
 	#END
 
 END
