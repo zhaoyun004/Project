@@ -52,10 +52,5 @@ END
 	#IF
 	#ELSE
 	END
-	
-	; 调用服务器上的函数
-	#CONNECT www.163.com 56 
-		#SET A  (FUN1 arg1 args2 arg3)
-	#END
 
 END

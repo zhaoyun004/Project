@@ -445,7 +445,7 @@ struct Window_Element {
 };
 
 //窗口列表
-vector<struct Window_Element *> v_window;
+//vector<struct Window_Element *> v_window;
 
 //绘制Window
 void Window_Element::Draw_Window() {
@@ -666,18 +666,36 @@ void Draw_Element(class GUI_Element *tmp, HDC hdc, HWND hwnd) {
     Draw_Element(tmp->brother, hdc, hwnd);
 }
 
+
+class MyGUI {
+	public:
+		MyGUI(char *filename);
+		void Draw_Window(struct Window_Element *p);
+		int MyGUI::Find_Window(HWND hwnd);
+		struct Window_Element *Get_Window(int i);
+		void Set_Window(int i);
+	private:
+		void read_gui(char *gui);
+		vector<struct Window_Element *> v_window;
+};
+
+struct Window_Element * MyGUI::Get_Window(int i) {
+	return v_window[i];
+}
+
 //找到hwnd对应的Window_Element的数组下标，如果返回-1表示没有找到。
-int Find_Window(HWND hwnd) {
+int MyGUI::Find_Window(HWND hwnd) {
   for (int i=0; i< v_window.size(); i++){
-    if (v_window[i]->hwnd == hwnd) {
+    if (Get_Window(i)->hwnd == hwnd) {
       return i;
     }
   }
   return -1;
 }
 
+
 //读取GUI描述文件，生成树形结构。
-void read_gui(char *gui){
+void MyGUI::read_gui(char *gui){
   ifstream in(gui);
   string line;
       
@@ -865,6 +883,16 @@ void read_gui(char *gui){
   }
 }
 
+MyGUI::MyGUI(char *filename) {
+	read_gui(filename);
+}
+
+void MyGUI::Draw_Window(struct Window_Element *p) {
+	p->Draw_Window();
+}
+
+MyGUI *gui;
+
 int main(int argc, char **argv) {
   
   GdiplusStartupInput gdiplusStartupInput;
@@ -880,7 +908,8 @@ int main(int argc, char **argv) {
   
   GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 
-  read_gui(argv[1]);
+  //read_gui(argv[1]);
+  gui = new MyGUI(argv[1]);
 
   //打印所有Proc，确认读取无误。
   
@@ -899,7 +928,8 @@ int main(int argc, char **argv) {
   wndClass.lpszClassName  = TEXT("MyClass");
   
   RegisterClass(&wndClass);
-  v_window[0]->Draw_Window();
+  //v_window[0]->Draw_Window();
+  gui->Draw_Window(gui->Get_Window(0));
   
   //释放内存
   GdiplusShutdown(gdiplusToken);
@@ -955,16 +985,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
   switch(message) {
     //移动标题栏等
     case WM_SYSCOMMAND:
-      i = Find_Window(hWnd);
+      i = gui->Find_Window(hWnd);
       
       //取得窗口客户区坐标
       GetClientRect(hWnd, &r);
       
       //取得移动后，修改窗体的客户区坐标。
-      v_window[i]->head->l = r.left;
-      v_window[i]->head->t = r.top;
-      v_window[i]->head->t = r.right;
-      v_window[i]->head->b = r.bottom;
+      gui->Get_Window(i)->head->l = r.left;
+      gui->Get_Window(i)->head->t = r.top;
+      gui->Get_Window(i)->head->t = r.right;
+      gui->Get_Window(i)->head->b = r.bottom;
 			
       //InvalidateRect(hWnd, NULL, TRUE);
       
@@ -978,11 +1008,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
       ScreenToClient(hWnd, &point);    // 将鼠标指针位置转换为窗口坐标
       cout << point.x << " "<< point.y << "\n";
       
-      i = Find_Window(hWnd);
+      i = gui->Find_Window(hWnd);
       //遍历Window_Element，得到鼠标点击点所在的控件，并调用其处理函数。
       //遍历方式：先父后子，先兄后弟。
       class GUI_Element * tmp;
-      tmp = Find_Element(point, v_window[i]->head);
+      tmp = Find_Element(point, gui->Get_Window(i)->head);
       
       s = tmp->Property["click"];
 			cout << s  << " s = \n";
@@ -1030,19 +1060,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
 	  // 选中画笔
       SelectObject(hdc, hpen);
       
-      i = Find_Window(hWnd);
+      i = gui->Find_Window(hWnd);
             
       //取得窗口客户区坐标
       GetClientRect(hWnd, &r);
             
       //存储当前窗口客户区的top left right bottom
-      v_window[i]->head->l = r.left;
-      v_window[i]->head->t = r.top;
-      v_window[i]->head->r = r.right;
-      v_window[i]->head->b = r.bottom;
+      gui->Get_Window(i)->head->l = r.left;
+      gui->Get_Window(i)->head->t = r.top;
+      gui->Get_Window(i)->head->r = r.right;
+      gui->Get_Window(i)->head->b = r.bottom;
 
 	  //Sleep(atoi(v_window[i]->head->Property["sleep"].c_str()));
-      Draw_Element(v_window[i]->head->child, hdc, hWnd);
+      Draw_Element(gui->Get_Window(i)->head->child, hdc, hWnd);
       
 	  // 删除画笔
       DeleteObject(hpen);
