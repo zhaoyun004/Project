@@ -908,7 +908,6 @@ int main(int argc, char **argv) {
   
   GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 
-  //read_gui(argv[1]);
   gui = new MyGUI(argv[1]);
 
   //打印所有Proc，确认读取无误。
@@ -928,8 +927,9 @@ int main(int argc, char **argv) {
   wndClass.lpszClassName  = TEXT("MyClass");
   
   RegisterClass(&wndClass);
-  //v_window[0]->Draw_Window();
   gui->Draw_Window(gui->Get_Window(0));
+  
+  delete gui;
   
   //释放内存
   GdiplusShutdown(gdiplusToken);
