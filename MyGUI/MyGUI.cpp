@@ -673,9 +673,10 @@ class MyGUI {
 		void Draw_Window(struct Window_Element *p);
 		int MyGUI::Find_Window(HWND hwnd);
 		struct Window_Element *Get_Window(int i);
-		void Set_Window(int i);
 	private:
 		void read_gui(char *gui);
+		static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+		WNDCLASS            wndClass;
 		vector<struct Window_Element *> v_window;
 };
 
@@ -884,35 +885,6 @@ void MyGUI::read_gui(char *gui){
 }
 
 MyGUI::MyGUI(char *filename) {
-	read_gui(filename);
-}
-
-void MyGUI::Draw_Window(struct Window_Element *p) {
-	p->Draw_Window();
-}
-
-MyGUI *gui;
-
-int main(int argc, char **argv) {
-  
-  GdiplusStartupInput gdiplusStartupInput;
-  ULONG_PTR           gdiplusToken;
-	
-  SetConsoleOutputCP(65001);
-  cxScreen=GetSystemMetrics(SM_CXSCREEN);
-  cyScreen=GetSystemMetrics(SM_CYSCREEN);
-  if (argc == 1) {
-    cout << "Need file name as args.\n";
-    exit(1);
-  }
-  
-  GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
-
-  gui = new MyGUI(argv[1]);
-
-  //打印所有Proc，确认读取无误。
-  
-  WNDCLASS            wndClass;
   
   wndClass.style          = CS_HREDRAW | CS_VREDRAW;
   //同一窗口类公用一个窗口处理过程
@@ -927,15 +899,16 @@ int main(int argc, char **argv) {
   wndClass.lpszClassName  = TEXT("MyClass");
   
   RegisterClass(&wndClass);
-  gui->Draw_Window(gui->Get_Window(0));
   
-  delete gui;
-  
-  //释放内存
-  GdiplusShutdown(gdiplusToken);
-  
-  return 0;
+  read_gui(filename);
 }
+
+void MyGUI::Draw_Window(struct Window_Element *p) {
+	p->Draw_Window();
+}
+
+MyGUI *gui;
+
 
 //返回p所处的控件
 GUI_Element * Find_Element(POINT p, GUI_Element *e) {
@@ -975,7 +948,7 @@ class Proc * Find_Proc(string name) {
 }
 
 //同一个窗口类公用一个窗口处理过程
-LRESULT CALLBACK WndProc(HWND hWnd, UINT message, 
+LRESULT CALLBACK MyGUI::WndProc(HWND hWnd, UINT message, 
    WPARAM wParam, LPARAM lParam)
 {
   int i;
@@ -1085,5 +1058,35 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
     default:
       return DefWindowProc(hWnd, message, wParam, lParam);
   }
+  return 0;
+}
+
+
+int main(int argc, char **argv) {
+  
+  GdiplusStartupInput gdiplusStartupInput;
+  ULONG_PTR           gdiplusToken;
+	
+  SetConsoleOutputCP(65001);
+  cxScreen=GetSystemMetrics(SM_CXSCREEN);
+  cyScreen=GetSystemMetrics(SM_CYSCREEN);
+  if (argc == 1) {
+    cout << "Need file name as args.\n";
+    exit(1);
+  }
+  
+  GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
+
+  gui = new MyGUI(argv[1]);
+
+  //打印所有Proc，确认读取无误。
+  
+  gui->Draw_Window(gui->Get_Window(0));
+  
+  delete gui;
+  
+  //释放内存
+  GdiplusShutdown(gdiplusToken);
+  
   return 0;
 }
