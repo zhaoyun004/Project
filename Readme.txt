@@ -1,4 +1,50 @@
+C:\Windows\System32\drivers\etc\hosts文件，修改后能连上大部分国外网站：
+https://raw.githubusercontent.com/racaljk/hosts/master/hosts
+
+hosts文件末尾添加：
+151.101.185.194 http://github.global.ssl.fastly.net 
+192.30.253.112 http://github.com
+
+
+
+git for windows镜像下载：
+https://github.com/waylau/git-for-win
+
+git clone https://github.com/zhangyun007/Sword.git
+git config --global user.email "zhangxp147@qq.com"
+git config --global user.name "zhangyun007"
+  
+进入项目根目录下：
+git add *
+git commit -a
+git push
+
+创建分支
+git branch new
+git checkout new
+
+
+
+编程相关软件：
+
+Visual Studio C++ Community 2019:
+https://visualstudio.microsoft.com/zh-hans/vs/features/cplusplus/
+
+下载安装C++相关的开发软件。
+
+虽然，我们可能并不需要VS的各种高级功能，但是其中的命令行编译工具是必不可缺少的 -- 或者您可以选择开源项目Mingw或者模拟GNU Linux系统的mysys2。
+
+进入Developer Command Prompt for VS 2019命令行下，运行cl test.cpp编译您的程序。 
+
+
+notepad++编辑器：https://notepad-plus-plus.org/
+默认的风格可能不是很喜欢，点击“设置/语言格式设置”，然后在”选择主题“选项里选择自己喜爱的主题；点击视图/自动换行。
+
+
+
+
 ToBeDone：
+
 
 
 一、Zh程序设计

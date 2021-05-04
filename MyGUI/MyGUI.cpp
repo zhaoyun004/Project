@@ -462,6 +462,8 @@ void Window_Element::Draw_Window() {
     int w = (atof(tmp->Property["right"].c_str()) - atof(tmp->Property["left"].c_str())) * cxScreen;
     int h = (atof(tmp->Property["bottom"].c_str()) - atof(tmp->Property["top"].c_str())) * cyScreen;
     
+	cout << x << y << w << h << "--------------------------------";
+	
     this->hwnd = CreateWindow(
       TEXT("MyClass"),   			  // window class name
       TEXT(title.c_str()),  		        
@@ -482,10 +484,22 @@ void Window_Element::Draw_Window() {
       (TIMERPROC) NULL);     // no timer callback 
 
     SetWindowText(w.hwnd, "aaa");    */
-  
+	
+	//去掉边框和标题栏
+	LONG_PTR Style = ::GetWindowLongPtr(hwnd,GWL_STYLE);
+	Style = Style &~WS_CAPTION &~WS_SYSMENU &~WS_SIZEBOX;
+	::SetWindowLongPtr(hwnd, GWL_STYLE, Style);
+
+	// 实现透明必须设置WS_EX_LAYERED标志
+    LONG nRet = ::GetWindowLong(hwnd, GWL_EXSTYLE);
+    nRet = nRet | WS_EX_LAYERED;
+    ::SetWindowLong(hwnd, GWL_EXSTYLE, nRet);
+	
+	::SetLayeredWindowAttributes(hwnd, 0, 123, LWA_ALPHA);    // 设置半透明
+
     ShowWindow(this->hwnd, 1);
     UpdateWindow(this->hwnd);
-		
+	
 	//发送一个WM_PAINTER消息，绘制子控件。
     //InvalidateRect(this->hwnd, NULL, TRUE);
 
@@ -787,7 +801,7 @@ void read_gui(char *gui){
         }
       }
 
-/*
+
       if (line=="@ZHUSHI") {
 		while (getline (in, line)) {
 		  line = Skip_Blank(line);
@@ -800,7 +814,7 @@ void read_gui(char *gui){
             break;
 		}
 	  }
-	*/
+
 	
       //初始化函数
       if (line=="@INIT") {
